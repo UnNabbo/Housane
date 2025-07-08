@@ -1,0 +1,373 @@
+Device_Queue :: enum {
+	INVALID :: -1;
+	GRAPHIC_PRESENT;
+	COUNT;
+}
+
+Physical_Device :: struct {
+	#as handle : VkPhysicalDevice;
+	queue_families: [Device_Queue.COUNT] u32;
+}
+
+Device :: struct { 
+	#as handle: VkDevice;
+	physical_device: *Physical_Device;
+	queues: [Device_Queue.COUNT] VkQueue;
+}
+
+Surface :: struct {
+	#as handle: VkSurfaceKHR;
+	capabilities: VkSurfaceCapabilitiesKHR ;
+	formats: [..] VkSurfaceFormatKHR;
+	present_modes: [..] VkPresentModeKHR;
+	extent: VkExtent2D;
+}
+
+Swap_Chain :: struct{
+	#as handle: VkSwapchainKHR;
+	images: [..] VkImage;
+	surface_format: VkSurfaceFormatKHR;
+    present_mode: VkPresentModeKHR;
+    extent: VkExtent2D;
+}
+
+Instance :: struct{
+	#as handle: VkInstance;
+	surface: Surface;
+	physical_device: Physical_Device ;
+	
+	#if BUILD_TYPE != .RELEASE{
+		debug_messenger: VkDebugUtilsMessengerEXT ;
+	}
+}
+
+
+create_instance :: (window_handle: * void, width: s32, height: s32) -> Instance  {
+	instance: Instance;
+	
+	app_info: VkApplicationInfo;
+    app_info.pApplicationName = "Hello Triangle";
+    app_info.applicationVersion = VK_MAKE_VERSION(1, 0, 0);
+    app_info.pEngineName = "No Engine";
+    app_info.engineVersion = VK_MAKE_VERSION(1, 0, 0);
+    app_info.apiVersion = VK_API_VERSION_1_3;
+
+	instance_info: VkInstanceCreateInfo;
+	instance_info.pApplicationInfo = *app_info;
+
+	//TODO MAYBE CHECK FOR SUPPORT
+	#if BUILD_TYPE != .RELEASE{
+		extensions: []* u8 = .[
+		VK_KHR_SURFACE_EXTENSION_NAME, VK_KHR_WIN32_SURFACE_EXTENSION_NAME, VK_EXT_DEBUG_UTILS_EXTENSION_NAME
+		];
+	}else{
+		extensions: []* u8 = .[
+		VK_KHR_SURFACE_EXTENSION_NAME, VK_KHR_WIN32_SURFACE_EXTENSION_NAME
+		];
+
+	}
+	
+	instance_info.enabledExtensionCount = xx extensions.count;
+	instance_info.ppEnabledExtensionNames = extensions.data;
+	
+	#if BUILD_TYPE != .RELEASE{
+		//TODO MAYBE CHECK FOR SUPPORT
+		validation_layers: [] *u8 = .[
+		"VK_LAYER_LUNARG_monitor", "VK_LAYER_KHRONOS_validation"
+		]; 
+
+		instance_info.enabledLayerCount = xx validation_layers.count;
+		instance_info.ppEnabledLayerNames = validation_layers.data;
+
+		messenger_info: VkDebugUtilsMessengerCreateInfoEXT;
+		messenger_info.messageSeverity = .VERBOSE_BIT_EXT | .WARNING_BIT_EXT | .ERROR_BIT_EXT;
+		messenger_info.messageType = .GENERAL_BIT_EXT | .VALIDATION_BIT_EXT | .PERFORMANCE_BIT_EXT;
+	
+		debug_callback :: (message_severity: VkDebugUtilsMessageSeverityFlagBitsEXT,
+			message_type: VkDebugUtilsMessageTypeFlagsEXT,
+			callback_data: *VkDebugUtilsMessengerCallbackDataEXT,
+			user_data: *void
+		) -> VkBool32 #c_call{
+			push_context,defer_pop cast(*#Context, user_data).*;
+
+			if message_severity == .ERROR_BIT_EXT {
+				log_error("[Vulkan]:  %", to_string(callback_data.pMessage));
+				breakpoint();
+			}else{
+				log("[Vulkan]:  %", to_string(callback_data.pMessage));
+			}
+			return VK_FALSE;
+			
+		}
+		
+
+	
+		messenger_info.pfnUserCallback = debug_callback;
+		messenger_info.pUserData = *context;
+
+		instance_info.pNext = *messenger_info;
+	}
+
+	vk_assert(vkCreateInstance(*instance_info, null, *instance.handle));
+
+	#if BUILD_TYPE != .RELEASE{
+		get_instance_proc_add(instance.handle, "vkCreateDebugUtilsMessengerEXT");
+		vk_assert(vkCreateDebugUtilsMessengerEXT(instance.handle, *messenger_info, null, *instance.debug_messenger));
+	}
+
+	surface_info: VkWin32SurfaceCreateInfoKHR;
+	surface_info.hwnd = cast(HWND, window_handle);
+	surface_info.hinstance = GetModuleHandleA(null);
+	
+	vk_assert(vkCreateWin32SurfaceKHR(instance.handle, *surface_info, null, *instance.surface.handle));
+	
+	device_extensions: []*u8 = .[
+		VK_KHR_SWAPCHAIN_EXTENSION_NAME
+	];
+
+	device_count: u32;
+	vkEnumeratePhysicalDevices(instance.handle, *device_count, null);
+
+	
+	devices: [..] VkPhysicalDevice;
+	array_resize(*devices, device_count);
+	
+	vkEnumeratePhysicalDevices(instance.handle, *device_count, devices.data);
+	for physical_device : devices{
+		device_properties: VkPhysicalDeviceProperties;
+		vkGetPhysicalDeviceProperties(physical_device, *device_properties);
+
+		if device_properties.apiVersion < VK_API_VERSION_1_3 then continue;
+		
+		device_features: VkPhysicalDeviceFeatures;
+		vkGetPhysicalDeviceFeatures(physical_device, *device_features);
+		
+		extension_count: u32;
+		vkEnumerateDeviceExtensionProperties(physical_device, null, *extension_count, null);
+		available_extensions := array_allocate(extension_count, VkExtensionProperties);
+		vkEnumerateDeviceExtensionProperties(physical_device, null, *extension_count, available_extensions.data);
+		
+		req_ext := device_extensions.count;
+		for extension : available_extensions {
+			for j : 0..device_extensions.count - 1 {
+				if to_string(*extension.extensionName[0]) == to_string(device_extensions[j]) {
+					req_ext -= 1;
+				}
+			}
+		
+			if !req_ext then break;
+		}
+		
+		assert(!req_ext, "Not all required extensions are supported");
+		
+		
+		families: [Device_Queue.COUNT] u32;
+		for * families{
+			 it.* = U32_MAX;
+		}
+		
+		queue_family_count: u32;
+		vkGetPhysicalDeviceQueueFamilyProperties(physical_device, *queue_family_count, null);
+		queue_families := array_allocate(queue_family_count, VkQueueFamilyProperties);
+		vkGetPhysicalDeviceQueueFamilyProperties(physical_device, *queue_family_count, queue_families.data);
+		
+		for family, family_index : queue_families{
+			extension_count: u32;
+			vkEnumerateDeviceExtensionProperties(physical_device, null, *extension_count, nu\ll);
+			
+			available_extensions := array_allocate(extension_count, VkExtensionProperties);
+			vkEnumerateDeviceExtensionProperties(physical_device, null, *extension_count, available_extensions.data);
+			
+			req_ext := device_extensions.count;
+			for extension : available_extensions {
+				for j : 0..device_extensions.count - 1 {
+					if(to_string(*extension.extensionName[0]) == to_string(device_extensions[j])){
+						req_ext -= 1;
+					}
+				}
+				
+				if(!req_ext) then break;
+			}
+
+			
+			assert(!req_ext, "Not all device extensions are supported");
+			
+			if family.queueFlags & .GRAPHICS_BIT {
+				families[Device_Queue.GRAPHIC_PRESENT] = xx family_index;
+			}
+			
+			present_support: VkBool32 = 0;
+			vkGetPhysicalDeviceSurfaceSupportKHR(physical_device, xx family_index, instance.surface.handle, *present_support);
+			
+			is_complete := true;
+			for families {
+				is_complete &= (it != U32_MAX);
+			}
+			
+			if is_complete then break;
+		}
+
+		
+		is_complete := true;
+		for families {
+			is_complete &= (it != U32_MAX);
+		}
+		
+		if (device_properties.deviceType == .DISCRETE_GPU && device_features.geometryShader && is_complete) {
+			instance.physical_device.handle = physical_device;
+			memcpy(instance.physical_device.queue_families.data, families.data, size_of(type_of(families)));
+			break;
+		}
+	}
+
+
+-	vkGetPhysicalDeviceSurfaceCapabilitiesKHR(instance.physical_device.handle, instance.surface.handle, *instance.surface.capabilities);
+	if (instance.surface.capabilities.currentExtent.width != U32_MAX) {
+        instance.surface.extent = instance.surface.capabilities.currentExtent;
+    } else {
+        instance.surface.extent.width = clamp(cast(u32, width), instance.surface.capabilities.minImageExtent.width, instance.surface.capabilities.maxImageExtent.width);
+        instance.surface.extent.height = clamp(cast(u32, height), instance.surface.capabilities.minImageExtent.height, instance.surface.capabilities.maxImageExtent.height);
+    }
+
+
+	format_count: u32;
+	vkGetPhysicalDeviceSurfaceFormatsKHR(instance.physical_device.handle, instance.surface.handle, *format_count, null);
+	array_resize(*instance.surface.formats, format_count);
+	vkGetPhysicalDeviceSurfaceFormatsKHR(instance.physical_device.handle, instance.surface.handle, *format_count, instance.surface.formats.data);
+	
+	present_mode_count: u32;
+	vkGetPhysicalDeviceSurfacePresentModesKHR(instance.physical_device.handle, instance.surface.handle, *present_mode_count, null);
+	array_resize(*instance.surface.present_modes, present_mode_count);
+	vkGetPhysicalDeviceSurfacePresentModesKHR(instance.physical_device.handle, instance.surface.handle, *present_mode_count, instance.surface.present_modes.data);
+	
+	return instance; 
+}
+	
+
+destroy_instance :: (instance: *Instance){
+	assert(xx *instance.handle, "Istance is 0x00");
+	vkDestroySurfaceKHR(instance.handle, instance.surface.handle, null);
+	#if BUILD_TYPE != .RELEASE{
+		vkDestroyDebugUtilsMessengerEXT: PFN_vkDestroyDebugUtilsMessengerEXT = xx vkGetInstanceProcAddr(instance.handle, "vkDestroyDebugUtilsMessengerEXT");
+		vkDestroyDebugUtilsMessengerEXT(instance.handle, instance.debug_messenger, null);
+	}
+	vkDestroyInstance(instance.handle, null);
+}
+
+create_device :: (physical_device: *Physical_Device) -> Device{
+	device : Device;
+	
+	device.physical_device = physical_device;
+	
+	queue_priority := 1.0;
+
+	distinct_queues: [..] u32;
+	for queue: physical_device.queue_families {
+		found:= false;
+		for distinct_queue: distinct_queues {
+			if distinct_queue == queue then found = true;
+		}
+		if !found then array_add(*distinct_queues, queue);
+	}
+
+	queue_create_infos: [..] VkDeviceQueueCreateInfo;
+	for distinct_queues {
+		queue_create_info: VkDeviceQueueCreateInfo;
+		queue_create_info.queueFamilyIndex = it;
+		queue_create_info.queueCount = 1;
+		queue_create_info.pQueuePriorities = *queue_priority;
+		array_add(*queue_create_infos, queue_create_info);
+	}
+	
+
+	device_create_info: VkDeviceCreateInfo;
+	device_create_info.pQueueCreateInfos = queue_create_infos.data;
+	device_create_info.queueCreateInfoCount = xx queue_create_infos.count;
+
+	device_features: VkPhysicalDeviceFeatures2;
+
+	features13: VkPhysicalDeviceVulkan13Features;
+	features13.dynamicRendering = 1;
+	features13.synchronization2 = 1;
+
+	features12: VkPhysicalDeviceVulkan12Features;
+	features12.pNext = *features13;
+	features12.bufferDeviceAddress = 1;
+	features12.descriptorIndexing = 1;
+
+	device_features.pNext = *features12;
+	
+	vkGetPhysicalDeviceFeatures2(physical_device, *device_features);
+	
+	device_create_info.pNext = *device_features;
+
+	device_extensions: [] *u8 = .[
+		VK_KHR_SWAPCHAIN_EXTENSION_NAME, VK_KHR_DYNAMIC_RENDERING_EXTENSION_NAME, VK_KHR_SYNCHRONIZATION_2_EXTENSION_NAME, VK_KHR_BUFFER_DEVICE_ADDRESS_EXTENSION_NAME, VK_EXT_DESCRIPTOR_INDEXING_EXTENSION_NAME
+	];
+	
+	device_create_info.ppEnabledExtensionNames = device_extensions.data;
+	device_create_info.enabledExtensionCount = xx device_extensions.count;
+	
+	vk_assert(vkCreateDevice(physical_device.handle, *device_create_info, null, *device.handle));
+
+	distinct_queue: VkQueue;
+	for distinct_queues {
+		vkGetDeviceQueue(device.handle, physical_device.queue_families[Device_Queue.GRAPHIC_PRESENT], 0, *distinct_queue);
+		for queue, type: physical_device.queue_families {
+			if it == queue {
+				device.queues[type] = distinct_queue;
+			}
+		}
+	}
+	
+	return device;
+}
+
+destroy_device :: (device: *Device){
+	vkDeviceWaitIdle(device);
+	vkDestroyDevice(device, null);
+}
+
+create_swapchain :: (device: * Device, surface: * Surface,  old_handle: VkSwapchainKHR = VK_NULL_HANDLE) -> Swap_Chain {
+	swap_chain: Swap_Chain;
+
+	swap_chain.surface_format = .{.B8G8R8A8_SRGB, .COLOR_SPACE_SRGB_NONLINEAR_KHR};
+    swap_chain.present_mode = .FIFO_KHR;
+    swap_chain.extent = surface.extent;
+
+	image_count := ifx (!surface.capabilities.maxImageCount) then surface.capabilities.minImageCount + 1 else clamp_hi(surface.capabilities.minImageCount + 1, surface.capabilities.maxImageCount);
+	
+	swap_chain_create_info: VkSwapchainCreateInfoKHR;
+	swap_chain_create_info.surface = surface.handle;
+	swap_chain_create_info.minImageCount = image_count;
+	swap_chain_create_info.imageFormat = swap_chain.surface_format.format;
+	swap_chain_create_info.imageColorSpace = swap_chain.surface_format.colorSpace;
+	swap_chain_create_info.imageExtent = swap_chain.extent;
+	swap_chain_create_info.imageArrayLayers = 1;
+	swap_chain_create_info.imageUsage = .COLOR_ATTACHMENT_BIT | .TRANSFER_DST_BIT;
+
+	swap_chain_create_info.imageSharingMode = .EXCLUSIVE;
+	swap_chain_create_info.queueFamilyIndexCount = 0;
+	swap_chain_create_info.pQueueFamilyIndices = null;
+	swap_chain_create_info.preTransform = surface.capabilities.currentTransform;
+	swap_chain_create_info.compositeAlpha = .OPAQUE_BIT_KHR;
+	swap_chain_create_info.presentMode = swap_chain.present_mode; 
+	swap_chain_create_info.clipped = VK_TRUE;
+	swap_chain_create_info.oldSwapchain = old_handle;
+
+	vk_assert(vkCreateSwapchainKHR(device.handle, *swap_chain_create_info, null, *swap_chain.handle));
+	
+	array_resize(*swap_chain.images, image_count);
+	vkGetSwapchainImagesKHR(device.handle, swap_chain.handle, *image_count, swap_chain.images.data);
+
+	return swap_chain;
+}
+
+destroy_swapchain :: (device: *Device, swap_chain: *Swap_Chain){
+    vkDestroySwapchainKHR(device, swap_chain, null);
+}
+
+acquire_image_from_swapchain :: (device: *Device, swap_chain: * Swap_Chain, semaphore: Semaphore = NULL_HANDLE, fence: Fence = NULL_HANDLE, timeout: u64 = U64_MAX){
+	index: u32;
+	vk_assert(vkAcquireNextImageKHR(device, swap_chain, timeout, semaphore, fence, *index));
+}
