@@ -23,12 +23,14 @@ Surface :: struct {
 	extent: VkExtent2D;
 }
 
-Swap_Chain :: struct{
+Swapchain :: struct{
 	#as handle: VkSwapchainKHR;
-	images: [..] VkImage;
+	images: [..] Image;
 	surface_format: VkSurfaceFormatKHR;
     present_mode: VkPresentModeKHR;
     extent: VkExtent2D;
+
+	device: *Device;
 }
 
 Instance :: struct{
@@ -328,46 +330,72 @@ destroy_device :: (device: *Device){
 	vkDestroyDevice(device, null);
 }
 
-create_swapchain :: (device: * Device, surface: * Surface,  old_handle: VkSwapchainKHR = VK_NULL_HANDLE) -> Swap_Chain {
-	swap_chain: Swap_Chain;
-
-	swap_chain.surface_format = .{.B8G8R8A8_SRGB, .COLOR_SPACE_SRGB_NONLINEAR_KHR};
-    swap_chain.present_mode = .FIFO_KHR;
-    swap_chain.extent = surface.extent;
+create_swapchain :: (device: * Device, surface: * Surface,  old_handle: VkSwapchainKHR = VK_NULL_HANDLE) -> Swapchain {
+	swapchain: Swapchain;
+	swapchain.device = device;
+	
+	swapchain.surface_format = .{.B8G8R8A8_SRGB, .COLOR_SPACE_SRGB_NONLINEAR_KHR};
+    swapchain.present_mode = .FIFO_KHR;
+    swapchain.extent = surface.extent;
 
 	image_count := ifx (!surface.capabilities.maxImageCount) then surface.capabilities.minImageCount + 1 else clamp_hi(surface.capabilities.minImageCount + 1, surface.capabilities.maxImageCount);
 	
-	swap_chain_create_info: VkSwapchainCreateInfoKHR;
-	swap_chain_create_info.surface = surface.handle;
-	swap_chain_create_info.minImageCount = image_count;
-	swap_chain_create_info.imageFormat = swap_chain.surface_format.format;
-	swap_chain_create_info.imageColorSpace = swap_chain.surface_format.colorSpace;
-	swap_chain_create_info.imageExtent = swap_chain.extent;
-	swap_chain_create_info.imageArrayLayers = 1;
-	swap_chain_create_info.imageUsage = .COLOR_ATTACHMENT_BIT | .TRANSFER_DST_BIT;
+	swapchain_create_info: VkSwapchainCreateInfoKHR;
+	swapchain_create_info.surface = surface.handle;
+	swapchain_create_info.minImageCount = image_count;
+	swapchain_create_info.imageFormat = swapchain.surface_format.format;
+	swapchain_create_info.imageColorSpace = swapchain.surface_format.colorSpace;
+	swapchain_create_info.imageExtent = swapchain.extent;
+	swapchain_create_info.imageArrayLayers = 1;
+	swapchain_create_info.imageUsage = .COLOR_ATTACHMENT_BIT | .TRANSFER_DST_BIT;
 
-	swap_chain_create_info.imageSharingMode = .EXCLUSIVE;
-	swap_chain_create_info.queueFamilyIndexCount = 0;
-	swap_chain_create_info.pQueueFamilyIndices = null;
-	swap_chain_create_info.preTransform = surface.capabilities.currentTransform;
-	swap_chain_create_info.compositeAlpha = .OPAQUE_BIT_KHR;
-	swap_chain_create_info.presentMode = swap_chain.present_mode; 
-	swap_chain_create_info.clipped = VK_TRUE;
-	swap_chain_create_info.oldSwapchain = old_handle;
+	swapchain_create_info.imageSharingMode = .EXCLUSIVE;
+	swapchain_create_info.queueFamilyIndexCount = 0;
+	swapchain_create_info.pQueueFamilyIndices = null;
+	swapchain_create_info.preTransform = surface.capabilities.currentTransform;
+	swapchain_create_info.compositeAlpha = .OPAQUE_BIT_KHR;
+	swapchain_create_info.presentMode = swapchain.present_mode; 
+	swapchain_create_info.clipped = VK_TRUE;
+	swapchain_create_info.oldSwapchain = old_handle;
 
-	vk_assert(vkCreateSwapchainKHR(device.handle, *swap_chain_create_info, null, *swap_chain.handle));
+	vk_assert(vkCreateSwapchainKHR(device.handle, *swapchain_create_info, null, *swapchain.handle));
 	
-	array_resize(*swap_chain.images, image_count);
-	vkGetSwapchainImagesKHR(device.handle, swap_chain.handle, *image_count, swap_chain.images.data);
+	array_resize(*swapchain.images, image_count);
+	raw_images := array_allocate(image_count, VkImage);
+	vkGetSwapchainImagesKHR(device.handle, swapchain.handle, *image_count, raw_images.data);
 
-	return swap_chain;
+	for raw_images{
+		swapchain.images[it_index].handle = it;
+		swapchain.images[it_index].layout = .UNDEFINED;
+		swapchain.images[it_index].format = .B8G8R8A8_SRGB;
+		swapchain.images[it_index].extent = .{surface.extent.width, surface.extent.height, 1};
+	}
+
+	array_free(raw_images);
+	return swapchain;
 }
 
-destroy_swapchain :: (device: *Device, swap_chain: *Swap_Chain){
-    vkDestroySwapchainKHR(device, swap_chain, null);
+destroy_swapchain :: (device: *Device, swapchain: *Swapchain){
+    vkDestroySwapchainKHR(device, swapchain, null);
 }
 
-acquire_image_from_swapchain :: (device: *Device, swap_chain: * Swap_Chain, semaphore: Semaphore = NULL_HANDLE, fence: Fence = NULL_HANDLE, timeout: u64 = U64_MAX){
+acquire_image_from_swapchain :: (swapchain: * Swapchain, semaphore: Semaphore, fence: Fence = .{}, timeout: u64 = U64_MAX) -> *Image, u32{
 	index: u32;
-	vk_assert(vkAcquireNextImageKHR(device, swap_chain, timeout, semaphore, fence, *index));
+	vk_assert(vkAcquireNextImageKHR(swapchain.device, swapchain, timeout, semaphore, fence, *index));
+	return *swapchain.images[index], index;
+}
+
+present_queue_to_swapchain :: (swapchain: *Swapchain, index: u32 /*temp*/, semaphore: *Semaphore = null){	
+	present_info: VkPresentInfoKHR;
+	present_info.pSwapchains = *swapchain.handle;
+	present_info.swapchainCount = 1;
+
+	if semaphore{
+		present_info.pWaitSemaphores = *semaphore.handle;
+		present_info.waitSemaphoreCount = 1;
+	}
+
+	present_info.pImageIndices = *index;
+
+	vk_assert(vkQueuePresentKHR(swapchain.device.queues[Device_Queue.GRAPHIC_PRESENT], *present_info));
 }

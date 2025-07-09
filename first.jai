@@ -9,7 +9,7 @@ build :: () {
 	options.text_output_flags = 0;
 	
 	build_path := "out/debug";
-	src_path := "vulkan/src";
+	src_path := "housane/src";
 	options.entry_point_name = "entry_point";
 	debug := true;
 	run_debugger := false;
