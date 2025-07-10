@@ -21,7 +21,7 @@ create_fence :: (device: *Device, signaled: bool, deletion_queue: *Deletion_Queu
 	return fence;
 }
 
-destroy_fence :: (fence: Fence){
+destroy_fence :: (fence: *Fence){
 	vkDestroyFence(fence.device, fence, null);
 }
 
@@ -36,7 +36,7 @@ create_semaphore :: (device: *Device, deletion_queue: *Deletion_Queue = null/*, 
     return semaphore;
 }
 
-destroy_semaphore :: (semaphore: Semaphore){
+destroy_semaphore :: (semaphore: *Semaphore){
 	vkDestroySemaphore(semaphore.device, semaphore, null);
 }
 

@@ -5,10 +5,10 @@ Command_Buffer :: struct{
 	device: *Device;
 }
 
-create_command_buffer :: (device: *Device, queue_family: Device_Queue, deletion_queue: *Deletion_Queue = null) -> Command_Buffer{
+create_command_buffer :: (device: Device, queue_family: Device_Queue, deletion_queue: *Deletion_Queue = null) -> Command_Buffer{
 	command_buffer: Command_Buffer;
 
-	command_buffer.device = device;
+	command_buffer.device = *device;
 	
 	command_pool_info: VkCommandPoolCreateInfo;
 	command_pool_info.flags = .RESET_COMMAND_BUFFER_BIT;
@@ -27,11 +27,11 @@ create_command_buffer :: (device: *Device, queue_family: Device_Queue, deletion_
 	return command_buffer;
 }
 
-destroy_command_buffer :: (buffer: Command_Buffer){
+destroy_command_buffer :: (buffer: *Command_Buffer){
 	vkDestroyCommandPool(buffer.device, buffer.allocator, null);
 }
 
-begin_command_recording :: (command_buffer: *Command_Buffer, clear: bool = true/*,flags: <type>*/){
+begin_command_recording :: (command_buffer: Command_Buffer, clear: bool = true/*,flags: <type>*/){
 	info: VkCommandBufferBeginInfo;
     info.flags = .ONE_TIME_SUBMIT_BIT; // TODO enable other behaviours
 
@@ -39,11 +39,11 @@ begin_command_recording :: (command_buffer: *Command_Buffer, clear: bool = true/
 	vk_assert(vkBeginCommandBuffer(command_buffer, *info));
 }
 
-end_command_recording :: (command_buffer: *Command_Buffer){
+end_command_recording :: (command_buffer: Command_Buffer){
 	vk_assert(vkEndCommandBuffer(command_buffer));
 }
 
-transition_image_layout_command :: (command_buffer: *Command_Buffer, image: *Image, target_layout: Image_Layout){
+transition_image_layout_command :: (command_buffer: Command_Buffer, image: *Image, target_layout: Image_Layout){
 	if image.layout == target_layout then return;
 	
 	image_barrier: VkImageMemoryBarrier2;
@@ -70,14 +70,14 @@ transition_image_layout_command :: (command_buffer: *Command_Buffer, image: *Ima
 	image.layout = target_layout;
 }
 
-clear_image_command :: (command_buffer: *Command_Buffer, image: Image,  color: Color4){
+clear_image_command :: (command_buffer: Command_Buffer, image: Image,  color: Color4){
 	assert(image.layout == .GENERAL, "Wrong image layout for clear command!");
 	clear_range := create_subresource_range(xx VkImageAspectFlagBits.COLOR_BIT);
 	clear_value: VkClearColorValue = .{.[color.r / 255.0, color.g / 255.0, color.b / 255.0, color.a / 255.0]};
 	vkCmdClearColorImage(command_buffer, image, xx image.layout, *clear_value, 1, *clear_range);
 }
 
-submit_command_buffer :: (command_buffer: *Command_Buffer, queue: VkQueue, fence: *Fence, wait_semaphore: *Semaphore = null,  signal_semaphore: *Semaphore = null){
+submit_command_buffer :: (command_buffer: Command_Buffer, queue: VkQueue, fence: *Fence, wait_semaphore: *Semaphore = null,  signal_semaphore: *Semaphore = null){
 	buffer_info: VkCommandBufferSubmitInfo;
 	buffer_info.commandBuffer = command_buffer;
 
@@ -112,7 +112,7 @@ submit_command_buffer :: (command_buffer: *Command_Buffer, queue: VkQueue, fence
 }
 
 
-blit_image_command ::(buffer: *Command_Buffer, source: *Image, destination: *Image){
+blit_image_command ::(buffer: Command_Buffer, source: *Image, destination: *Image){
 	source_layout := source.layout;
 	destination_layout := destination.layout;
 	
@@ -150,16 +150,72 @@ blit_image_command ::(buffer: *Command_Buffer, source: *Image, destination: *Ima
 	if destination_layout != .UNDEFINED then transition_image_layout_command(buffer, destination, destination_layout);
 }
 
-bind_pipeline_command :: (buffer: *Command_Buffer, bind_point: Pipeline_Bind_Point, pipeline: *Pipeline, descriptor: Descriptor_Set){
-	vkCmdBindPipeline(buffer, xx bind_point, pipeline);
-	
-	vkCmdBindDescriptorSets(buffer, xx bind_point, pipeline.layout, 0, 1, *descriptor.handle, 0, null);
+bind_pipeline_command :: (buffer: Command_Buffer, pipeline: Pipeline, descriptor: *Descriptor_Set = null){
+	vkCmdBindPipeline(buffer, xx pipeline.usage, pipeline);
+
+	if descriptor then vkCmdBindDescriptorSets(buffer, xx pipeline.usage, pipeline.layout, 0, 1, *descriptor.handle, 0, null);
 }
 
-dispatch_compute_command :: (buffer: *Command_Buffer, x_groups: u32, y_groups: u32, z_groups: u32 = 1){
+dispatch_compute_command :: (buffer: Command_Buffer, x_groups: u32, y_groups: u32, z_groups: u32 = 1){
 	vkCmdDispatch(buffer, x_groups, y_groups, z_groups);
 }
 
-push_constants_command :: (buffer: *Command_Buffer, pipeline: *Pipeline, bind_point: Shader_Stage, data: *$T){
+push_constants_command :: (buffer: Command_Buffer, pipeline: Pipeline, bind_point: Shader_Stage, data: *$T){
 	vkCmdPushConstants(buffer, pipeline.layout, xx bind_point, 0, size_of(T), data);
 }
+
+begin_rendering_command ::(buffer: Command_Buffer, target_color_attachment: *Image = null, target_depth_attachment: *Image = null) {
+	render_info: VkRenderingInfo;
+	
+	if target_color_attachment && !target_depth_attachment {
+		render_info.renderArea = VkRect2D.{ VkOffset2D.{ 0, 0 }, .{target_color_attachment.width, target_color_attachment.height} };
+	}
+
+	if !target_color_attachment && target_depth_attachment {
+		render_info.renderArea = VkRect2D.{ VkOffset2D.{ 0, 0 }, .{target_depth_attachment.width, target_depth_attachment.height} };
+	}
+	
+    render_info.layerCount = 1;
+    render_info.colorAttachmentCount = 1;
+    if target_color_attachment then render_info.pColorAttachments = *image_attachment_info(target_color_attachment);
+	if target_depth_attachment then render_info.pDepthAttachment = *image_attachment_info(target_depth_attachment);
+    render_info.pStencilAttachment = null;
+
+	vkCmdBeginRendering(buffer, *render_info);
+}
+
+end_renderin_command :: (buffer: Command_Buffer){
+	vkCmdEndRendering(buffer);
+}
+
+set_viewport_command :: (buffer: Command_Buffer, x: f32, y: f32, width: f32, height: f32, min_depth: f32 = 0.1, max_depth: f32 = 1.0) {
+	viewport: VkViewport;
+	viewport.x = x;
+	viewport.y = y;
+	viewport.width = width;
+	viewport.height = height;
+	viewport.minDepth = min_depth;
+	viewport.maxDepth = max_depth;
+
+	vkCmdSetViewport(buffer, 0, 1, *viewport);
+}
+
+set_scissor_command :: (buffer: Command_Buffer, x: s32, y: s32, width: u32, height: u32) {
+	scissor: VkRect2D;
+	scissor.offset.x = x;
+	scissor.offset.y = y;
+	scissor.extent.width = width;
+	scissor.extent.height = height;
+
+	vkCmdSetScissor(buffer, 0, 1, *scissor);
+}
+
+draw_command :: (buffer: Command_Buffer, vertex_count: u32, instance_count: u32 = 1, vertex_offset: u32 = 0, instance_offset: u32 = 0){
+	vkCmdDraw(buffer, vertex_count, instance_count, vertex_offset, instance_offset);
+}
+
+
+
+//_command ::(buffer: Command_Buffer) {}
+//_command ::(buffer: Command_Buffer) {}
+//_command ::(buffer: Command_Buffer) {}

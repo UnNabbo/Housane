@@ -39,7 +39,7 @@ __generate_deletion_queue_body :: ($type: ..Type) -> string{
 	for type {
 		it_str := tprint("%", it);
 		queue_name := __sanitize_vk_type(it_str);
-		append(*string_builder, tprint("\tfor < queue.%0_queue {\n\t\tdestroy_%(it);\n\t}\n\tqueue.%0_queue.count = 0;\n", queue_name, queue_name, queue_name));
+		append(*string_builder, tprint("\tfor *< queue.%0_queue {\n\t\tdestroy_%(it);\n\t}\n\tqueue.%0_queue.count = 0;\n", queue_name, queue_name, queue_name));
 	}
 	append(*string_builder, tprint("}"));
 	

@@ -1,11 +1,4 @@
-#import "Basic"()(MEMORY_DEBUGGER = BUILD_TYPE != .RELEASE, ENABLE_ASSERT = BUILD_TYPE != .RELEASE);
 
-#import "Math";
-
-#import "String";
-#import "Debug";
-#import "File";
-#import "Print_Color";
 
 #load "entry_point.jai";
 #load "window_and_input.jai";

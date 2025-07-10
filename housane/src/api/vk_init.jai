@@ -223,7 +223,7 @@ create_instance :: (window_handle: * void, width: s32, height: s32) -> Instance 
 	}
 
 
--	vkGetPhysicalDeviceSurfaceCapabilitiesKHR(instance.physical_device.handle, instance.surface.handle, *instance.surface.capabilities);
+	vkGetPhysicalDeviceSurfaceCapabilitiesKHR(instance.physical_device.handle, instance.surface.handle, *instance.surface.capabilities);
 	if (instance.surface.capabilities.currentExtent.width != U32_MAX) {
         instance.surface.extent = instance.surface.capabilities.currentExtent;
     } else {
@@ -375,17 +375,17 @@ create_swapchain :: (device: * Device, surface: * Surface,  old_handle: VkSwapch
 	return swapchain;
 }
 
-destroy_swapchain :: (device: *Device, swapchain: *Swapchain){
-    vkDestroySwapchainKHR(device, swapchain, null);
+destroy_swapchain :: (swapchain: *Swapchain){
+    vkDestroySwapchainKHR(swapchain.device, swapchain, null);
 }
 
-acquire_image_from_swapchain :: (swapchain: * Swapchain, semaphore: Semaphore, fence: Fence = .{}, timeout: u64 = U64_MAX) -> *Image, u32{
+acquire_image_from_swapchain :: (swapchain: Swapchain, semaphore: Semaphore, fence: Fence = .{}, timeout: u64 = U64_MAX) -> *Image, u32{
 	index: u32;
 	vk_assert(vkAcquireNextImageKHR(swapchain.device, swapchain, timeout, semaphore, fence, *index));
 	return *swapchain.images[index], index;
 }
 
-present_queue_to_swapchain :: (swapchain: *Swapchain, index: u32 /*temp*/, semaphore: *Semaphore = null){	
+present_queue_to_swapchain :: (swapchain: Swapchain, index: u32 /*temp*/, semaphore: *Semaphore = null){	
 	present_info: VkPresentInfoKHR;
 	present_info.pSwapchains = *swapchain.handle;
 	present_info.swapchainCount = 1;
@@ -399,3 +399,5 @@ present_queue_to_swapchain :: (swapchain: *Swapchain, index: u32 /*temp*/, semap
 
 	vk_assert(vkQueuePresentKHR(swapchain.device.queues[Device_Queue.GRAPHIC_PRESENT], *present_info));
 }
+
+ 

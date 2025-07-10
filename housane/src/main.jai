@@ -1,3 +1,12 @@
+#import "Basic"()(MEMORY_DEBUGGER = BUILD_TYPE != .RELEASE, ENABLE_ASSERT = BUILD_TYPE != .RELEASE);
+
+#import "Math";
+
+#import "String";
+#import "Debug";
+#import "File";
+#import "Print_Color";
+
 #load "core/basic.jai";
 
 #import "Vulkan";
@@ -7,6 +16,7 @@
 #load "api/vk_utils.jai";
 #load "api/vk_memory.jai";
 #load "api/vk_init.jai";
+#load "api/vk_shader.jai";
 #load "api/vk_pipeline.jai";
 #load "api/vk_descriptors.jai";
 

@@ -1,169 +1,74 @@
-Rasterizer_Mode :: enum{
+Assembly_Topology :: enum{
 	NONE                          :: -1;
-	POINT_LIST                    :: 0;
-    LINE_LIST                     :: 1;
-    LINE_STRIP                    :: 2;
-    TRIANGLE_LIST                 :: 3;
-    TRIANGLE_STRIP                :: 4;
-    TRIANGLE_FAN                  :: 5;
-    LINE_LIST_WITH_ADJACENCY      :: 6;
-    LINE_STRIP_WITH_ADJACENCY     :: 7;
-    TRIANGLE_LIST_WITH_ADJACENCY  :: 8;
-    TRIANGLE_STRIP_WITH_ADJACENCY :: 9;
+	POINT_LIST                    ::  0;
+    LINE_LIST                     ::  1;
+    LINE_STRIP                    ::  2;
+    TRIANGLE_LIST                 ::  3;
+    TRIANGLE_STRIP                ::  4;
+    TRIANGLE_FAN                  ::  5;
+    LINE_LIST_WITH_ADJACENCY      ::  6;
+    LINE_STRIP_WITH_ADJACENCY     ::  7;
+    TRIANGLE_LIST_WITH_ADJACENCY  ::  8;
+    TRIANGLE_STRIP_WITH_ADJACENCY ::  9;
     PATCH_LIST                    :: 10;
 }
 
-Polygon_Mode :: enum{
-	NONE              :: -1;
-	FILL              :: 0;
-    LINE              :: 1;
-    POINT             :: 2;
-    FILL_RECTANGLE_NV :: 1000153000;
+Rasterization_Fill_Mode :: enum{
+	NONE              ::          -1;
+	FILL              ::           0;
+    LINE              ::           1;
+    POINT             ::           2;
+    FILL_RECTANGLE_NV ::  1000153000;
 }
 
-Culling_Mode :: enum{
+Rasterization_Cull_Mode :: enum{
 	NONE              :: -1;
-	COUNTER_CLOCKWISE :: 0;
-    CLOCKWISE         :: 1;
+	COUNTER_CLOCKWISE ::  0;
+    CLOCKWISE         ::  1;
 } 
 
-Pipeline_Bind_Point :: enum{
+Pipeline_Usage :: enum{
 	GRAPHICS               :: 0;
 	COMPUTE                :: 1;
-	RAY_TRACING_KHR        :: 1000165000;
-	SUBPASS_SHADING_HUAWEI :: 1000369003;
-	RAY_TRACING_NV         :: 1000165000;
+	RAY_TRACING            :: 1000165000;
+}
+
+Pipeline_Info :: struct {
+	color_attachment_format: Image_Format = .UNDEFINED;
+	depth_attachment_format: Image_Format = .UNDEFINED;
+	
+	multisampling: bool = false;
+	alpha_blending: bool = false;
+	depth_testing: bool = false;
+	
+	assembly_topology: Assembly_Topology = .TRIANGLE_LIST;
+	rasterization_fill_mode: Rasterization_Fill_Mode = .FILL;
+	rasterization_cull_mode: Rasterization_Cull_Mode = .COUNTER_CLOCKWISE;
 }
 
 Pipeline :: struct {
 	#as handle: VkPipeline;
 	layout: VkPipelineLayout;
 	
-	shader: Shader;
+	usage: Pipeline_Usage = .GRAPHICS;
+}
+
+create_pipeline :: (device: *Device, info: Pipeline_Info, shader: *Shader, deletion_queue: *Deletion_Queue = null) -> Pipeline{
+	pipeline: Pipeline;
 	
-    rasterizer:              VkPipelineRasterizationStateCreateInfo;
-    multisampling:           VkPipelineMultisampleStateCreateInfo;
-    render_info:             VkPipelineRenderingCreateInfo;
-    depth_stencil:           VkPipelineDepthStencilStateCreateInfo;
-    input_assembly:          VkPipelineInputAssemblyStateCreateInfo;
-    color_blend_attachment:  VkPipelineColorBlendAttachmentState;
-    color_attachment_format: VkFormat;
-}
-
-Type_And_Size :: struct {
-	#as type: Type;
-	size: u64;
-}
-
-
-Shader_Stage :: enum_flags {
-    VERTEX                  :: 0x1;
-    TESSELLATION_CONTROL    :: 0x2;
-    TESSELLATION_EVALUATION :: 0x4;
-    GEOMETRY                :: 0x8;
-    FRAGMENT                :: 0x10;
-    COMPUTE                 :: 0x20;
-    ALL_GRAPHICS            :: 0x1f;
-    ALL                     :: 0x7fffffff;
-    RAYGEN                  :: 0x100;
-    ANY_HIT                 :: 0x200;
-    CLOSEST_HIT             :: 0x400;
-    MISS                    :: 0x800;
-    INTERSECTION            :: 0x1000;
-    CALLABLE                :: 0x2000;
-    TASK                    :: 0x40;
-    MESH                    :: 0x80;
-}
-
-Shader_Module :: struct{
-	#as handle: VkShaderModule;
-	stage: Shader_Stage;
-	entry_point: string = "main";
-	push_types: [..] Type;
-	
-	device: *Device;
-}
-
-Shader :: struct{
-	stages: [..] VkPipelineShaderStageCreateInfo;
-	push_constants: [..] VkPushConstantRange;
-}
-
-create_shader :: (modules: ..Shader_Module) -> Shader {
-	shader: Shader;
-	
-	for modules {
-		stage_info: VkPipelineShaderStageCreateInfo;
-		stage_info.stage = xx it.stage;
-		stage_info.module = it;
-		stage_info.pName = it.entry_point.data;
-		
-		array_add(*shader.stages, stage_info);
-		for type: it.push_types {
-			push_constant_info: VkPushConstantRange;
-			push_constant_info.offset = 0;
-			push_constant_info.size = xx cast(*Type_Info, type).runtime_size;
-			push_constant_info.stageFlags = xx it.stage;
-			
-			array_add(*shader.push_constants, push_constant_info);
-		}
-	}
-
-	return shader;
-}
-
-create_shader_module :: (device: *Device, stage: Shader_Stage, path: string, push_types: ..Type) -> Shader_Module{
-	data, result := read_entire_file(path);
-	if !result{
-		breakpoint();
-		exit(-1);
-	}
-
-	create_info: VkShaderModuleCreateInfo;
-    create_info.codeSize = xx data.count;
-    create_info.pCode = xx data.data;
-	
-	module: Shader_Module;
-	module.stage = stage;
-
-    vk_assert(vkCreateShaderModule(device, *create_info, null, *module.handle));
-
-	for push_types {
-		array_add(*module.push_types, it);
-	}
-	
-	return module;
-}
-
-destroy_shader_module :: (module: *Shader_Module){
-	vkDestroyShaderModule(module.device, module, null);
-}
-#if false{
-
-create_pipeline_info :: (
-	shader: Shader,
-	color: Image_Format = .UNDEFINED,
-	depth: Image_Format = .UNDEFINED,
-	rasterizer_mode: Rasterizer_Mode = .NONE,
-	polygon_mode: Polygon_Mode = .NONE,
-	culling_mode: Culling_Mode = .NONE,
-	enable_multisampling: bool = false,
-	enable_alpha_blending: bool = false,
-	enable_depth_testing: bool = false
-) -> Pipeline_Info{
-	info.shader = shader;
-
-	input_assembly.topology   = xx rasterizer_mode;
+	input_assembly: VkPipelineInputAssemblyStateCreateInfo;
+	input_assembly.topology   = xx info.assembly_topology;
     input_assembly.primitiveRestartEnable  = VK_FALSE;
 		
-	
-	rasterizer.polygonMode = xx polygon_mode;
+	rasterizer: VkPipelineRasterizationStateCreateInfo;
+	rasterizer.polygonMode = xx info.rasterization_fill_mode;
     rasterizer.lineWidth = xx 1.0;
 
 	rasterizer.cullMode = .NONE;
-    rasterizer.frontFace = xx culling_mode;
+    rasterizer.frontFace = xx info.rasterization_cull_mode;
 
-	if(enable_multisampling){
+	multisampling: VkPipelineMultisampleStateCreateInfo;
+	if(info.multisampling){
 		
 	}else{
 		multisampling.sampleShadingEnable = VK_FALSE;
@@ -173,21 +78,23 @@ create_pipeline_info :: (
 		multisampling.alphaToCoverageEnable = VK_FALSE;
 		multisampling.alphaToOneEnable = VK_FALSE;
 	}
-    // no alpha to coverage either
 
-	if(enable_a_blending){
+	color_blend_attachment: VkPipelineColorBlendAttachmentState;
+	if(info.alpha_blending){
 		
 	}else{
 		color_blend_attachment.colorWriteMask = .R_BIT | .G_BIT | .B_BIT | .A_BIT;
 		color_blend_attachment.blendEnable = VK_FALSE;
 	}
 
-	color_attachment_format = color;
+	attachment: VkFormat = xx info.color_attachment_format;
+	render_info: VkPipelineRenderingCreateInfo;
 	render_info.colorAttachmentCount = 1;
-    render_info.pColorAttachmentFormats = *color_attachment_format;
-	render_info.depthAttachmentFormat = depth;
+    render_info.pColorAttachmentFormats = *attachment;
+	render_info.depthAttachmentFormat = xx info.depth_attachment_format;
 
-	if(enable_depth_testing){
+	depth_stencil: VkPipelineDepthStencilStateCreateInfo;
+	if(info.depth_testing){
 
 	}else{
 		depth_stencil.depthTestEnable = VK_FALSE;
@@ -201,21 +108,14 @@ create_pipeline_info :: (
 		depth_stencil.maxDepthBounds = xx 1.0;
 	}
 	
-	return info;
-}
-
-create_graphic_pipeline :: (using vk_context: *Context, info: Pipeline_Info, descriptors: ..VkDescriptorSetLayout) -> Pipeline{
-	pipeline: Pipeline;
-	pipeline.info = info;
 
 	layout: VkPipelineLayoutCreateInfo;
-	layout.pSetLayouts = descriptors.data;
-	layout.setLayoutCount = xx descriptors.count;
-	layout.pPushConstantRanges = pipeline.info.shader.push_constants.data;
-	layout.pushConstantRangeCount = xx pipeline.info.shader.push_constants.count;
+	layout.pSetLayouts = shader.descriptor_layouts.data;
+	layout.setLayoutCount = xx shader.descriptor_layouts.count;
+	layout.pPushConstantRanges = shader.push_constants.data;
+	layout.pushConstantRangeCount = xx shader.push_constants.count;
 	
 	vk_assert(vkCreatePipelineLayout(device, *layout, null, *pipeline.layout));
-	
 	
 	viewport_state: VkPipelineViewportStateCreateInfo;
 	viewport_state.viewportCount = 1;
@@ -225,21 +125,21 @@ create_graphic_pipeline :: (using vk_context: *Context, info: Pipeline_Info, des
 	color_blending.logicOpEnable = VK_FALSE;
 	color_blending.logicOp = .COPY;
 	color_blending.attachmentCount = 1;
-	color_blending.pAttachments = *pipeline.color_blend_attachment;
+	color_blending.pAttachments = *color_blend_attachment;
 
 	vertex_input_info: VkPipelineVertexInputStateCreateInfo;
 
 	pipeline_info: VkGraphicsPipelineCreateInfo;
-	pipeline_info.pNext = *pipeline.render_info;
-	pipeline_info.stageCount = xx pipeline.shader.stages.count;
-	pipeline_info.pStages = pipeline.shader.stages.data;
+	pipeline_info.pNext = *render_info;
+	pipeline_info.stageCount = xx shader.stages.count;
+	pipeline_info.pStages = shader.stages.data;
 	pipeline_info.pVertexInputState = *vertex_input_info;
-	pipeline_info.pInputAssemblyState = *pipeline.input_assembly;
+	pipeline_info.pInputAssemblyState = *input_assembly;
 	pipeline_info.pViewportState = *viewport_state;
-	pipeline_info.pRasterizationState = *pipeline.rasterizer;
-	pipeline_info.pMultisampleState = *pipeline.multisampling;
+	pipeline_info.pRasterizationState = *rasterizer;
+	pipeline_info.pMultisampleState = *multisampling;
 	pipeline_info.pColorBlendState = *color_blending;
-	pipeline_info.pDepthStencilState = *pipeline.depth_stencil;
+	pipeline_info.pDepthStencilState = *depth_stencil;
 	pipeline_info.layout = pipeline.layout;
 
 	state: [] VkDynamicState = .[.VIEWPORT, .SCISSOR];
@@ -250,36 +150,33 @@ create_graphic_pipeline :: (using vk_context: *Context, info: Pipeline_Info, des
 
 	pipeline_info.pDynamicState = *dynamic_info;
 
-
 	vkCreateGraphicsPipelines(device, VK_NULL_HANDLE, 1, *pipeline_info, null, *pipeline.handle);
 
+	Deletion_Queue.push(deletion_queue, pipeline);
+	
 	return pipeline;
 }
 
+destroy_pipeline :: (device: *Pipeline){
+	
 }
 
-create_compute_pipeline :: (device: *Device, shader: Shader, descriptors: ..Descriptor_Set) -> Pipeline{
+create_pipeline :: (device: *Device, shader: *Shader) -> Pipeline{
 	pipeline: Pipeline;
-	pipeline.shader = shader;
-	
-	layouts: [..] VkDescriptorSetLayout ;
-	for descriptors {
-		array_add(*layouts, it.layout);
-	}
+	pipeline.usage = .COMPUTE;
 	
 	compute_layout: VkPipelineLayoutCreateInfo;
-	compute_layout.pSetLayouts = layouts.data;
-	compute_layout.setLayoutCount = xx layouts.count;
+	compute_layout.pSetLayouts = shader.descriptor_layouts.data;
+	compute_layout.setLayoutCount = xx shader.descriptor_layouts.count;
 	compute_layout.pPushConstantRanges = shader.push_constants.data;
 	compute_layout.pushConstantRangeCount = xx shader.push_constants.count;
 	
 	vk_assert(vkCreatePipelineLayout(device, *compute_layout, null, *pipeline.layout));
-	array_free(layouts);
 
 	compute_pipeline_create_info: VkComputePipelineCreateInfo;
 	compute_pipeline_create_info.layout = pipeline.layout;
-	assert(pipeline.shader.stages.count == 1);
-	compute_pipeline_create_info.stage = pipeline.shader.stages[0];
+	assert(shader.stages.count == 1);
+	compute_pipeline_create_info.stage = shader.stages[0];
 	
 	vk_assert(vkCreateComputePipelines(device, VK_NULL_HANDLE, 1, *compute_pipeline_create_info, null, *pipeline.handle));
 

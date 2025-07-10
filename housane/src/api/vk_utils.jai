@@ -4,9 +4,14 @@ Image_Subresource_Range :: VkImageSubresourceRange;
 
 vk_assert :: val => assert(val == .SUCCESS);
 
-Deletion_Queue :: struct {
-	#insert #run __generate_deletion_queue_body(Fence, Semaphore, Vulkan_Memory_Allocator, Command_Buffer, Image_Internals, Descriptor_Allocator_Internals);
-}
+Deletion_Queue :: struct {#insert #run __generate_deletion_queue_body(
+		Fence,
+		Pipeline,
+		Semaphore,
+		Command_Buffer,
+		Descriptor_Allocator,
+		Vulkan_Memory_Allocator
+);}
 
 
 clamp_hi :: inline (val: $T, max: T) -> T {
@@ -16,7 +21,6 @@ clamp_hi :: inline (val: $T, max: T) -> T {
 get_instance_proc_add :: (inst: VkInstance, entry: string) #expand {
 	#insert #run tprint("`% : PFN_% = xx vkGetInstanceProcAddr(inst, \"%\");", entry, entry, entry);
 }
-
 
 create_subresource_range :: (mask: u64) -> Image_Subresource_Range{
 	subresource: Image_Subresource_Range;
@@ -29,10 +33,18 @@ create_subresource_range :: (mask: u64) -> Image_Subresource_Range{
 	return subresource;
 }
 
-#scope_file
 
-//NOTE: maybe move it in vk_memory.jai.
-destroy_image_internals :: (using image_internals: Image_Internals){
-	vkDestroyImageView(allocation.allocator.device, view, null);
-	vmaDestroyImage(allocation.allocator, handle, allocation);
+image_attachment_info :: (image: Image) -> VkRenderingAttachmentInfo{
+	attachment: VkRenderingAttachmentInfo;
+    attachment.imageView = image.view;
+    attachment.imageLayout = xx image.layout;
+    attachment.loadOp  = .LOAD;
+    attachment.storeOp = .STORE;
+
+	// if (clear) {
+	// 	attachment.loadOp |= VK_ATTACHMENT_LOAD_OP_CLEAR;
+    //     attachment.clearValue = *clear;
+    // }
+
+	return attachment;
 }

@@ -366,18 +366,69 @@ Image_Format :: enum u32 {
     R16G16_S10_5_NV                                :: 1000464000;
 }
 
-Image_Internals :: struct{
+Vulkan_Memory_Usage :: enum_flags{
+	UNKNOWN              :: 0;
+    GPU_ONLY             :: 1;
+    CPU_ONLY             :: 2;
+    CPU_TO_GPU           :: 3;
+    GPU_TO_CPU           :: 4;
+    CPU_COPY             :: 5;
+    GPU_LAZILY_ALLOCATED :: 6;
+    AUTO                 :: 7;
+    AUTO_PREFER_DEVICE   :: 8;
+    AUTO_PREFER_HOST     :: 9;
+}
+
+Allocated_Buffer_Usage :: enum_flags{
+    TRANSFER_SRC_BIT                                     :: 0x1;
+    TRANSFER_DST_BIT                                     :: 0x2;
+    UNIFORM_TEXEL_BUFFER_BIT                             :: 0x4;
+    STORAGE_TEXEL_BUFFER_BIT                             :: 0x8;
+    UNIFORM_BUFFER_BIT                                   :: 0x10;
+    STORAGE_BUFFER_BIT                                   :: 0x20;
+    INDEX_BUFFER_BIT                                     :: 0x40;
+    VERTEX_BUFFER_BIT                                    :: 0x80;
+    INDIRECT_BUFFER_BIT                                  :: 0x100;
+    SHADER_DEVICE_ADDRESS_BIT                            :: 0x20000;
+    VIDEO_DECODE_SRC_BIT_KHR                             :: 0x2000;
+    VIDEO_DECODE_DST_BIT_KHR                             :: 0x4000;
+    TRANSFORM_FEEDBACK_BUFFER_BIT_EXT                    :: 0x800;
+    TRANSFORM_FEEDBACK_COUNTER_BUFFER_BIT_EXT            :: 0x1000;
+    CONDITIONAL_RENDERING_BIT_EXT                        :: 0x200;
+
+    ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR :: 0x80000;
+    ACCELERATION_STRUCTURE_STORAGE_BIT_KHR               :: 0x100000;
+    SHADER_BINDING_TABLE_BIT_KHR                         :: 0x400;
+    VIDEO_ENCODE_DST_BIT_KHR                             :: 0x8000;
+    VIDEO_ENCODE_SRC_BIT_KHR                             :: 0x10000;
+    SAMPLER_DESCRIPTOR_BUFFER_BIT_EXT                    :: 0x200000;
+    RESOURCE_DESCRIPTOR_BUFFER_BIT_EXT                   :: 0x400000;
+    PUSH_DESCRIPTORS_DESCRIPTOR_BUFFER_BIT_EXT           :: 0x4000000;
+    MICROMAP_BUILD_INPUT_READ_ONLY_BIT_EXT               :: 0x800000;
+    MICROMAP_STORAGE_BIT_EXT                             :: 0x1000000;
+    RAY_TRACING_BIT_NV                                   :: 0x400;
+    SHADER_DEVICE_ADDRESS_BIT_EXT                        :: 0x20000;
+    SHADER_DEVICE_ADDRESS_BIT_KHR                        :: 0x20000;
+    FLAG_BITS_MAX_ENUM                                   :: 0x7fffffff;
+
+}
+Allocated_Buffer :: struct {
+	#as handle: VkBuffer;
+    allocation: Vulkan_Memory_Allocation;
+	info: Vulkan_Memory_Allocation_Info;
+}
+
+
+Image :: struct{
 	#as handle: VkImage;
+    using extent: VkExtent3D;
 	view: VkImageView;
+	layout : Image_Layout;
+    format: Image_Format;
     allocation: Vulkan_Memory_Allocation;
 }
 
-Image :: struct{
-	using internals: Image_Internals;
-	layout : Image_Layout;
-    format: Image_Format;
-    extent: VkExtent3D;
-}
+Vulkan_Memory_Allocation_Info :: VmaAllocationInfo;
 
 Vulkan_Memory_Allocation :: struct {
 	#as handle: VmaAllocation;
@@ -389,7 +440,7 @@ Vulkan_Memory_Allocator :: struct {
 	device: *Device;
 }
 
-create_image :: (allocator: *Vulkan_Memory_Allocator, width: s32, height: s32, image_usage: Image_Usage = .NONE, image_format: Image_Format = .R16G16B16A16_SFLOAT, deletion_queue: *Deletion_Queue = null) -> Image{
+allocate_image :: (allocator: *Vulkan_Memory_Allocator, width: s32, height: s32, image_usage: Image_Usage = .NONE, image_format: Image_Format = .R16G16B16A16_SFLOAT, loc := #caller_location) -> Image{
 	image: Image;
 	
 	image_3d_extent: VkExtent3D = .{
@@ -429,15 +480,13 @@ create_image :: (allocator: *Vulkan_Memory_Allocator, width: s32, height: s32, i
     view_info.subresourceRange.aspectMask = .COLOR_BIT;
 
 	vk_assert(vkCreateImageView(allocator.device, *view_info, null, *image.view));
-
-	Deletion_Queue.push(deletion_queue, image.internals);
+	
+	log("Image allocated at %:%", loc.fully_pathed_filename, loc.line_number);
 	
 	return image;
 }
 
-
-
-create_vulkan_memory_allocator :: (instance: *Instance, device: *Device, deletion_queue: *Deletion_Queue = null) -> Vulkan_Memory_Allocator{
+create_vulkan_memory_allocator :: (instance: Instance, device: *Device, deletion_queue: *Deletion_Queue = null) -> Vulkan_Memory_Allocator{
 	allocator: Vulkan_Memory_Allocator;
 
 	allocator.device = device;
@@ -452,6 +501,29 @@ create_vulkan_memory_allocator :: (instance: *Instance, device: *Device, deletio
 	return allocator;
 }
 
-destroy_vulkan_memory_allocator :: (allocator: Vulkan_Memory_Allocator){
+destroy_vulkan_memory_allocator :: (allocator: *Vulkan_Memory_Allocator){
 	vmaDestroyAllocator(allocator);
+}
+
+allocate_gpu_buffer :: (allocator: *Vulkan_Memory_Allocator, size: u64, buffer_usage: Allocated_Buffer_Usage, memory_usage: Vulkan_Memory_Usage, loc := #caller_location) -> Allocated_Buffer{
+	buffer_info: VkBufferCreateInfo;
+	buffer_info.size = size;
+	//buffer_info.usage = buffer_usage;
+
+	vma_alloc_info: VmaAllocationCreateInfo ;
+	vma_alloc_info.usage = xx memory_usage;
+	vma_alloc_info.flags = .MAPPED_BIT;
+	buffer : Allocated_Buffer;
+
+	// allocate the buffer
+	vk_assert(vmaCreateBuffer(allocator, *buffer_info, *vma_alloc_info, *buffer.handle, *buffer.allocation.handle, *buffer.info));
+
+	log("Buffer allocated at %:%", loc.fully_pathed_filename, loc.line_number);
+	
+	return buffer;
+}
+
+deallocate_gpu_buffer :: (buffer: *Allocated_Buffer, loc := #caller_location){
+	log("Buffer deallocated at %:%", loc.fully_pathed_filename, loc.line_number);
+	vmaDestroyBuffer(buffer.allocation.allocator, buffer.handle, buffer.allocation);
 }

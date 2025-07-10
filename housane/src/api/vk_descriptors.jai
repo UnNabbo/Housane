@@ -31,19 +31,18 @@ Pool_Size_Ratio :: struct {
 	ratio: f32;
 }
 
-Descriptor_Allocator_Internals :: struct{
+Descriptor_Allocator :: struct{
 	#as handle: VkDescriptorPool;
 	device: *Device;
-}
-
-Descriptor_Allocator :: struct{
-	using internals: Descriptor_Allocator_Internals;
 	allocations: [..] VkDescriptorPool;
 }
 
+
+Descriptor_Set_Layout :: VkDescriptorSetLayout;
+
 Descriptor_Set :: struct{
 	#as handle: VkDescriptorSet;
-	layout: VkDescriptorSetLayout;
+	layout: Descriptor_Set_Layout;
 }
 
 create_descriptor_allocator :: (device: *Device, deletion_queue: *Deletion_Queue, sets: u32, pool_ratios: ..Pool_Size_Ratio) -> Descriptor_Allocator{
@@ -67,7 +66,7 @@ create_descriptor_allocator :: (device: *Device, deletion_queue: *Deletion_Queue
 	vkCreateDescriptorPool(device, *pool_info, null, *allocator.handle);
 	array_free(pool_sizes);
 	
-	Deletion_Queue.push(deletion_queue, allocator.internals);
+	Deletion_Queue.push(deletion_queue, allocator);
 	return allocator;
 }
 
@@ -75,18 +74,12 @@ clear_descriptor_allocator :: (allocator: *Descriptor_Allocator){
 	vkResetDescriptorPool(allocator.device, allocator, 0);
 }
 
-destroy_descriptor_allocator_internals :: (allocator: Descriptor_Allocator_Internals){
+destroy_descriptor_allocator :: (allocator: *Descriptor_Allocator) {
 	vkDestroyDescriptorPool(allocator.device, allocator, null);
 }
 
-destroy_descriptor_allocator :: (allocator: *Descriptor_Allocator) {
-	destroy_descriptor_allocator_internals(allocator.internals);
-}
-
-
-create_descriptor_set :: (allocator: *Descriptor_Allocator, shader_stage: Shader_Stage, bindings: ..Descriptor_Binding, next: *void = null)  -> Descriptor_Set{
-	set: Descriptor_Set;
-	
+create_descriptor_set_layout :: (device: Device, shader_stage: Shader_Stage, bindings: ..Descriptor_Binding, next: *void = null) -> Descriptor_Set_Layout{
+	layout: Descriptor_Set_Layout;
 	vulkan_bindings: [..] VkDescriptorSetLayoutBinding;
 	for bindings {
 		new_bind: VkDescriptorSetLayoutBinding;
@@ -105,18 +98,31 @@ create_descriptor_set :: (allocator: *Descriptor_Allocator, shader_stage: Shader
 	layout_info.bindingCount = xx vulkan_bindings.count;
 	layout_info.flags = 0;
 
-	vk_assert(vkCreateDescriptorSetLayout(allocator.device, *layout_info, null, *set.layout));
+	vk_assert(vkCreateDescriptorSetLayout(device, *layout_info, null, *layout));
+
+	return layout;
+}
+
+destroy_descriptor_set_layout :: (device: Device, layout: *Descriptor_Set_Layout){
+	vkDestroyDescriptorSetLayout(device, layout.*, null);
+}
+
+allocate_descriptor_set :: (allocator: *Descriptor_Allocator, layout: Descriptor_Set_Layout, loc := #caller_location)  -> Descriptor_Set{
+	set: Descriptor_Set;
+	set.layout = layout;
 	
 	alloc_info: VkDescriptorSetAllocateInfo ;
 	alloc_info.descriptorPool = allocator;
 	alloc_info.descriptorSetCount = 1;
-	alloc_info.pSetLayouts = *set.layout;
+	alloc_info.pSetLayouts = *layout;
 
+	log("Descriptor allocated at %:%", loc.fully_pathed_filename, loc.line_number);
+	
 	vk_assert(vkAllocateDescriptorSets(allocator.device, *alloc_info, *set.handle));
 	return set;
 }
 
-update_descriptor_set_image :: (device: *Device, descriptor: *Descriptor_Set, image: *Image){
+update_descriptor_set_image :: (device: Device, descriptor: Descriptor_Set, image: Image){
 	img_info: VkDescriptorImageInfo;
 	img_info.imageLayout = .GENERAL; //NOTE: dunno why i need to force it to be general
 	img_info.imageView = image.view;

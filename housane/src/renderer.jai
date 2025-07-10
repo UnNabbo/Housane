@@ -5,6 +5,8 @@ Compute_Push_Constants :: struct {
 	data4: Vector4;
 };
 
+
+
 render_init :: (window: *Window){
 	using render_data;
 	
@@ -19,18 +21,25 @@ render_init :: (window: *Window){
 		frames[it].render_semaphore = create_semaphore(*device, *deletion_queue);
 	}
 
-	allocator = create_vulkan_memory_allocator(*instance, *device, *deletion_queue);
-
+	allocator = create_vulkan_memory_allocator(instance, *device, *deletion_queue);
 	descriptor_allocator = create_descriptor_allocator(*device, *deletion_queue, 16, .{.STORAGE_IMAGE, 1});
 	
-	backbuffer.handle = create_image(*allocator, window.width, window.height, .TRANSFER_SRC_BIT | .TRANSFER_DST_BIT | .STORAGE_BIT | .COLOR_ATTACHMENT_BIT, deletion_queue = *deletion_queue);
+	backbuffer.image = allocate_image(*allocator, window.width, window.height, .TRANSFER_SRC_BIT | .TRANSFER_DST_BIT | .STORAGE_BIT | .COLOR_ATTACHMENT_BIT);
+	layout := create_descriptor_set_layout(device, .COMPUTE, .{.STORAGE_IMAGE, 0});
+	defer destroy_descriptor_set_layout(device, *layout);
+	backbuffer.descriptor_set = allocate_descriptor_set(*descriptor_allocator, layout);
+	update_descriptor_set_image(device, backbuffer.descriptor_set, backbuffer.image);
+	backbuffer_shader_module0 := create_shader_module(device, .COMPUTE, "housane/res/gradient_comp.sprv", Compute_Push_Constants);
+	defer destroy_shader_module(device, *backbuffer_shader_module0);
+	backbuffer_shader := create_shader(.[backbuffer_shader_module0], .[layout]);
+	backbuffer.pipeline = create_pipeline(*device, *backbuffer_shader);
 
-	backbuffer.descriptor_set = create_descriptor_set(*descriptor_allocator, .COMPUTE, .{.STORAGE_IMAGE, 0});
-	update_descriptor_set_image(*device, *backbuffer.descriptor_set, *backbuffer.handle);
-	
-	backbuffer_shader_module0 := create_shader_module(*device, .COMPUTE, "housane/res/gradient_comp.sprv", Compute_Push_Constants);
-	backbuffer_shader := create_shader(backbuffer_shader_module0);
-	backbuffer.pipeline = create_compute_pipeline(*device, backbuffer_shader, backbuffer.descriptor_set);
+	pipeline_info:  Pipeline_Info;
+	pipeline_info.color_attachment_format = backbuffer.image.format;
+	vertex_shader_module := create_shader_module(device, .VERTEX, "housane/res/shader_vertex.sprv");
+	fragment_shader_module := create_shader_module(device, .FRAGMENT, "housane/res/shader_frag.sprv");
+	shader := create_shader(.[vertex_shader_module, fragment_shader_module], .[]);
+	pipeline = create_pipeline(*device, pipeline_info, *shader);
 }
 
 render_deinit :: (){
@@ -45,40 +54,41 @@ render_deinit :: (){
 
 render_next_frame :: (){
 	using render_data;
-	
 	frame := *frames[frame_count % Frame_Data.OVERLAP];
 	defer frame_count += 1;
 
 	wait_fence(frame.fence);
 	Deletion_Queue.flush(*frame.deletion_queue);
+	image, index := acquire_image_from_swapchain(swapchain, frame.swapchain_semaphore);
+	begin_command_recording(frame.buffer);
 
-	image, index := acquire_image_from_swapchain(*swapchain, frame.swapchain_semaphore);
-	begin_command_recording(*frame.buffer);
-
-	transition_image_layout_command(*frame.buffer, *backbuffer, .GENERAL);
-
-	clear_image_command(*frame.buffer, backbuffer, .{0, 0, 255, 255});
-
-	bind_pipeline_command(*frame.buffer, .COMPUTE, *backbuffer.pipeline, backbuffer.descriptor_set);
-
+	transition_image_layout_command(frame.buffer, *backbuffer, .GENERAL);
+	clear_image_command(frame.buffer, backbuffer, .{0, 0, 255, 255});
+	bind_pipeline_command(frame.buffer, backbuffer.pipeline, *backbuffer.descriptor_set);
 	pc: Compute_Push_Constants;
-	pc.data1 = .{1, 1, 0, 1};
+	pc.data1 = .{1, 0, 0, 1};
 	pc.data2 = .{0, 0, 1, 1};
+	push_constants_command(frame.buffer, backbuffer.pipeline, .COMPUTE, *pc);
+	dispatch_compute_command(frame.buffer, backbuffer.width / 16, backbuffer.height / 16);
 	
-	push_constants_command(*frame.buffer, *backbuffer.pipeline, .COMPUTE, *pc);
-	
-	dispatch_compute_command(*frame.buffer, xx ceil(800.0 / 16.0), xx ceil(600.0 / 16.0));
-	
-	blit_image_command(*frame.buffer, *backbuffer, image);
-	
-	transition_image_layout_command(*frame.buffer, image, .PRESENT_SRC);
+	transition_image_layout_command(frame.buffer, *backbuffer, .COLOR_ATTACHMENT_OPTIMAL);
 
-	end_command_recording(*frame.buffer);
+
+	begin_rendering_command(frame.buffer, backbuffer);
+	bind_pipeline_command(frame.buffer, pipeline);
+	set_viewport_command(frame.buffer, 0, 0, xx backbuffer.width, xx backbuffer.height);
+	set_scissor_command(frame.buffer, 0, 0, backbuffer.width, backbuffer.height);
+	draw_command(frame.buffer, 3);
+	end_renderin_command(frame.buffer);
+
 	
-	submit_command_buffer(*frame.buffer, device.queues[Device_Queue.GRAPHIC_PRESENT], *frame.fence, *frame.swapchain_semaphore, *frame.render_semaphore);
-	
-	present_queue_to_swapchain(*swapchain, index, *frame.render_semaphore);
+	blit_image_command(frame.buffer, *backbuffer, image);
+	transition_image_layout_command(frame.buffer, image, .PRESENT_SRC);
+	end_command_recording(frame.buffer);
+	submit_command_buffer(frame.buffer, device.queues[Device_Queue.GRAPHIC_PRESENT], *frame.fence, *frame.swapchain_semaphore, *frame.render_semaphore);
+	present_queue_to_swapchain(swapchain, index, *frame.render_semaphore);
 }
+
 
 #scope_file
 
@@ -93,14 +103,15 @@ Render_Data :: struct{
 
 	allocator: Vulkan_Memory_Allocator;
 	descriptor_allocator: Descriptor_Allocator;
-
 	
 	Backbuffer :: struct{
-		#as handle: Image;
+		#as using,except(handle, internals, format) image: Image; //NOTE: would normally use using,only(extent) but does not seem to work. 
 		descriptor_set: Descriptor_Set;
 		pipeline: Pipeline;
 	}
 	backbuffer: Backbuffer; 
+
+	pipeline: Pipeline;
 	
 	frames : [Frame_Data.OVERLAP]Frame_Data;
 	deletion_queue: Deletion_Queue;
@@ -114,5 +125,3 @@ Frame_Data :: struct {
 	deletion_queue: Deletion_Queue;
 	OVERLAP :: 2; 
 }
-
-
