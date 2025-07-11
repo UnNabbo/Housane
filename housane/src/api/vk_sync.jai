@@ -44,3 +44,8 @@ wait_fence :: (fence: Fence, timeout: u64 = U64_MAX){
 	vk_assert(vkWaitForFences(fence.device, 1, *fence.handle, 1, timeout));
 	vk_assert(vkResetFences(fence.device, 1, *fence.handle));
 }
+
+
+reset_fence :: (fence: Fence, timeout: u64 = U64_MAX){
+	vk_assert(vkResetFences(fence.device, 1, *fence.handle));
+}

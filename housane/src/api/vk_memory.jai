@@ -380,37 +380,32 @@ Vulkan_Memory_Usage :: enum_flags{
 }
 
 Allocated_Buffer_Usage :: enum_flags{
-    TRANSFER_SRC_BIT                                     :: 0x1;
-    TRANSFER_DST_BIT                                     :: 0x2;
-    UNIFORM_TEXEL_BUFFER_BIT                             :: 0x4;
-    STORAGE_TEXEL_BUFFER_BIT                             :: 0x8;
-    UNIFORM_BUFFER_BIT                                   :: 0x10;
-    STORAGE_BUFFER_BIT                                   :: 0x20;
-    INDEX_BUFFER_BIT                                     :: 0x40;
-    VERTEX_BUFFER_BIT                                    :: 0x80;
-    INDIRECT_BUFFER_BIT                                  :: 0x100;
-    SHADER_DEVICE_ADDRESS_BIT                            :: 0x20000;
-    VIDEO_DECODE_SRC_BIT_KHR                             :: 0x2000;
-    VIDEO_DECODE_DST_BIT_KHR                             :: 0x4000;
-    TRANSFORM_FEEDBACK_BUFFER_BIT_EXT                    :: 0x800;
-    TRANSFORM_FEEDBACK_COUNTER_BUFFER_BIT_EXT            :: 0x1000;
-    CONDITIONAL_RENDERING_BIT_EXT                        :: 0x200;
-
-    ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR :: 0x80000;
-    ACCELERATION_STRUCTURE_STORAGE_BIT_KHR               :: 0x100000;
-    SHADER_BINDING_TABLE_BIT_KHR                         :: 0x400;
-    VIDEO_ENCODE_DST_BIT_KHR                             :: 0x8000;
-    VIDEO_ENCODE_SRC_BIT_KHR                             :: 0x10000;
-    SAMPLER_DESCRIPTOR_BUFFER_BIT_EXT                    :: 0x200000;
-    RESOURCE_DESCRIPTOR_BUFFER_BIT_EXT                   :: 0x400000;
-    PUSH_DESCRIPTORS_DESCRIPTOR_BUFFER_BIT_EXT           :: 0x4000000;
-    MICROMAP_BUILD_INPUT_READ_ONLY_BIT_EXT               :: 0x800000;
-    MICROMAP_STORAGE_BIT_EXT                             :: 0x1000000;
-    RAY_TRACING_BIT_NV                                   :: 0x400;
-    SHADER_DEVICE_ADDRESS_BIT_EXT                        :: 0x20000;
-    SHADER_DEVICE_ADDRESS_BIT_KHR                        :: 0x20000;
-    FLAG_BITS_MAX_ENUM                                   :: 0x7fffffff;
-
+    TRANSFER_SRC                                     :: 0x1;
+    TRANSFER_DST                                     :: 0x2;
+    UNIFORM_TEXEL                                    :: 0x4;
+    STORAGE_TEXEL                                    :: 0x8;
+    UNIFORM                                          :: 0x10;
+    STORAGE                                          :: 0x20;
+    INDEX                                            :: 0x40;
+    VERTEX                                           :: 0x80;
+    INDIRECT                                         :: 0x100;
+    SHADER_DEVICE_ADDRESS                            :: 0x20000;
+    VIDEO_DECODE_SRC                                 :: 0x2000;
+    VIDEO_DECODE_DST                                 :: 0x4000;
+    TRANSFORM_FEEDBACK                               :: 0x800;
+    TRANSFORM_FEEDBACK_COUNTER                       :: 0x1000;
+    CONDITIONAL_RENDERING                            :: 0x200;
+    ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY     :: 0x80000;
+    ACCELERATION_STRUCTURE_STORAGE                   :: 0x100000;
+    SHADER_BINDING_TABLE                             :: 0x400;
+    VIDEO_ENCODE_DST                                 :: 0x8000;
+    VIDEO_ENCODE_SRC                                 :: 0x10000;
+    SAMPLER_DESCRIPTOR                               :: 0x200000;
+    RESOURCE_DESCRIPTOR                              :: 0x400000;
+    PUSH_DESCRIPTORS_DESCRIPTOR                      :: 0x4000000;
+    MICROMAP_BUILD_INPUT_READ_ONLY                   :: 0x800000;
+    MICROMAP_STORAGE                                 :: 0x1000000;
+    RAY_TRACING                                      :: 0x400;
 }
 Allocated_Buffer :: struct {
 	#as handle: VkBuffer;
@@ -418,6 +413,7 @@ Allocated_Buffer :: struct {
 	info: Vulkan_Memory_Allocation_Info;
 }
 
+Buffer_Device_Address :: VkDeviceAddress ;
 
 Image :: struct{
 	#as handle: VkImage;
@@ -505,10 +501,10 @@ destroy_vulkan_memory_allocator :: (allocator: *Vulkan_Memory_Allocator){
 	vmaDestroyAllocator(allocator);
 }
 
-allocate_gpu_buffer :: (allocator: *Vulkan_Memory_Allocator, size: u64, buffer_usage: Allocated_Buffer_Usage, memory_usage: Vulkan_Memory_Usage, loc := #caller_location) -> Allocated_Buffer{
+allocate_gpu_buffer :: (allocator: *Vulkan_Memory_Allocator, size: s64, buffer_usage: Allocated_Buffer_Usage, memory_usage: Vulkan_Memory_Usage, loc := #caller_location) -> Allocated_Buffer{
 	buffer_info: VkBufferCreateInfo;
-	buffer_info.size = size;
-	//buffer_info.usage = buffer_usage;
+	buffer_info.size = xx size;
+	buffer_info.usage = xx buffer_usage;
 
 	vma_alloc_info: VmaAllocationCreateInfo ;
 	vma_alloc_info.usage = xx memory_usage;
@@ -517,7 +513,7 @@ allocate_gpu_buffer :: (allocator: *Vulkan_Memory_Allocator, size: u64, buffer_u
 
 	// allocate the buffer
 	vk_assert(vmaCreateBuffer(allocator, *buffer_info, *vma_alloc_info, *buffer.handle, *buffer.allocation.handle, *buffer.info));
-
+	buffer.allocation.allocator = allocator;
 	log("Buffer allocated at %:%", loc.fully_pathed_filename, loc.line_number);
 	
 	return buffer;
@@ -526,4 +522,10 @@ allocate_gpu_buffer :: (allocator: *Vulkan_Memory_Allocator, size: u64, buffer_u
 deallocate_gpu_buffer :: (buffer: *Allocated_Buffer, loc := #caller_location){
 	log("Buffer deallocated at %:%", loc.fully_pathed_filename, loc.line_number);
 	vmaDestroyBuffer(buffer.allocation.allocator, buffer.handle, buffer.allocation);
+}
+
+get_buffer_device_address :: (buffer: Allocated_Buffer) -> Buffer_Device_Address{
+	device_adress_info: VkBufferDeviceAddressInfo;
+	device_adress_info.buffer = buffer;
+	return vkGetBufferDeviceAddress(buffer.allocation.allocator.device, *device_adress_info);
 }

@@ -17,7 +17,11 @@ Color4 :: struct {
     channel: [4] u8 = ---;
 }
 
+Vec2 :: Vector2;
+Vec3 :: Vector3;
+Vec4 :: Vector4;
 
+Mat4 :: Matrix4;
 
 	
 array_allocate :: NewArray;

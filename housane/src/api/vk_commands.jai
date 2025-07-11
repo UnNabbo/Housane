@@ -39,10 +39,6 @@ begin_command_recording :: (command_buffer: Command_Buffer, clear: bool = true/*
 	vk_assert(vkBeginCommandBuffer(command_buffer, *info));
 }
 
-end_command_recording :: (command_buffer: Command_Buffer){
-	vk_assert(vkEndCommandBuffer(command_buffer));
-}
-
 transition_image_layout_command :: (command_buffer: Command_Buffer, image: *Image, target_layout: Image_Layout){
 	if image.layout == target_layout then return;
 	
@@ -75,6 +71,11 @@ clear_image_command :: (command_buffer: Command_Buffer, image: Image,  color: Co
 	clear_range := create_subresource_range(xx VkImageAspectFlagBits.COLOR_BIT);
 	clear_value: VkClearColorValue = .{.[color.r / 255.0, color.g / 255.0, color.b / 255.0, color.a / 255.0]};
 	vkCmdClearColorImage(command_buffer, image, xx image.layout, *clear_value, 1, *clear_range);
+}
+
+
+end_command_recording :: (command_buffer: Command_Buffer){
+	vk_assert(vkEndCommandBuffer(command_buffer));
 }
 
 submit_command_buffer :: (command_buffer: Command_Buffer, queue: VkQueue, fence: *Fence, wait_semaphore: *Semaphore = null,  signal_semaphore: *Semaphore = null){
@@ -184,7 +185,7 @@ begin_rendering_command ::(buffer: Command_Buffer, target_color_attachment: *Ima
 	vkCmdBeginRendering(buffer, *render_info);
 }
 
-end_renderin_command :: (buffer: Command_Buffer){
+end_rendering_command :: (buffer: Command_Buffer){
 	vkCmdEndRendering(buffer);
 }
 
@@ -210,12 +211,29 @@ set_scissor_command :: (buffer: Command_Buffer, x: s32, y: s32, width: u32, heig
 	vkCmdSetScissor(buffer, 0, 1, *scissor);
 }
 
+bind_index_buffer_command :: (buffer: Command_Buffer, data: Allocated_Buffer, offset: u64 = 0) {
+	vkCmdBindIndexBuffer(buffer, data, xx offset, .UINT32);
+}
+
 draw_command :: (buffer: Command_Buffer, vertex_count: u32, instance_count: u32 = 1, vertex_offset: u32 = 0, instance_offset: u32 = 0){
 	vkCmdDraw(buffer, vertex_count, instance_count, vertex_offset, instance_offset);
 }
 
+draw_indexed_command :: (buffer: Command_Buffer, vertex_count: u32, instance_count: u32 = 1, first_index: u32 = 0, vertex_offset: s32 = 0, instance_offset: u32 = 0){
+	vkCmdDrawIndexed(buffer, vertex_count, instance_count, first_index, vertex_offset, instance_offset);
+}
 
 
-//_command ::(buffer: Command_Buffer) {}
+
+
+memcpy_command ::(buffer: Command_Buffer, source: Allocated_Buffer, destination: Allocated_Buffer, size: s64, source_offset: s64 = 0) {
+	copy_info: VkBufferCopy ;
+	copy_info.dstOffset = 0;
+	copy_info.srcOffset = xx source_offset;
+	copy_info.size = xx size;
+
+	vkCmdCopyBuffer(buffer, source, destination, 1, *copy_info);
+}
+
 //_command ::(buffer: Command_Buffer) {}
 //_command ::(buffer: Command_Buffer) {}

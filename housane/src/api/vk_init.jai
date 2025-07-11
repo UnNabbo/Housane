@@ -94,7 +94,7 @@ create_instance :: (window_handle: * void, width: s32, height: s32) -> Instance 
 
 			if message_severity == .ERROR_BIT_EXT {
 				log_error("[Vulkan]:  %", to_string(callback_data.pMessage));
-				breakpoint();
+				//assert(false, "Read error message above");
 			}else{
 				log("[Vulkan]:  %", to_string(callback_data.pMessage));
 			}
