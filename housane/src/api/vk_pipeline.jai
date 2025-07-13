@@ -33,13 +33,32 @@ Pipeline_Usage :: enum{
 	RAY_TRACING            :: 1000165000;
 }
 
+Blending_Mode :: enum{
+	NONE               :: 0;
+	ADDITIVE           :: 1;
+	ALPHA              :: 2;
+}
+
+Depth_Testing_Mode :: enum{
+	NEVER            :: 0;
+    LESS             :: 1;
+    EQUAL            :: 2;
+    LESS_OR_EQUAL    :: 3;
+    GREATER          :: 4;
+    NOT_EQUAL        :: 5;
+    GREATER_OR_EQUAL :: 6;
+    ALWAYS           :: 7;
+    MAX_ENUM         :: 2147483647;
+}
+
 Pipeline_Info :: struct {
 	color_attachment_format: Image_Format = .UNDEFINED;
 	depth_attachment_format: Image_Format = .UNDEFINED;
 	
 	multisampling: bool = false;
-	alpha_blending: bool = false;
-	depth_testing: bool = false;
+
+	depth_testing: Depth_Testing_Mode = .GREATER_OR_EQUAL;
+	color_blending: Blending_Mode = .ALPHA;
 	
 	assembly_topology: Assembly_Topology = .TRIANGLE_LIST;
 	rasterization_fill_mode: Rasterization_Fill_Mode = .FILL;
@@ -80,11 +99,28 @@ create_pipeline :: (device: *Device, info: Pipeline_Info, shader: *Shader, delet
 	}
 
 	color_blend_attachment: VkPipelineColorBlendAttachmentState;
-	if(info.alpha_blending){
-		
-	}else{
-		color_blend_attachment.colorWriteMask = .R_BIT | .G_BIT | .B_BIT | .A_BIT;
-		color_blend_attachment.blendEnable = VK_FALSE;
+	if info.color_blending == {
+		case .ADDITIVE;
+			color_blend_attachment.colorWriteMask = .R_BIT | .G_BIT | .B_BIT | .A_BIT;
+			color_blend_attachment.blendEnable = VK_TRUE;
+			color_blend_attachment.srcColorBlendFactor = .SRC_ALPHA;
+			color_blend_attachment.dstColorBlendFactor = .ONE;
+			color_blend_attachment.colorBlendOp = .ADD;
+			color_blend_attachment.srcAlphaBlendFactor = .ONE;
+			color_blend_attachment.dstAlphaBlendFactor = .ZERO;
+			color_blend_attachment.alphaBlendOp = .ADD;
+		case .ALPHA;
+		    color_blend_attachment.colorWriteMask = .R_BIT | .G_BIT | .B_BIT | .A_BIT;
+			color_blend_attachment.blendEnable = VK_TRUE;
+			color_blend_attachment.srcColorBlendFactor = .SRC_ALPHA;
+			color_blend_attachment.dstColorBlendFactor = .ONE_MINUS_SRC_ALPHA;
+			color_blend_attachment.colorBlendOp = .ADD;
+			color_blend_attachment.srcAlphaBlendFactor = .ONE;
+			color_blend_attachment.dstAlphaBlendFactor = .ZERO;
+			color_blend_attachment.alphaBlendOp = .ADD;
+		case .NONE;
+			color_blend_attachment.colorWriteMask = .R_BIT | .G_BIT | .B_BIT | .A_BIT;
+			color_blend_attachment.blendEnable = VK_FALSE;
 	}
 
 	attachment: VkFormat = xx info.color_attachment_format;
@@ -94,19 +130,16 @@ create_pipeline :: (device: *Device, info: Pipeline_Info, shader: *Shader, delet
 	render_info.depthAttachmentFormat = xx info.depth_attachment_format;
 
 	depth_stencil: VkPipelineDepthStencilStateCreateInfo;
-	if(info.depth_testing){
+	depth_stencil.depthTestEnable = ifx info.depth_testing != .NEVER then VK_TRUE else VK_FALSE;
+	depth_stencil.depthWriteEnable = 1;
+	depth_stencil.depthCompareOp = xx info.depth_testing;
+	depth_stencil.depthBoundsTestEnable = VK_FALSE;
+	depth_stencil.stencilTestEnable = VK_FALSE;
+	depth_stencil.front = .{};
+	depth_stencil.back = .{};
+	depth_stencil.minDepthBounds = 0.0;
+	depth_stencil.maxDepthBounds = 1.0;
 
-	}else{
-		depth_stencil.depthTestEnable = VK_FALSE;
-		depth_stencil.depthWriteEnable = VK_FALSE;
-		depth_stencil.depthCompareOp = .NEVER;
-		depth_stencil.depthBoundsTestEnable = VK_FALSE;
-		depth_stencil.stencilTestEnable = VK_FALSE;
-		depth_stencil.front = .{};
-		depth_stencil.back = .{};
-		depth_stencil.minDepthBounds = xx 0.0;
-		depth_stencil.maxDepthBounds = xx 1.0;
-	}
 	
 
 	layout: VkPipelineLayoutCreateInfo;

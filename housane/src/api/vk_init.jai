@@ -20,17 +20,26 @@ Surface :: struct {
 	capabilities: VkSurfaceCapabilitiesKHR ;
 	formats: [..] VkSurfaceFormatKHR;
 	present_modes: [..] VkPresentModeKHR;
-	extent: VkExtent2D;
+}
+
+Swap_Chain_Present_Mode :: enum u32{
+	IMMEDIATE				  :: 0;
+	MAILBOX					  :: 1;
+	FIFO					  :: 2;
+	FIFO_RELAXED			  :: 3;
+	SHARED_DEMAND_REFRESH	  :: 1000111000;
+	SHARED_CONTINUOUS_REFRESH :: 1000111001;
 }
 
 Swapchain :: struct{
 	#as handle: VkSwapchainKHR;
 	images: [..] Image;
+	extent: VkExtent2D;
 	surface_format: VkSurfaceFormatKHR;
-    present_mode: VkPresentModeKHR;
-    extent: VkExtent2D;
+	present_mode: Swap_Chain_Present_Mode;
 
 	device: *Device;
+	surface: *Surface;
 }
 
 Instance :: struct{
@@ -44,15 +53,15 @@ Instance :: struct{
 }
 
 
-create_instance :: (window_handle: * void, width: s32, height: s32) -> Instance  {
+create_instance :: (window_handle: * void) -> Instance	 {
 	instance: Instance;
 	
 	app_info: VkApplicationInfo;
-    app_info.pApplicationName = "Hello Triangle";
-    app_info.applicationVersion = VK_MAKE_VERSION(1, 0, 0);
-    app_info.pEngineName = "No Engine";
-    app_info.engineVersion = VK_MAKE_VERSION(1, 0, 0);
-    app_info.apiVersion = VK_API_VERSION_1_3;
+	app_info.pApplicationName = "Hello Triangle";
+	app_info.applicationVersion = VK_MAKE_VERSION(1, 0, 0);
+	app_info.pEngineName = "No Engine";
+	app_info.engineVersion = VK_MAKE_VERSION(1, 0, 0);
+	app_info.apiVersion = VK_API_VERSION_1_3;
 
 	instance_info: VkInstanceCreateInfo;
 	instance_info.pApplicationInfo = *app_info;
@@ -60,13 +69,10 @@ create_instance :: (window_handle: * void, width: s32, height: s32) -> Instance 
 	//TODO MAYBE CHECK FOR SUPPORT
 	#if BUILD_TYPE != .RELEASE{
 		extensions: []* u8 = .[
-		VK_KHR_SURFACE_EXTENSION_NAME, VK_KHR_WIN32_SURFACE_EXTENSION_NAME, VK_EXT_DEBUG_UTILS_EXTENSION_NAME
-		];
+		VK_KHR_SURFACE_EXTENSION_NAME, VK_KHR_WIN32_SURFACE_EXTENSION_NAME, VK_EXT_SURFACE_MAINTENANCE_1_EXTENSION_NAME, VK_KHR_GET_SURFACE_CAPABILITIES_2_EXTENSION_NAME, VK_EXT_DEBUG_UTILS_EXTENSION_NAME];
 	}else{
-		extensions: []* u8 = .[
-		VK_KHR_SURFACE_EXTENSION_NAME, VK_KHR_WIN32_SURFACE_EXTENSION_NAME
-		];
-
+		EXTENSIONS: []* u8 = .[
+		VK_KHR_SURFACE_EXTENSION_NAME, VK_EXT_SURFACE_MAINTENANCE_1_EXTENSION_NAME, VK_KHR_GET_SURFACE_CAPABILITIES_2_EXTENSION_NAME, VK_KHR_WIN32_SURFACE_EXTENSION_NAME];
 	}
 	
 	instance_info.enabledExtensionCount = xx extensions.count;
@@ -96,7 +102,7 @@ create_instance :: (window_handle: * void, width: s32, height: s32) -> Instance 
 				log_error("[Vulkan]:  %", to_string(callback_data.pMessage));
 				//assert(false, "Read error message above");
 			}else{
-				log("[Vulkan]:  %", to_string(callback_data.pMessage));
+				log("[Vulkan]:	%", to_string(callback_data.pMessage));
 			}
 			return VK_FALSE;
 			
@@ -224,13 +230,6 @@ create_instance :: (window_handle: * void, width: s32, height: s32) -> Instance 
 
 
 	vkGetPhysicalDeviceSurfaceCapabilitiesKHR(instance.physical_device.handle, instance.surface.handle, *instance.surface.capabilities);
-	if (instance.surface.capabilities.currentExtent.width != U32_MAX) {
-        instance.surface.extent = instance.surface.capabilities.currentExtent;
-    } else {
-        instance.surface.extent.width = clamp(cast(u32, width), instance.surface.capabilities.minImageExtent.width, instance.surface.capabilities.maxImageExtent.width);
-        instance.surface.extent.height = clamp(cast(u32, height), instance.surface.capabilities.minImageExtent.height, instance.surface.capabilities.maxImageExtent.height);
-    }
-
 
 	format_count: u32;
 	vkGetPhysicalDeviceSurfaceFormatsKHR(instance.physical_device.handle, instance.surface.handle, *format_count, null);
@@ -304,7 +303,7 @@ create_device :: (physical_device: *Physical_Device) -> Device{
 	device_create_info.pNext = *device_features;
 
 	device_extensions: [] *u8 = .[
-		VK_KHR_SWAPCHAIN_EXTENSION_NAME, VK_KHR_DYNAMIC_RENDERING_EXTENSION_NAME, VK_KHR_SYNCHRONIZATION_2_EXTENSION_NAME, VK_KHR_BUFFER_DEVICE_ADDRESS_EXTENSION_NAME, VK_EXT_DESCRIPTOR_INDEXING_EXTENSION_NAME
+		VK_KHR_SWAPCHAIN_EXTENSION_NAME, VK_KHR_DYNAMIC_RENDERING_EXTENSION_NAME, VK_KHR_SYNCHRONIZATION_2_EXTENSION_NAME, VK_KHR_BUFFER_DEVICE_ADDRESS_EXTENSION_NAME, VK_EXT_DESCRIPTOR_INDEXING_EXTENSION_NAME, VK_EXT_SWAPCHAIN_MAINTENANCE_1_EXTENSION_NAME
 	];
 	
 	device_create_info.ppEnabledExtensionNames = device_extensions.data;
@@ -330,13 +329,16 @@ destroy_device :: (device: *Device){
 	vkDestroyDevice(device, null);
 }
 
-create_swapchain :: (device: * Device, surface: * Surface,  old_handle: VkSwapchainKHR = VK_NULL_HANDLE) -> Swapchain {
+create_swapchain :: (device: * Device, surface: * Surface, present_mode: Swap_Chain_Present_Mode, width: s32, height: s32, old_handle: VkSwapchainKHR = VK_NULL_HANDLE) -> Swapchain {
+	
+
 	swapchain: Swapchain;
 	swapchain.device = device;
+	swapchain.surface =surface;
 	
 	swapchain.surface_format = .{.B8G8R8A8_SRGB, .COLOR_SPACE_SRGB_NONLINEAR_KHR};
-    swapchain.present_mode = .FIFO_KHR;
-    swapchain.extent = surface.extent;
+	swapchain.present_mode = xx present_mode;
+	swapchain.extent = .{xx width, xx height};
 
 	image_count := ifx (!surface.capabilities.maxImageCount) then surface.capabilities.minImageCount + 1 else clamp_hi(surface.capabilities.minImageCount + 1, surface.capabilities.maxImageCount);
 	
@@ -354,10 +356,20 @@ create_swapchain :: (device: * Device, surface: * Surface,  old_handle: VkSwapch
 	swapchain_create_info.pQueueFamilyIndices = null;
 	swapchain_create_info.preTransform = surface.capabilities.currentTransform;
 	swapchain_create_info.compositeAlpha = .OPAQUE_BIT_KHR;
-	swapchain_create_info.presentMode = swapchain.present_mode; 
+	swapchain_create_info.presentMode = xx present_mode; 
 	swapchain_create_info.clipped = VK_TRUE;
 	swapchain_create_info.oldSwapchain = old_handle;
 
+	// MIN_BIT_EXT            :: 0x1;
+    // MAX_BIT_EXT            :: 0x2;
+    // CENTERED_BIT_EXT       :: 0x4;
+	scaling :VkSwapchainPresentScalingCreateInfoEXT;
+	//scaling.scalingBehavior = .ONE_TO_ONE_BIT_EXT;
+	scaling.scalingBehavior = .STRETCH_BIT_EXT;
+	scaling.presentGravityX = .MIN_BIT_EXT;
+	scaling.presentGravityY = .MIN_BIT_EXT;
+	swapchain_create_info.pNext = *scaling;
+	
 	vk_assert(vkCreateSwapchainKHR(device.handle, *swapchain_create_info, null, *swapchain.handle));
 	
 	array_resize(*swapchain.images, image_count);
@@ -368,21 +380,24 @@ create_swapchain :: (device: * Device, surface: * Surface,  old_handle: VkSwapch
 		swapchain.images[it_index].handle = it;
 		swapchain.images[it_index].layout = .UNDEFINED;
 		swapchain.images[it_index].format = .B8G8R8A8_SRGB;
-		swapchain.images[it_index].extent = .{surface.extent.width, surface.extent.height, 1};
+		swapchain.images[it_index].extent = .{xx width, xx height, 1};
 	}
 
 	array_free(raw_images);
 	return swapchain;
 }
 
+
+
 destroy_swapchain :: (swapchain: *Swapchain){
-    vkDestroySwapchainKHR(swapchain.device, swapchain, null);
+	vkDestroySwapchainKHR(swapchain.device, swapchain, null);
 }
 
-acquire_image_from_swapchain :: (swapchain: Swapchain, semaphore: Semaphore, fence: Fence = .{}, timeout: u64 = U64_MAX) -> *Image, u32{
+acquire_image_from_swapchain :: (swapchain: Swapchain, semaphore: Semaphore, fence: Fence = .{}, timeout: u64 = U64_MAX) -> *Image, u32, bool{
 	index: u32;
-	vk_assert(vkAcquireNextImageKHR(swapchain.device, swapchain, timeout, semaphore, fence, *index));
-	return *swapchain.images[index], index;
+	e := vkAcquireNextImageKHR(swapchain.device, swapchain, timeout, semaphore, fence, *index);
+	if e == VkResult.ERROR_OUT_OF_DATE_KHR return null, U32_MAX, true;
+	return *swapchain.images[index], index, false;
 }
 
 present_queue_to_swapchain :: (swapchain: Swapchain, index: u32 /*temp*/, semaphore: *Semaphore = null){	
@@ -397,7 +412,7 @@ present_queue_to_swapchain :: (swapchain: Swapchain, index: u32 /*temp*/, semaph
 
 	present_info.pImageIndices = *index;
 
-	vk_assert(vkQueuePresentKHR(swapchain.device.queues[Device_Queue.GRAPHIC_PRESENT], *present_info));
+	vkQueuePresentKHR(swapchain.device.queues[Device_Queue.GRAPHIC_PRESENT], *present_info);
 }
 
  

@@ -14,9 +14,6 @@ Deletion_Queue :: struct {#insert #run __generate_deletion_queue_body(
 );}
 
 
-clamp_hi :: inline (val: $T, max: T) -> T {
-	return clamp(val, val, max);
-}
 
 get_instance_proc_add :: (inst: VkInstance, entry: string) #expand {
 	#insert #run tprint("`% : PFN_% = xx vkGetInstanceProcAddr(inst, \"%\");", entry, entry, entry);
@@ -34,17 +31,17 @@ create_subresource_range :: (mask: u64) -> Image_Subresource_Range{
 }
 
 
-image_attachment_info :: (image: Image) -> VkRenderingAttachmentInfo{
+image_attachment_info :: (image: Image, clear: bool = false) -> VkRenderingAttachmentInfo{
 	attachment: VkRenderingAttachmentInfo;
     attachment.imageView = image.view;
     attachment.imageLayout = xx image.layout;
     attachment.loadOp  = .LOAD;
     attachment.storeOp = .STORE;
 
-	// if (clear) {
-	// 	attachment.loadOp |= VK_ATTACHMENT_LOAD_OP_CLEAR;
-    //     attachment.clearValue = *clear;
-    // }
+	if image.usage == .DEPTH_STENCIL_ATTACHMENT_BIT {
+		attachment.loadOp = .CLEAR;
+		attachment.clearValue.depthStencil.depth = 0.0;
+	}
 
 	return attachment;
 }

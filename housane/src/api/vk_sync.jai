@@ -40,12 +40,15 @@ destroy_semaphore :: (semaphore: *Semaphore){
 	vkDestroySemaphore(semaphore.device, semaphore, null);
 }
 
-wait_fence :: (fence: Fence, timeout: u64 = U64_MAX){
+wait_and_reset_fence :: (fence: Fence, timeout: u64 = U64_MAX){
 	vk_assert(vkWaitForFences(fence.device, 1, *fence.handle, 1, timeout));
 	vk_assert(vkResetFences(fence.device, 1, *fence.handle));
 }
 
+wait_fence :: (fence: Fence, timeout: u64 = U64_MAX){
+	vk_assert(vkWaitForFences(fence.device, 1, *fence.handle, 1, timeout));
+}
 
-reset_fence :: (fence: Fence, timeout: u64 = U64_MAX){
+reset_fence :: (fence: Fence){
 	vk_assert(vkResetFences(fence.device, 1, *fence.handle));
 }

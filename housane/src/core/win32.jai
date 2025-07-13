@@ -298,6 +298,45 @@ ReleaseDC :: (hwnd: *void, hdc: *void) -> s32 #foreign user32;
 kernel32  :: #system_library "kernel32";
 
 
+PAGE_NOACCESS ::                0x01;
+PAGE_READONLY ::                0x02;
+PAGE_READWRITE ::               0x04;
+PAGE_WRITECOPY ::               0x08;
+PAGE_EXECUTE ::                 0x10;
+PAGE_EXECUTE_READ ::            0x20;
+PAGE_EXECUTE_READWRITE ::       0x40;
+PAGE_EXECUTE_WRITECOPY ::       0x80;
+PAGE_GUARD ::                   0x100;
+PAGE_NOCACHE ::                 0x200;
+PAGE_WRITECOMBINE ::            0x400;
+PAGE_REVERT_TO_FILE_MAP ::      0x80000000;
+PAGE_ENCLAVE_THREAD_CONTROL ::  0x80000000;
+PAGE_TARGETS_NO_UPDATE ::       0x40000000;
+PAGE_TARGETS_INVALID ::         0x40000000;
+PAGE_ENCLAVE_UNVALIDATED ::     0x20000000;
+
+
+MEM_COMMIT ::                   0x00001000;
+MEM_RESERVE ::                  0x00002000;
+MEM_DECOMMIT ::                 0x00004000;
+MEM_RELEASE ::                  0x00008000;
+MEM_FREE ::                     0x00010000;
+MEM_PRIVATE ::                  0x00020000;
+MEM_MAPPED ::                   0x00040000;
+MEM_RESET ::                    0x00080000;
+MEM_TOP_DOWN ::                 0x00100000;
+MEM_WRITE_WATCH ::              0x00200000;
+MEM_PHYSICAL ::                 0x00400000;
+MEM_ROTATE ::                   0x00800000;
+MEM_DIFFERENT_IMAGE_BASE_OK ::  0x00800000;
+MEM_RESET_UNDO ::               0x01000000;
+MEM_LARGE_PAGES ::              0x20000000;
+MEM_4MB_PAGES ::                0x80000000;
+MEM_64K_PAGES ::                MEM_LARGE_PAGES | MEM_PHYSICAL;
+
+VirtualAlloc :: (lpAddress: *void, dwSize: u64, flAllocationType: u32, flProtect: u32) -> *void #foreign kernel32;
+VirtualFree :: (lpAddress: *void, dwSize: u64, dwFreeType: u32) -> u32 #foreign kernel32;
+
 GetLastError :: () -> u32 #foreign kernel32;
 
 using Creation_Flags :: enum_flags u32 {

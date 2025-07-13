@@ -1,6 +1,7 @@
 
 
 #load "entry_point.jai";
+#load "memory.jai";
 #load "window_and_input.jai";
 
 Color3 :: struct {
@@ -25,3 +26,12 @@ Mat4 :: Matrix4;
 
 	
 array_allocate :: NewArray;
+
+
+clamp_hi :: inline (val: $T, max: T) -> T {
+	return clamp(val, val, max);
+}
+
+clamp_lo :: inline (val: $T, min: T) -> T {
+	return clamp(val, min, val);
+}

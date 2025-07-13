@@ -420,6 +420,7 @@ Image :: struct{
     using extent: VkExtent3D;
 	view: VkImageView;
 	layout : Image_Layout;
+	usage : Image_Usage;
     format: Image_Format;
     allocation: Vulkan_Memory_Allocation;
 }
@@ -438,6 +439,7 @@ Vulkan_Memory_Allocator :: struct {
 
 allocate_image :: (allocator: *Vulkan_Memory_Allocator, width: s32, height: s32, image_usage: Image_Usage = .NONE, image_format: Image_Format = .R16G16B16A16_SFLOAT, loc := #caller_location) -> Image{
 	image: Image;
+	image.usage = image_usage;
 	
 	image_3d_extent: VkExtent3D = .{
 		xx width,
@@ -473,7 +475,9 @@ allocate_image :: (allocator: *Vulkan_Memory_Allocator, width: s32, height: s32,
     view_info.subresourceRange.levelCount = 1;
     view_info.subresourceRange.baseArrayLayer = 0;
     view_info.subresourceRange.layerCount = 1;
-    view_info.subresourceRange.aspectMask = .COLOR_BIT;
+	if image_usage & .COLOR_ATTACHMENT_BIT then view_info.subresourceRange.aspectMask = .COLOR_BIT;
+	if image_usage & .DEPTH_STENCIL_ATTACHMENT_BIT then view_info.subresourceRange.aspectMask = .DEPTH_BIT;
+
 
 	vk_assert(vkCreateImageView(allocator.device, *view_info, null, *image.view));
 	

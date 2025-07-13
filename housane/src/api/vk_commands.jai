@@ -168,7 +168,7 @@ push_constants_command :: (buffer: Command_Buffer, pipeline: Pipeline, bind_poin
 begin_rendering_command ::(buffer: Command_Buffer, target_color_attachment: *Image = null, target_depth_attachment: *Image = null) {
 	render_info: VkRenderingInfo;
 	
-	if target_color_attachment && !target_depth_attachment {
+	if target_color_attachment {
 		render_info.renderArea = VkRect2D.{ VkOffset2D.{ 0, 0 }, .{target_color_attachment.width, target_color_attachment.height} };
 	}
 

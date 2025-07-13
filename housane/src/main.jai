@@ -8,6 +8,9 @@
 #import "Print_Color";
 
 #load "core/basic.jai";
+#load "core/arena.jai";
+
+#import "cgltf";
 
 #import "Vulkan";
 #import "Vulkan_Memory_Allocator";
@@ -23,6 +26,7 @@
 #load "api/vk_commands.jai";
 #load "api/vk_sync.jai";
 
+#load "mesh_loader.jai";
 #load "renderer.jai";
 
 nlogger :: (message: string, data: *void, info: Log_Info)
@@ -56,6 +60,8 @@ main :: () {
 	//NOTE: LET IT LEAK!!
 	//defer destroy_window(window);
 	//defer render_deinit();
+
+
 	
 	while window.running{
 		for event : fetch_window_events(window){
@@ -64,8 +70,7 @@ main :: () {
 				window.running = false;
 			}
 		}
-		
-		render_next_frame();
+		if window.width != 0 && window.height != 0 then render_next_frame();
 	};
 
 	

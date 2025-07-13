@@ -79,10 +79,10 @@ create_window :: (window_name: string, width: s32, height: s32) -> *Window {
 	y_pos := (monitor_height - height) / 2;
 
 	rect := RECT.{x_pos, y_pos, width + x_pos, height + y_pos};
-	AdjustWindowRectEx(*rect, WS_OVERLAPPEDWINDOW,xx false, 0);
+	AdjustWindowRectEx(*rect, WS_OVERLAPPEDWINDOW, xx false, 0);
 	
 	data: Threaded_Window_Create_Data;
-    data.dwExStyle = 0;;
+    data.dwExStyle = 0;
     data.lpClassName = wc.lpszClassName;
     data.lpWindowName = wide_name;
     data.dwStyle = WS_OVERLAPPEDWINDOW | WS_VISIBLE;
