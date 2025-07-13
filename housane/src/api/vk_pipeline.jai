@@ -130,8 +130,8 @@ create_pipeline :: (device: *Device, info: Pipeline_Info, shader: *Shader, delet
 	render_info.depthAttachmentFormat = xx info.depth_attachment_format;
 
 	depth_stencil: VkPipelineDepthStencilStateCreateInfo;
-	depth_stencil.depthTestEnable = ifx info.depth_testing != .NEVER then VK_TRUE else VK_FALSE;
-	depth_stencil.depthWriteEnable = 1;
+	depth_stencil.depthTestEnable = xx (info.depth_testing != .NEVER);
+	depth_stencil.depthWriteEnable = xx (info.depth_testing != .NEVER);
 	depth_stencil.depthCompareOp = xx info.depth_testing;
 	depth_stencil.depthBoundsTestEnable = VK_FALSE;
 	depth_stencil.stencilTestEnable = VK_FALSE;
@@ -140,7 +140,6 @@ create_pipeline :: (device: *Device, info: Pipeline_Info, shader: *Shader, delet
 	depth_stencil.minDepthBounds = 0.0;
 	depth_stencil.maxDepthBounds = 1.0;
 
-	
 
 	layout: VkPipelineLayoutCreateInfo;
 	layout.pSetLayouts = shader.descriptor_layouts.data;

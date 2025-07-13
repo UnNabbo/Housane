@@ -189,12 +189,12 @@ end_rendering_command :: (buffer: Command_Buffer){
 	vkCmdEndRendering(buffer);
 }
 
-set_viewport_command :: (buffer: Command_Buffer, x: f32, y: f32, width: f32, height: f32, min_depth: f32 = 0.1, max_depth: f32 = 1.0) {
+set_viewport_command :: (buffer: Command_Buffer, x: u32, y: u32, width: u32, height: u32, min_depth: f32 = 0.1, max_depth: f32 = 1.0) {
 	viewport: VkViewport;
-	viewport.x = x;
-	viewport.y = y;
-	viewport.width = width;
-	viewport.height = height;
+	viewport.x = xx x;
+	viewport.y = xx y;
+	viewport.width = xx width;
+	viewport.height = xx height;
 	viewport.minDepth = min_depth;
 	viewport.maxDepth = max_depth;
 

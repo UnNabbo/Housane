@@ -130,8 +130,8 @@ render_init :: (window: *Window){
 	//monkey := load_gltf_file(arena, "housane/res/models/monkey.glb")[0].buffer;
 	
 	mesh = load_gltf_file(arena, "housane/res/models/monkey.glb")[0];//TODO: destroy
-
-
+	//mesh.buffer = allocate_mesh_on_gpu(vertices, indices);
+	//mesh.indices_count = 6;
 }
 
 render_resize :: (width: s32, height: s32){
@@ -159,20 +159,23 @@ render_next_frame :: (){
 	image, index, should_resize := acquire_image_from_swapchain(swapchain, frame.swapchain_semaphore);
 	begin_command_recording(frame.buffer);
 
+	draw_region: Vec2 = .{xx window.width, xx window.height};
+	
 	transition_image_layout_command(frame.buffer, *backbuffer, .GENERAL);
 	clear_image_command(frame.buffer, backbuffer, .{0, 0, 255, 255});
 
 	transition_image_layout_command(frame.buffer, *backbuffer, .COLOR_ATTACHMENT_OPTIMAL);
 	transition_image_layout_command(frame.buffer, *depth_buffer, .DEPTH_ATTACHMENT_OPTIMAL);
+	
 	begin_rendering_command(frame.buffer, *backbuffer, *depth_buffer);
 	bind_pipeline_command(frame.buffer, pipeline);
-	set_viewport_command(frame.buffer, 0, 0, xx backbuffer.width, xx backbuffer.height);
+	set_viewport_command(frame.buffer, 0, 0, backbuffer.width, backbuffer.height);
 	set_scissor_command(frame.buffer, 0, 0, backbuffer.width, backbuffer.height);
 	constants: Buffer_Push_Constants;
 	constants.address = mesh.buffer.address;
-	projection :=  make_projection_matrix(90.0 * PI/ 180.0, cast(f32, backbuffer.width) / cast(f32, backbuffer.height),  100000000, 0.1);
+	projection :=  make_projection_matrix(90.0 * PI / 180.0, cast(f32, backbuffer.width) / cast(f32, backbuffer.height),  10000, 0.1, depth_range_01 = true);
 	projection._22 *= -1;
-	constants.world =   projection * make_translation_matrix4(.{0, 0, -8});
+	constants.world =    projection * make_translation_matrix4(.{0, 0, -5});
 	push_constants_command(frame.buffer, pipeline, .VERTEX, *constants);
 	bind_index_buffer_command(frame.buffer, mesh.buffer.index);
 	draw_indexed_command(frame.buffer, xx mesh.indices_count);

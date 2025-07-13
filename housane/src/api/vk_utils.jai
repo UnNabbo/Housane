@@ -35,12 +35,12 @@ image_attachment_info :: (image: Image, clear: bool = false) -> VkRenderingAttac
 	attachment: VkRenderingAttachmentInfo;
     attachment.imageView = image.view;
     attachment.imageLayout = xx image.layout;
-    attachment.loadOp  = .LOAD;
     attachment.storeOp = .STORE;
-
 	if image.usage == .DEPTH_STENCIL_ATTACHMENT_BIT {
 		attachment.loadOp = .CLEAR;
 		attachment.clearValue.depthStencil.depth = 0.0;
+	}else{
+		attachment.loadOp  = .LOAD;
 	}
 
 	return attachment;

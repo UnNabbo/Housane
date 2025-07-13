@@ -67,7 +67,9 @@ main :: () {
 		for event : fetch_window_events(window){
 			if event.kind == {
 				case .QUIT;
-				window.running = false;
+					window.running = false;
+				case .RESIZE;
+					render_resize(window.width, window.height);
 			}
 		}
 		if window.width != 0 && window.height != 0 then render_next_frame();
