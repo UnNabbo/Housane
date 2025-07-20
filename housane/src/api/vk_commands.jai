@@ -112,6 +112,49 @@ submit_command_buffer :: (command_buffer: Command_Buffer, queue: VkQueue, fence:
 	vk_assert(vkQueueSubmit2(queue, 1, *submit2_info, fence));
 }
 
+Blit_Region :: struct{
+	width, height: u32;
+}
+
+blit_image_command ::(buffer: Command_Buffer, source: *Image, source_region: Blit_Region, destination: *Image, destination_region: Blit_Region){
+	source_layout := source.layout;
+	destination_layout := destination.layout;
+	
+	transition_image_layout_command(buffer, source, .TRANSFER_SRC_OPTIMAL);
+	transition_image_layout_command(buffer, destination, .TRANSFER_DST_OPTIMAL);
+
+	//log("%, %, %, %", source.width, source.height, destination.width, destination.height);
+	
+	blit_region: VkImageBlit2;
+	blit_region.srcOffsets[1].x = xx source_region.width;
+	blit_region.srcOffsets[1].y = xx source_region.height;
+	blit_region.srcOffsets[1].z = 1;
+	blit_region.dstOffsets[1].x = xx destination_region.width;
+	blit_region.dstOffsets[1].y = xx destination_region.height;
+	blit_region.dstOffsets[1].z = 1;
+	blit_region.srcSubresource.aspectMask = .COLOR_BIT;
+	blit_region.srcSubresource.baseArrayLayer = 0;
+	blit_region.srcSubresource.layerCount = 1;
+	blit_region.srcSubresource.mipLevel = 0;
+	blit_region.dstSubresource.aspectMask = .COLOR_BIT;
+	blit_region.dstSubresource.baseArrayLayer = 0;
+	blit_region.dstSubresource.layerCount = 1;
+	blit_region.dstSubresource.mipLevel = 0;
+	
+	blit_info: VkBlitImageInfo2;
+	blit_info.dstImage = destination;
+	blit_info.dstImageLayout = .TRANSFER_DST_OPTIMAL;
+	blit_info.srcImage = source;
+	blit_info.srcImageLayout = .TRANSFER_SRC_OPTIMAL;
+	blit_info.filter = .LINEAR;
+	blit_info.regionCount = 1;
+	blit_info.pRegions = *blit_region;
+
+	vkCmdBlitImage2(buffer, *blit_info);
+ 	
+	if source_layout != .UNDEFINED then transition_image_layout_command(buffer, source, source_layout);
+	if destination_layout != .UNDEFINED then transition_image_layout_command(buffer, destination, destination_layout);
+}
 
 blit_image_command ::(buffer: Command_Buffer, source: *Image, destination: *Image){
 	source_layout := source.layout;
@@ -119,6 +162,8 @@ blit_image_command ::(buffer: Command_Buffer, source: *Image, destination: *Imag
 	
 	transition_image_layout_command(buffer, source, .TRANSFER_SRC_OPTIMAL);
 	transition_image_layout_command(buffer, destination, .TRANSFER_DST_OPTIMAL);
+
+	//log("%, %, %, %", source.width, source.height, destination.width, destination.height);
 	
 	blit_region: VkImageBlit2;
 	blit_region.srcOffsets[1].x = xx source.extent.width;
@@ -151,10 +196,13 @@ blit_image_command ::(buffer: Command_Buffer, source: *Image, destination: *Imag
 	if destination_layout != .UNDEFINED then transition_image_layout_command(buffer, destination, destination_layout);
 }
 
-bind_pipeline_command :: (buffer: Command_Buffer, pipeline: Pipeline, descriptor: *Descriptor_Set = null){
+bind_pipeline_command :: (buffer: Command_Buffer, pipeline: Pipeline){
 	vkCmdBindPipeline(buffer, xx pipeline.usage, pipeline);
 
-	if descriptor then vkCmdBindDescriptorSets(buffer, xx pipeline.usage, pipeline.layout, 0, 1, *descriptor.handle, 0, null);
+}
+
+bind_descriptor_set :: (buffer: Command_Buffer, pipeline: Pipeline, descriptor: Descriptor_Set){
+	vkCmdBindDescriptorSets(buffer, xx pipeline.usage, pipeline.layout, 0, 1, *descriptor.handle, 0, null);
 }
 
 dispatch_compute_command :: (buffer: Command_Buffer, x_groups: u32, y_groups: u32, z_groups: u32 = 1){
@@ -233,6 +281,21 @@ memcpy_command ::(buffer: Command_Buffer, source: Allocated_Buffer, destination:
 	copy_info.size = xx size;
 
 	vkCmdCopyBuffer(buffer, source, destination, 1, *copy_info);
+}
+
+memcpy_command ::(buffer: Command_Buffer, source: Allocated_Buffer, destination: Image) {
+	copy_region: VkBufferImageCopy;
+	copy_region.bufferOffset = 0;
+	copy_region.bufferRowLength = 0;
+	copy_region.bufferImageHeight = 0;
+	copy_region.imageSubresource.aspectMask = .COLOR_BIT;
+	copy_region.imageSubresource.mipLevel = 0;
+	copy_region.imageSubresource.baseArrayLayer = 0;
+	copy_region.imageSubresource.layerCount = 1;
+	copy_region.imageExtent = destination.extent;
+
+	vkCmdCopyBufferToImage(buffer, source, destination, .TRANSFER_DST_OPTIMAL, 1,  *copy_region);
+
 }
 
 //_command ::(buffer: Command_Buffer) {}

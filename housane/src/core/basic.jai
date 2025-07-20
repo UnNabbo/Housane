@@ -33,5 +33,6 @@ clamp_hi :: inline (val: $T, max: T) -> T {
 }
 
 clamp_lo :: inline (val: $T, min: T) -> T {
-	return clamp(val, min, val);
+	if val < min return min;
+	else return val;
 }

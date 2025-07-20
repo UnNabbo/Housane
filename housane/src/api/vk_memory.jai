@@ -32,30 +32,30 @@ Image_Layout :: enum{
 }
 
 Image_Usage :: enum_flags {
-    NONE                                     :: 0x0;
-    TRANSFER_SRC_BIT                         :: 0x1;
-    TRANSFER_DST_BIT                         :: 0x2;
-    SAMPLED_BIT                              :: 0x4;
-    STORAGE_BIT                              :: 0x8;
-    COLOR_ATTACHMENT_BIT                     :: 0x10;
-    DEPTH_STENCIL_ATTACHMENT_BIT             :: 0x20;
-    TRANSIENT_ATTACHMENT_BIT                 :: 0x40;
-    INPUT_ATTACHMENT_BIT                     :: 0x80;
-    VIDEO_DECODE_DST_BIT_KHR                 :: 0x400;
-    VIDEO_DECODE_SRC_BIT_KHR                 :: 0x800;
-    VIDEO_DECODE_DPB_BIT_KHR                 :: 0x1000;
-    FRAGMENT_DENSITY_MAP_BIT_EXT             :: 0x200;
-    FRAGMENT_SHADING_RATE_ATTACHMENT_BIT_KHR :: 0x100;
-    HOST_TRANSFER_BIT_EXT                    :: 0x400000;
-    VIDEO_ENCODE_DST_BIT_KHR                 :: 0x2000;
-    VIDEO_ENCODE_SRC_BIT_KHR                 :: 0x4000;
-    VIDEO_ENCODE_DPB_BIT_KHR                 :: 0x8000;
-    ATTACHMENT_FEEDBACK_LOOP_BIT_EXT         :: 0x80000;
-    INVOCATION_MASK_BIT_HUAWEI               :: 0x40000;
-    SAMPLE_WEIGHT_BIT_QCOM                   :: 0x100000;
-    SAMPLE_BLOCK_MATCH_BIT_QCOM              :: 0x200000;
-    SHADING_RATE_IMAGE_BIT_NV                :: 0x100;
-    FLAG_BITS_MAX_ENUM                       :: 0x7fffffff;
+    NONE                                 :: 0x0;
+    TRANSFER_SRC                         :: 0x1;
+    TRANSFER_DST                         :: 0x2;
+    SAMPLED                              :: 0x4;
+    STORAGE                              :: 0x8;
+    COLOR_ATTACHMENT                     :: 0x10;
+    DEPTH_STENCIL_ATTACHMENT             :: 0x20;
+    TRANSIENT_ATTACHMENT                 :: 0x40;
+    INPUT_ATTACHMENT                     :: 0x80;
+    VIDEO_DECODE_DST_KHR                 :: 0x400;
+    VIDEO_DECODE_SRC_KHR                 :: 0x800;
+    VIDEO_DECODE_DPB_KHR                 :: 0x1000;
+    FRAGMENT_DENSITY_MAP_EXT             :: 0x200;
+    FRAGMENT_SHADING_RATE_ATTACHMENT_KHR :: 0x100;
+    HOST_TRANSFER_EXT                    :: 0x400000;
+    VIDEO_ENCODE_DST_KHR                 :: 0x2000;
+    VIDEO_ENCODE_SRC_KHR                 :: 0x4000;
+    VIDEO_ENCODE_DPB_KHR                 :: 0x8000;
+    ATTACHMENT_FEEDBACK_LOOP_EXT         :: 0x80000;
+    INVOCATION_MASK_HUAWEI               :: 0x40000;
+    SAMPLE_WEIGHT_QCOM                   :: 0x100000;
+    SAMPLE_BLOCK_MATCH_QCOM              :: 0x200000;
+    SHADING_RATE_IMAGE_NV                :: 0x100;
+    FLAGS_MAX_ENUM                       :: 0x7fffffff;
 }
 
 Image_Format :: enum u32 {
@@ -410,6 +410,7 @@ Allocated_Buffer_Usage :: enum_flags{
 Allocated_Buffer :: struct {
 	#as handle: VkBuffer;
     allocation: Vulkan_Memory_Allocation;
+	size: u64;
 	info: Vulkan_Memory_Allocation_Info;
 }
 
@@ -423,6 +424,11 @@ Image :: struct{
 	usage : Image_Usage;
     format: Image_Format;
     allocation: Vulkan_Memory_Allocation;
+}
+
+Sampler :: struct{
+	#as handle: VkSampler;
+	device: *Device;
 }
 
 Vulkan_Memory_Allocation_Info :: VmaAllocationInfo;
@@ -475,8 +481,8 @@ allocate_image :: (allocator: *Vulkan_Memory_Allocator, width: s32, height: s32,
     view_info.subresourceRange.levelCount = 1;
     view_info.subresourceRange.baseArrayLayer = 0;
     view_info.subresourceRange.layerCount = 1;
-	if image_usage & .COLOR_ATTACHMENT_BIT then view_info.subresourceRange.aspectMask = .COLOR_BIT;
-	if image_usage & .DEPTH_STENCIL_ATTACHMENT_BIT then view_info.subresourceRange.aspectMask = .DEPTH_BIT;
+	if image_usage & .DEPTH_STENCIL_ATTACHMENT then view_info.subresourceRange.aspectMask = .DEPTH_BIT;
+	else view_info.subresourceRange.aspectMask = .COLOR_BIT;
 
 
 	vk_assert(vkCreateImageView(allocator.device, *view_info, null, *image.view));
@@ -484,6 +490,11 @@ allocate_image :: (allocator: *Vulkan_Memory_Allocator, width: s32, height: s32,
 	log("Image allocated at %:%", loc.fully_pathed_filename, loc.line_number);
 	
 	return image;
+}
+
+deallocate_image :: (image: *Image){
+	vkDestroyImageView(image.allocation.allocator.device, image.view, null);
+	vmaDestroyImage(image.allocation.allocator, image, image.allocation);
 }
 
 create_vulkan_memory_allocator :: (instance: Instance, device: *Device, deletion_queue: *Deletion_Queue = null) -> Vulkan_Memory_Allocator{
@@ -519,12 +530,15 @@ allocate_gpu_buffer :: (allocator: *Vulkan_Memory_Allocator, size: s64, buffer_u
 	vk_assert(vmaCreateBuffer(allocator, *buffer_info, *vma_alloc_info, *buffer.handle, *buffer.allocation.handle, *buffer.info));
 	buffer.allocation.allocator = allocator;
 	log("Buffer allocated at %:%", loc.fully_pathed_filename, loc.line_number);
-	
+
+	buffer.size = xx size;
 	return buffer;
 }
 
 deallocate_gpu_buffer :: (buffer: *Allocated_Buffer, loc := #caller_location){
+	if buffer.handle == NULL_HANDLE then return;
 	log("Buffer deallocated at %:%", loc.fully_pathed_filename, loc.line_number);
+	
 	vmaDestroyBuffer(buffer.allocation.allocator, buffer.handle, buffer.allocation);
 }
 
@@ -532,4 +546,16 @@ get_buffer_device_address :: (buffer: Allocated_Buffer) -> Buffer_Device_Address
 	device_adress_info: VkBufferDeviceAddressInfo;
 	device_adress_info.buffer = buffer;
 	return vkGetBufferDeviceAddress(buffer.allocation.allocator.device, *device_adress_info);
+}
+
+create_sampler :: (device: *Device) -> Sampler {
+	sampler: Sampler;
+	sampler.device = device;
+	
+	sampler_info: VkSamplerCreateInfo ;
+	sampler_info.magFilter = .NEAREST;
+	sampler_info.minFilter = .NEAREST;
+	vkCreateSampler(device, *sampler_info, null, *sampler.handle);
+	
+	return sampler;
 }

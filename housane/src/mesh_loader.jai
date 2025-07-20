@@ -84,7 +84,7 @@ load_gltf_file :: (arena: *Arena, path: string) -> [] *Mesh {
 						mesh.indices_count = xx primitive.indices.count;
 						if primitive.indices.component_type == {
 							case .cgltf_component_type_r_16u;
-								mesh.indices = arena_push(arena, u16, primitive.indices.count);
+								mesh.indices = cast(*u32, arena_push(arena, u16, primitive.indices.count));
 								for i : 0..mesh.indices_count - 1{
 									mesh.indices[i] =  xx cast(*u16, data)[i];
 								}

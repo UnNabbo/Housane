@@ -31,12 +31,23 @@ Pool_Size_Ratio :: struct {
 	ratio: f32;
 }
 
-Descriptor_Allocator :: struct{
+Descriptor_Pool :: struct{
 	#as handle: VkDescriptorPool;
+	full: bool;
+} 
+
+Descriptor_Allocator :: struct{
 	device: *Device;
-	allocations: [..] VkDescriptorPool;
+	ratios: [..] Pool_Size_Ratio;
+	pools:  [..] Descriptor_Pool;
+	sets: u32 = 32;
 }
 
+Descriptor_Write_Queue :: struct {
+	device: *Device;
+	memory: *Arena;
+	writes: [..] VkWriteDescriptorSet;
+}
 
 Descriptor_Set_Layout :: VkDescriptorSetLayout;
 
@@ -45,37 +56,119 @@ Descriptor_Set :: struct{
 	layout: Descriptor_Set_Layout;
 }
 
-create_descriptor_allocator :: (device: *Device, deletion_queue: *Deletion_Queue, sets: u32, pool_ratios: ..Pool_Size_Ratio) -> Descriptor_Allocator{
-	allocator: Descriptor_Allocator;
-	allocator.device = device;
+create_descriptor_write_queue :: (device: *Device, size: u64 = 32768) -> Descriptor_Write_Queue{
+	queue: Descriptor_Write_Queue;
+	queue.memory = arena_alloc();
+	queue.device = device;
+	return queue;
+}
+
+
+write_descriptor :: (queue: *Descriptor_Write_Queue, buffer: Allocated_Buffer, type: Descriptor_Type, bind_point: u32, size: u64, offset: u64 = 0){
+	assert(type == .UNIFORM_BUFFER || type == .UNIFORM_BUFFER_DYNAMIC || type == .STORAGE_BUFFER  || type == .STORAGE_BUFFER_DYNAMIC);
 	
+
+
+	data := arena_push(queue.memory, VkDescriptorBufferInfo);
+	data.offset = offset;
+	data.buffer = buffer;
+	data.range = size;
+	
+	write: VkWriteDescriptorSet;
+	write.dstBinding  = bind_point;
+	write.dstSet = NULL_HANDLE;
+	write.descriptorCount = 1;
+	write.descriptorType = xx type;
+	write.pBufferInfo = data;
+	array_add(*queue.writes, write);
+}
+
+write_descriptor :: (queue: *Descriptor_Write_Queue, image: Image, type: Descriptor_Type, bind_point: u32, sampler: Sampler = .{}){
+	//assert(type != .UNIFORM_BUFFER && type != .UNIFORM_BUFFER_DYNAMIC && type != .STORAGE_BUFFER  && type != .STORAGE_BUFFER_DYNAMIC);
+
+
+	data := arena_push(queue.memory, VkDescriptorImageInfo);
+	data.sampler = sampler;
+	data.imageView = image.view;
+	data.imageLayout = xx image.layout;
+	
+	write: VkWriteDescriptorSet;
+	write.dstBinding  = bind_point;
+	write.dstSet = NULL_HANDLE;
+	write.descriptorCount = 1;
+	write.descriptorType = xx type;
+	write.pImageInfo  = data;
+	array_add(*queue.writes, write);
+}
+
+flush_descriptor_write_queue :: (queue: *Descriptor_Write_Queue, set: Descriptor_Set, clear: bool = false){
+	for * queue.writes {
+		it.dstSet = set; 
+	}
+
+	vkUpdateDescriptorSets(queue.device, xx queue.writes.count, queue.writes.data, 0, null);
+	
+	if clear{
+		queue.writes.count = 0;
+		arena_clear(queue.memory);
+	}
+}
+
+grow_allocator_pools :: (allocator: * Descriptor_Allocator) -> *Descriptor_Pool{
 	pool_sizes: [..] VkDescriptorPoolSize;
-	for pool_ratios {
+	for allocator.ratios {
 		size: VkDescriptorPoolSize;
-		size.descriptorCount  = xx it.ratio * sets;
+		size.descriptorCount  = xx it.ratio * allocator.sets;
 		size.type = xx it.type;
 		array_add(*pool_sizes, size);
 	}
 
 	pool_info: VkDescriptorPoolCreateInfo;
 	pool_info.flags = 0;
-	pool_info.maxSets = sets;
+	pool_info.maxSets = allocator.sets;
 	pool_info.poolSizeCount = xx pool_sizes.count;
 	pool_info.pPoolSizes = pool_sizes.data;
 
-	vkCreateDescriptorPool(device, *pool_info, null, *allocator.handle);
-	array_free(pool_sizes);
+	pool: Descriptor_Pool;
+	vkCreateDescriptorPool(allocator.device, *pool_info, null, *pool.handle);
+	array_add(*allocator.pools, pool);
 	
-	Deletion_Queue.push(deletion_queue, allocator);
+	array_free(pool_sizes);
+	return *allocator.pools[allocator.pools.count - 1];
+}
+
+create_descriptor_allocator :: (device: *Device, pool_ratios: ..Pool_Size_Ratio) -> Descriptor_Allocator{
+	allocator: Descriptor_Allocator;
+	allocator.device = device;
+	
+	for pool_ratios {
+		array_add(*allocator.ratios, it);
+	}
+
+	grow_allocator_pools(*allocator);
+	
 	return allocator;
 }
 
+get_available_descriptor_pool :: (allocator: *Descriptor_Allocator) -> *Descriptor_Pool{
+	for * allocator.pools{
+		if !it.full then return it; 
+	}
+	
+	allocator.sets = clamp_hi(cast(u32, allocator.sets * 1.5), 4092);
+	return grow_allocator_pools(allocator);
+}
+
 clear_descriptor_allocator :: (allocator: *Descriptor_Allocator){
-	vkResetDescriptorPool(allocator.device, allocator, 0);
+	for * allocator.pools{
+		vkResetDescriptorPool(allocator.device, it, 0);
+	}
 }
 
 destroy_descriptor_allocator :: (allocator: *Descriptor_Allocator) {
-	vkDestroyDescriptorPool(allocator.device, allocator, null);
+	for * allocator.pools{
+		vkDestroyDescriptorPool(allocator.device, it, null);
+	}
 }
 
 create_descriptor_set_layout :: (device: Device, shader_stage: Shader_Stage, bindings: ..Descriptor_Binding, next: *void = null) -> Descriptor_Set_Layout{
@@ -108,19 +201,30 @@ destroy_descriptor_set_layout :: (device: Device, layout: *Descriptor_Set_Layout
 }
 
 allocate_descriptor_set :: (allocator: *Descriptor_Allocator, layout: Descriptor_Set_Layout, loc := #caller_location)  -> Descriptor_Set{
+	pool := get_available_descriptor_pool(allocator);
+
 	set: Descriptor_Set;
 	set.layout = layout;
-	
+
 	alloc_info: VkDescriptorSetAllocateInfo ;
-	alloc_info.descriptorPool = allocator;
+	alloc_info.descriptorPool = pool;
 	alloc_info.descriptorSetCount = 1;
 	alloc_info.pSetLayouts = *layout;
 
 	log("Descriptor allocated at %:%", loc.fully_pathed_filename, loc.line_number);
 	
-	vk_assert(vkAllocateDescriptorSets(allocator.device, *alloc_info, *set.handle));
+	res := vkAllocateDescriptorSets(allocator.device, *alloc_info, *set.handle);
+	if res == VkResult.ERROR_OUT_OF_POOL_MEMORY || res == VkResult.ERROR_FRAGMENTED_POOL{
+		pool.full = true;
+		pool = get_available_descriptor_pool(allocator);
+		alloc_info.descriptorPool = pool;
+		vk_assert(vkAllocateDescriptorSets(allocator.device, *alloc_info, *set.handle));
+	}
+	
 	return set;
 }
+
+
 
 update_descriptor_set_image :: (device: Device, descriptor: Descriptor_Set, image: Image){
 	img_info: VkDescriptorImageInfo;

@@ -12,8 +12,8 @@ align_pow2 :: (x: u64, b: u64) -> u64{
 PAGE_SIZE :: 4096; //TODO: comptime insert page size;
 
 Arena_Options :: enum_flags {
-	NONE;
-	NO_CHAIN;
+	NONE :: 0x0;
+	NO_CHAIN :: 0x1;
 }
 
 Arena :: struct	 {
@@ -103,7 +103,7 @@ arena_push :: (arena: *Arena, size: u64, allignment: u64 = ARENA_DEFAULT_ALIGNME
 	return ptr;
 }
 
-arena_push :: (arena: *Arena, $type: Type, count: u64 = 1, allignment: u64 = ARENA_DEFAULT_ALIGNMENT) -> *void{
+arena_push :: (arena: *Arena, $type: Type, count: u64 = 1, allignment: u64 = ARENA_DEFAULT_ALIGNMENT) -> *type{
 	size := size_of(type) * count;
 	ptr := arena_push_no_zero(arena, size);
 	memset(ptr, 0, xx size);
@@ -111,7 +111,7 @@ arena_push :: (arena: *Arena, $type: Type, count: u64 = 1, allignment: u64 = ARE
 }
 
 arena_release :: (arena: *Arena) {
-	current := arena.current;
+	current := arena;
 	prev: *Arena ;
 	while current != null {
 		prev = current.previous;
@@ -135,16 +135,15 @@ arena_pop_to :: (arena: *Arena, position: u64){
 	
 	new_pos := clamped_pos - current.base;
 	assert(new_pos <= current.position);
-	current.position = position;
+	current.position = clamped_pos;
 }
 
 arena_pop :: (arena: *Arena, amt: u64) {
 	pos_old := arena_pos(arena);
 	pos_new := pos_old;
-	if(amt < pos_old)
-		{
-			pos_new = pos_old - amt;
-		}
+	if(amt < pos_old){
+		pos_new = pos_old - amt;
+	}
 	arena_pop_to(arena, pos_new);
 }
 

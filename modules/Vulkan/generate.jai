@@ -89,11 +89,7 @@ generate_bindings :: () -> bool {
         array_add(*source_files, vulkan_h_location);
 
         generate_library_declarations = true;
-        will_print_bindings = () {
-            // Change the library name to be the same on all platforms
-            // so that we don't have to generate identical bindings for every platform just because the library name is different.
-            context.generator.libraries[0].name = "libvulkan";
-        };
+ 
 
         visitor     = vulkan_visitor;
         log_stripped_declarations = false;
@@ -172,7 +168,7 @@ vulkan_visitor :: (decl: *Declaration, parent_decl: *Declaration) -> Declaration
     if decl.kind == .TYPEDEF && decl.type.type_of_typedef &&  decl.type.type_of_typedef.name == "VkFlags" {
         //print("TYPEDEF(VkFlags):%\n", << decl.name);
         flags_name := replace(decl.name, "Flags", "FlagBits");
-        enum_decl, found := table_find(*available_flag_bits, flags_name);
+        found, enum_decl := table_find_new(*available_flag_bits, flags_name);
         if found {
             type := New(CType);
             type.type_of_enum = enum_decl;
@@ -241,7 +237,7 @@ maybe_add_enumeration_wrapper :: (builder: *String_Builder, function: *Function)
     print_type_to_builder(builder, data_arg.type.pointer_to, null);
 
     if has_return_value {
-        append(builder, ", VkResult #must");
+        append(builder, ", VkResult");
     }
 
     append(builder, " {\n");

@@ -329,6 +329,12 @@ destroy_device :: (device: *Device){
 	vkDestroyDevice(device, null);
 }
 
+resize_swapcahin :: (swapchain: *Swapchain, width: s32, height: s32) {
+	for * swapchain.images{
+		it.extent = .{xx width, xx height, 1};
+	}
+}
+
 create_swapchain :: (device: * Device, surface: * Surface, present_mode: Swap_Chain_Present_Mode, width: s32, height: s32, old_handle: VkSwapchainKHR = VK_NULL_HANDLE) -> Swapchain {
 	
 
@@ -364,7 +370,6 @@ create_swapchain :: (device: * Device, surface: * Surface, present_mode: Swap_Ch
     // MAX_BIT_EXT            :: 0x2;
     // CENTERED_BIT_EXT       :: 0x4;
 	scaling :VkSwapchainPresentScalingCreateInfoEXT;
-	//scaling.scalingBehavior = .ONE_TO_ONE_BIT_EXT;
 	scaling.scalingBehavior = .STRETCH_BIT_EXT;
 	scaling.presentGravityX = .MIN_BIT_EXT;
 	scaling.presentGravityY = .MIN_BIT_EXT;
@@ -390,7 +395,9 @@ create_swapchain :: (device: * Device, surface: * Surface, present_mode: Swap_Ch
 
 
 destroy_swapchain :: (swapchain: *Swapchain){
+	//vkDeviceWaitIdle(swapchain.device);
 	vkDestroySwapchainKHR(swapchain.device, swapchain, null);
+	array_free(swapchain.images);
 }
 
 acquire_image_from_swapchain :: (swapchain: Swapchain, semaphore: Semaphore, fence: Fence = .{}, timeout: u64 = U64_MAX) -> *Image, u32, bool{

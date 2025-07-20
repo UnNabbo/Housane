@@ -1,7 +1,7 @@
 //
 // This file was auto-generated using the following command:
 //
-// jai generate.jai
+// jai ./generate.jai
 //
 
 
@@ -7980,279 +7980,279 @@ PFN_vkCmdNextSubpass :: #type (commandBuffer: VkCommandBuffer, contents: VkSubpa
 PFN_vkCmdEndRenderPass :: #type (commandBuffer: VkCommandBuffer) -> void #c_call;
 PFN_vkCmdExecuteCommands :: #type (commandBuffer: VkCommandBuffer, commandBufferCount: u32, pCommandBuffers: *VkCommandBuffer) -> void #c_call;
 
-vkCreateInstance :: (pCreateInfo: *VkInstanceCreateInfo, pAllocator: *VkAllocationCallbacks, pInstance: *VkInstance) -> VkResult #foreign libvulkan;
+vkCreateInstance :: (pCreateInfo: *VkInstanceCreateInfo, pAllocator: *VkAllocationCallbacks, pInstance: *VkInstance) -> VkResult #foreign vulkan_1;
 
-vkDestroyInstance :: (instance: VkInstance, pAllocator: *VkAllocationCallbacks) -> void #foreign libvulkan;
+vkDestroyInstance :: (instance: VkInstance, pAllocator: *VkAllocationCallbacks) -> void #foreign vulkan_1;
 
-vkEnumeratePhysicalDevices :: (instance: VkInstance, pPhysicalDeviceCount: *u32, pPhysicalDevices: *VkPhysicalDevice) -> VkResult #foreign libvulkan;
+vkEnumeratePhysicalDevices :: (instance: VkInstance, pPhysicalDeviceCount: *u32, pPhysicalDevices: *VkPhysicalDevice) -> VkResult #foreign vulkan_1;
 
-vkGetPhysicalDeviceFeatures :: (physicalDevice: VkPhysicalDevice, pFeatures: *VkPhysicalDeviceFeatures) -> void #foreign libvulkan;
+vkGetPhysicalDeviceFeatures :: (physicalDevice: VkPhysicalDevice, pFeatures: *VkPhysicalDeviceFeatures) -> void #foreign vulkan_1;
 
-vkGetPhysicalDeviceFormatProperties :: (physicalDevice: VkPhysicalDevice, format: VkFormat, pFormatProperties: *VkFormatProperties) -> void #foreign libvulkan;
+vkGetPhysicalDeviceFormatProperties :: (physicalDevice: VkPhysicalDevice, format: VkFormat, pFormatProperties: *VkFormatProperties) -> void #foreign vulkan_1;
 
-vkGetPhysicalDeviceImageFormatProperties :: (physicalDevice: VkPhysicalDevice, format: VkFormat, type: VkImageType, tiling: VkImageTiling, usage: VkImageUsageFlags, flags: VkImageCreateFlags, pImageFormatProperties: *VkImageFormatProperties) -> VkResult #foreign libvulkan;
+vkGetPhysicalDeviceImageFormatProperties :: (physicalDevice: VkPhysicalDevice, format: VkFormat, type: VkImageType, tiling: VkImageTiling, usage: VkImageUsageFlags, flags: VkImageCreateFlags, pImageFormatProperties: *VkImageFormatProperties) -> VkResult #foreign vulkan_1;
 
-vkGetPhysicalDeviceProperties :: (physicalDevice: VkPhysicalDevice, pProperties: *VkPhysicalDeviceProperties) -> void #foreign libvulkan;
+vkGetPhysicalDeviceProperties :: (physicalDevice: VkPhysicalDevice, pProperties: *VkPhysicalDeviceProperties) -> void #foreign vulkan_1;
 
-vkGetPhysicalDeviceQueueFamilyProperties :: (physicalDevice: VkPhysicalDevice, pQueueFamilyPropertyCount: *u32, pQueueFamilyProperties: *VkQueueFamilyProperties) -> void #foreign libvulkan;
+vkGetPhysicalDeviceQueueFamilyProperties :: (physicalDevice: VkPhysicalDevice, pQueueFamilyPropertyCount: *u32, pQueueFamilyProperties: *VkQueueFamilyProperties) -> void #foreign vulkan_1;
 
-vkGetPhysicalDeviceMemoryProperties :: (physicalDevice: VkPhysicalDevice, pMemoryProperties: *VkPhysicalDeviceMemoryProperties) -> void #foreign libvulkan;
+vkGetPhysicalDeviceMemoryProperties :: (physicalDevice: VkPhysicalDevice, pMemoryProperties: *VkPhysicalDeviceMemoryProperties) -> void #foreign vulkan_1;
 
-vkGetInstanceProcAddr :: (instance: VkInstance, pName: *u8) -> PFN_vkVoidFunction #foreign libvulkan;
+vkGetInstanceProcAddr :: (instance: VkInstance, pName: *u8) -> PFN_vkVoidFunction #foreign vulkan_1;
 
-vkGetDeviceProcAddr :: (device: VkDevice, pName: *u8) -> PFN_vkVoidFunction #foreign libvulkan;
+vkGetDeviceProcAddr :: (device: VkDevice, pName: *u8) -> PFN_vkVoidFunction #foreign vulkan_1;
 
-vkCreateDevice :: (physicalDevice: VkPhysicalDevice, pCreateInfo: *VkDeviceCreateInfo, pAllocator: *VkAllocationCallbacks, pDevice: *VkDevice) -> VkResult #foreign libvulkan;
+vkCreateDevice :: (physicalDevice: VkPhysicalDevice, pCreateInfo: *VkDeviceCreateInfo, pAllocator: *VkAllocationCallbacks, pDevice: *VkDevice) -> VkResult #foreign vulkan_1;
 
-vkDestroyDevice :: (device: VkDevice, pAllocator: *VkAllocationCallbacks) -> void #foreign libvulkan;
+vkDestroyDevice :: (device: VkDevice, pAllocator: *VkAllocationCallbacks) -> void #foreign vulkan_1;
 
-vkEnumerateInstanceExtensionProperties :: (pLayerName: *u8, pPropertyCount: *u32, pProperties: *VkExtensionProperties) -> VkResult #foreign libvulkan;
+vkEnumerateInstanceExtensionProperties :: (pLayerName: *u8, pPropertyCount: *u32, pProperties: *VkExtensionProperties) -> VkResult #foreign vulkan_1;
 
-vkEnumerateDeviceExtensionProperties :: (physicalDevice: VkPhysicalDevice, pLayerName: *u8, pPropertyCount: *u32, pProperties: *VkExtensionProperties) -> VkResult #foreign libvulkan;
+vkEnumerateDeviceExtensionProperties :: (physicalDevice: VkPhysicalDevice, pLayerName: *u8, pPropertyCount: *u32, pProperties: *VkExtensionProperties) -> VkResult #foreign vulkan_1;
 
-vkEnumerateInstanceLayerProperties :: (pPropertyCount: *u32, pProperties: *VkLayerProperties) -> VkResult #foreign libvulkan;
+vkEnumerateInstanceLayerProperties :: (pPropertyCount: *u32, pProperties: *VkLayerProperties) -> VkResult #foreign vulkan_1;
 
-vkEnumerateDeviceLayerProperties :: (physicalDevice: VkPhysicalDevice, pPropertyCount: *u32, pProperties: *VkLayerProperties) -> VkResult #foreign libvulkan;
+vkEnumerateDeviceLayerProperties :: (physicalDevice: VkPhysicalDevice, pPropertyCount: *u32, pProperties: *VkLayerProperties) -> VkResult #foreign vulkan_1;
 
-vkGetDeviceQueue :: (device: VkDevice, queueFamilyIndex: u32, queueIndex: u32, pQueue: *VkQueue) -> void #foreign libvulkan;
+vkGetDeviceQueue :: (device: VkDevice, queueFamilyIndex: u32, queueIndex: u32, pQueue: *VkQueue) -> void #foreign vulkan_1;
 
-vkQueueSubmit :: (queue: VkQueue, submitCount: u32, pSubmits: *VkSubmitInfo, fence: VkFence) -> VkResult #foreign libvulkan;
+vkQueueSubmit :: (queue: VkQueue, submitCount: u32, pSubmits: *VkSubmitInfo, fence: VkFence) -> VkResult #foreign vulkan_1;
 
-vkQueueWaitIdle :: (queue: VkQueue) -> VkResult #foreign libvulkan;
+vkQueueWaitIdle :: (queue: VkQueue) -> VkResult #foreign vulkan_1;
 
-vkDeviceWaitIdle :: (device: VkDevice) -> VkResult #foreign libvulkan;
+vkDeviceWaitIdle :: (device: VkDevice) -> VkResult #foreign vulkan_1;
 
-vkAllocateMemory :: (device: VkDevice, pAllocateInfo: *VkMemoryAllocateInfo, pAllocator: *VkAllocationCallbacks, pMemory: *VkDeviceMemory) -> VkResult #foreign libvulkan;
+vkAllocateMemory :: (device: VkDevice, pAllocateInfo: *VkMemoryAllocateInfo, pAllocator: *VkAllocationCallbacks, pMemory: *VkDeviceMemory) -> VkResult #foreign vulkan_1;
 
-vkFreeMemory :: (device: VkDevice, memory: VkDeviceMemory, pAllocator: *VkAllocationCallbacks) -> void #foreign libvulkan;
+vkFreeMemory :: (device: VkDevice, memory: VkDeviceMemory, pAllocator: *VkAllocationCallbacks) -> void #foreign vulkan_1;
 
-vkMapMemory :: (device: VkDevice, memory: VkDeviceMemory, offset: VkDeviceSize, size: VkDeviceSize, flags: VkMemoryMapFlags, ppData: **void) -> VkResult #foreign libvulkan;
+vkMapMemory :: (device: VkDevice, memory: VkDeviceMemory, offset: VkDeviceSize, size: VkDeviceSize, flags: VkMemoryMapFlags, ppData: **void) -> VkResult #foreign vulkan_1;
 
-vkUnmapMemory :: (device: VkDevice, memory: VkDeviceMemory) -> void #foreign libvulkan;
+vkUnmapMemory :: (device: VkDevice, memory: VkDeviceMemory) -> void #foreign vulkan_1;
 
-vkFlushMappedMemoryRanges :: (device: VkDevice, memoryRangeCount: u32, pMemoryRanges: *VkMappedMemoryRange) -> VkResult #foreign libvulkan;
+vkFlushMappedMemoryRanges :: (device: VkDevice, memoryRangeCount: u32, pMemoryRanges: *VkMappedMemoryRange) -> VkResult #foreign vulkan_1;
 
-vkInvalidateMappedMemoryRanges :: (device: VkDevice, memoryRangeCount: u32, pMemoryRanges: *VkMappedMemoryRange) -> VkResult #foreign libvulkan;
+vkInvalidateMappedMemoryRanges :: (device: VkDevice, memoryRangeCount: u32, pMemoryRanges: *VkMappedMemoryRange) -> VkResult #foreign vulkan_1;
 
-vkGetDeviceMemoryCommitment :: (device: VkDevice, memory: VkDeviceMemory, pCommittedMemoryInBytes: *VkDeviceSize) -> void #foreign libvulkan;
+vkGetDeviceMemoryCommitment :: (device: VkDevice, memory: VkDeviceMemory, pCommittedMemoryInBytes: *VkDeviceSize) -> void #foreign vulkan_1;
 
-vkBindBufferMemory :: (device: VkDevice, buffer: VkBuffer, memory: VkDeviceMemory, memoryOffset: VkDeviceSize) -> VkResult #foreign libvulkan;
+vkBindBufferMemory :: (device: VkDevice, buffer: VkBuffer, memory: VkDeviceMemory, memoryOffset: VkDeviceSize) -> VkResult #foreign vulkan_1;
 
-vkBindImageMemory :: (device: VkDevice, image: VkImage, memory: VkDeviceMemory, memoryOffset: VkDeviceSize) -> VkResult #foreign libvulkan;
+vkBindImageMemory :: (device: VkDevice, image: VkImage, memory: VkDeviceMemory, memoryOffset: VkDeviceSize) -> VkResult #foreign vulkan_1;
 
-vkGetBufferMemoryRequirements :: (device: VkDevice, buffer: VkBuffer, pMemoryRequirements: *VkMemoryRequirements) -> void #foreign libvulkan;
+vkGetBufferMemoryRequirements :: (device: VkDevice, buffer: VkBuffer, pMemoryRequirements: *VkMemoryRequirements) -> void #foreign vulkan_1;
 
-vkGetImageMemoryRequirements :: (device: VkDevice, image: VkImage, pMemoryRequirements: *VkMemoryRequirements) -> void #foreign libvulkan;
+vkGetImageMemoryRequirements :: (device: VkDevice, image: VkImage, pMemoryRequirements: *VkMemoryRequirements) -> void #foreign vulkan_1;
 
-vkGetImageSparseMemoryRequirements :: (device: VkDevice, image: VkImage, pSparseMemoryRequirementCount: *u32, pSparseMemoryRequirements: *VkSparseImageMemoryRequirements) -> void #foreign libvulkan;
+vkGetImageSparseMemoryRequirements :: (device: VkDevice, image: VkImage, pSparseMemoryRequirementCount: *u32, pSparseMemoryRequirements: *VkSparseImageMemoryRequirements) -> void #foreign vulkan_1;
 
-vkGetPhysicalDeviceSparseImageFormatProperties :: (physicalDevice: VkPhysicalDevice, format: VkFormat, type: VkImageType, samples: VkSampleCountFlagBits, usage: VkImageUsageFlags, tiling: VkImageTiling, pPropertyCount: *u32, pProperties: *VkSparseImageFormatProperties) -> void #foreign libvulkan;
+vkGetPhysicalDeviceSparseImageFormatProperties :: (physicalDevice: VkPhysicalDevice, format: VkFormat, type: VkImageType, samples: VkSampleCountFlagBits, usage: VkImageUsageFlags, tiling: VkImageTiling, pPropertyCount: *u32, pProperties: *VkSparseImageFormatProperties) -> void #foreign vulkan_1;
 
-vkQueueBindSparse :: (queue: VkQueue, bindInfoCount: u32, pBindInfo: *VkBindSparseInfo, fence: VkFence) -> VkResult #foreign libvulkan;
+vkQueueBindSparse :: (queue: VkQueue, bindInfoCount: u32, pBindInfo: *VkBindSparseInfo, fence: VkFence) -> VkResult #foreign vulkan_1;
 
-vkCreateFence :: (device: VkDevice, pCreateInfo: *VkFenceCreateInfo, pAllocator: *VkAllocationCallbacks, pFence: *VkFence) -> VkResult #foreign libvulkan;
+vkCreateFence :: (device: VkDevice, pCreateInfo: *VkFenceCreateInfo, pAllocator: *VkAllocationCallbacks, pFence: *VkFence) -> VkResult #foreign vulkan_1;
 
-vkDestroyFence :: (device: VkDevice, fence: VkFence, pAllocator: *VkAllocationCallbacks) -> void #foreign libvulkan;
+vkDestroyFence :: (device: VkDevice, fence: VkFence, pAllocator: *VkAllocationCallbacks) -> void #foreign vulkan_1;
 
-vkResetFences :: (device: VkDevice, fenceCount: u32, pFences: *VkFence) -> VkResult #foreign libvulkan;
+vkResetFences :: (device: VkDevice, fenceCount: u32, pFences: *VkFence) -> VkResult #foreign vulkan_1;
 
-vkGetFenceStatus :: (device: VkDevice, fence: VkFence) -> VkResult #foreign libvulkan;
+vkGetFenceStatus :: (device: VkDevice, fence: VkFence) -> VkResult #foreign vulkan_1;
 
-vkWaitForFences :: (device: VkDevice, fenceCount: u32, pFences: *VkFence, waitAll: VkBool32, timeout: u64) -> VkResult #foreign libvulkan;
+vkWaitForFences :: (device: VkDevice, fenceCount: u32, pFences: *VkFence, waitAll: VkBool32, timeout: u64) -> VkResult #foreign vulkan_1;
 
-vkCreateSemaphore :: (device: VkDevice, pCreateInfo: *VkSemaphoreCreateInfo, pAllocator: *VkAllocationCallbacks, pSemaphore: *VkSemaphore) -> VkResult #foreign libvulkan;
+vkCreateSemaphore :: (device: VkDevice, pCreateInfo: *VkSemaphoreCreateInfo, pAllocator: *VkAllocationCallbacks, pSemaphore: *VkSemaphore) -> VkResult #foreign vulkan_1;
 
-vkDestroySemaphore :: (device: VkDevice, semaphore: VkSemaphore, pAllocator: *VkAllocationCallbacks) -> void #foreign libvulkan;
+vkDestroySemaphore :: (device: VkDevice, semaphore: VkSemaphore, pAllocator: *VkAllocationCallbacks) -> void #foreign vulkan_1;
 
-vkCreateEvent :: (device: VkDevice, pCreateInfo: *VkEventCreateInfo, pAllocator: *VkAllocationCallbacks, pEvent: *VkEvent) -> VkResult #foreign libvulkan;
+vkCreateEvent :: (device: VkDevice, pCreateInfo: *VkEventCreateInfo, pAllocator: *VkAllocationCallbacks, pEvent: *VkEvent) -> VkResult #foreign vulkan_1;
 
-vkDestroyEvent :: (device: VkDevice, event: VkEvent, pAllocator: *VkAllocationCallbacks) -> void #foreign libvulkan;
+vkDestroyEvent :: (device: VkDevice, event: VkEvent, pAllocator: *VkAllocationCallbacks) -> void #foreign vulkan_1;
 
-vkGetEventStatus :: (device: VkDevice, event: VkEvent) -> VkResult #foreign libvulkan;
+vkGetEventStatus :: (device: VkDevice, event: VkEvent) -> VkResult #foreign vulkan_1;
 
-vkSetEvent :: (device: VkDevice, event: VkEvent) -> VkResult #foreign libvulkan;
+vkSetEvent :: (device: VkDevice, event: VkEvent) -> VkResult #foreign vulkan_1;
 
-vkResetEvent :: (device: VkDevice, event: VkEvent) -> VkResult #foreign libvulkan;
+vkResetEvent :: (device: VkDevice, event: VkEvent) -> VkResult #foreign vulkan_1;
 
-vkCreateQueryPool :: (device: VkDevice, pCreateInfo: *VkQueryPoolCreateInfo, pAllocator: *VkAllocationCallbacks, pQueryPool: *VkQueryPool) -> VkResult #foreign libvulkan;
+vkCreateQueryPool :: (device: VkDevice, pCreateInfo: *VkQueryPoolCreateInfo, pAllocator: *VkAllocationCallbacks, pQueryPool: *VkQueryPool) -> VkResult #foreign vulkan_1;
 
-vkDestroyQueryPool :: (device: VkDevice, queryPool: VkQueryPool, pAllocator: *VkAllocationCallbacks) -> void #foreign libvulkan;
+vkDestroyQueryPool :: (device: VkDevice, queryPool: VkQueryPool, pAllocator: *VkAllocationCallbacks) -> void #foreign vulkan_1;
 
-vkGetQueryPoolResults :: (device: VkDevice, queryPool: VkQueryPool, firstQuery: u32, queryCount: u32, dataSize: u64, pData: *void, stride: VkDeviceSize, flags: VkQueryResultFlags) -> VkResult #foreign libvulkan;
+vkGetQueryPoolResults :: (device: VkDevice, queryPool: VkQueryPool, firstQuery: u32, queryCount: u32, dataSize: u64, pData: *void, stride: VkDeviceSize, flags: VkQueryResultFlags) -> VkResult #foreign vulkan_1;
 
-vkCreateBuffer :: (device: VkDevice, pCreateInfo: *VkBufferCreateInfo, pAllocator: *VkAllocationCallbacks, pBuffer: *VkBuffer) -> VkResult #foreign libvulkan;
+vkCreateBuffer :: (device: VkDevice, pCreateInfo: *VkBufferCreateInfo, pAllocator: *VkAllocationCallbacks, pBuffer: *VkBuffer) -> VkResult #foreign vulkan_1;
 
-vkDestroyBuffer :: (device: VkDevice, buffer: VkBuffer, pAllocator: *VkAllocationCallbacks) -> void #foreign libvulkan;
+vkDestroyBuffer :: (device: VkDevice, buffer: VkBuffer, pAllocator: *VkAllocationCallbacks) -> void #foreign vulkan_1;
 
-vkCreateBufferView :: (device: VkDevice, pCreateInfo: *VkBufferViewCreateInfo, pAllocator: *VkAllocationCallbacks, pView: *VkBufferView) -> VkResult #foreign libvulkan;
+vkCreateBufferView :: (device: VkDevice, pCreateInfo: *VkBufferViewCreateInfo, pAllocator: *VkAllocationCallbacks, pView: *VkBufferView) -> VkResult #foreign vulkan_1;
 
-vkDestroyBufferView :: (device: VkDevice, bufferView: VkBufferView, pAllocator: *VkAllocationCallbacks) -> void #foreign libvulkan;
+vkDestroyBufferView :: (device: VkDevice, bufferView: VkBufferView, pAllocator: *VkAllocationCallbacks) -> void #foreign vulkan_1;
 
-vkCreateImage :: (device: VkDevice, pCreateInfo: *VkImageCreateInfo, pAllocator: *VkAllocationCallbacks, pImage: *VkImage) -> VkResult #foreign libvulkan;
+vkCreateImage :: (device: VkDevice, pCreateInfo: *VkImageCreateInfo, pAllocator: *VkAllocationCallbacks, pImage: *VkImage) -> VkResult #foreign vulkan_1;
 
-vkDestroyImage :: (device: VkDevice, image: VkImage, pAllocator: *VkAllocationCallbacks) -> void #foreign libvulkan;
+vkDestroyImage :: (device: VkDevice, image: VkImage, pAllocator: *VkAllocationCallbacks) -> void #foreign vulkan_1;
 
-vkGetImageSubresourceLayout :: (device: VkDevice, image: VkImage, pSubresource: *VkImageSubresource, pLayout: *VkSubresourceLayout) -> void #foreign libvulkan;
+vkGetImageSubresourceLayout :: (device: VkDevice, image: VkImage, pSubresource: *VkImageSubresource, pLayout: *VkSubresourceLayout) -> void #foreign vulkan_1;
 
-vkCreateImageView :: (device: VkDevice, pCreateInfo: *VkImageViewCreateInfo, pAllocator: *VkAllocationCallbacks, pView: *VkImageView) -> VkResult #foreign libvulkan;
+vkCreateImageView :: (device: VkDevice, pCreateInfo: *VkImageViewCreateInfo, pAllocator: *VkAllocationCallbacks, pView: *VkImageView) -> VkResult #foreign vulkan_1;
 
-vkDestroyImageView :: (device: VkDevice, imageView: VkImageView, pAllocator: *VkAllocationCallbacks) -> void #foreign libvulkan;
+vkDestroyImageView :: (device: VkDevice, imageView: VkImageView, pAllocator: *VkAllocationCallbacks) -> void #foreign vulkan_1;
 
-vkCreateShaderModule :: (device: VkDevice, pCreateInfo: *VkShaderModuleCreateInfo, pAllocator: *VkAllocationCallbacks, pShaderModule: *VkShaderModule) -> VkResult #foreign libvulkan;
+vkCreateShaderModule :: (device: VkDevice, pCreateInfo: *VkShaderModuleCreateInfo, pAllocator: *VkAllocationCallbacks, pShaderModule: *VkShaderModule) -> VkResult #foreign vulkan_1;
 
-vkDestroyShaderModule :: (device: VkDevice, shaderModule: VkShaderModule, pAllocator: *VkAllocationCallbacks) -> void #foreign libvulkan;
+vkDestroyShaderModule :: (device: VkDevice, shaderModule: VkShaderModule, pAllocator: *VkAllocationCallbacks) -> void #foreign vulkan_1;
 
-vkCreatePipelineCache :: (device: VkDevice, pCreateInfo: *VkPipelineCacheCreateInfo, pAllocator: *VkAllocationCallbacks, pPipelineCache: *VkPipelineCache) -> VkResult #foreign libvulkan;
+vkCreatePipelineCache :: (device: VkDevice, pCreateInfo: *VkPipelineCacheCreateInfo, pAllocator: *VkAllocationCallbacks, pPipelineCache: *VkPipelineCache) -> VkResult #foreign vulkan_1;
 
-vkDestroyPipelineCache :: (device: VkDevice, pipelineCache: VkPipelineCache, pAllocator: *VkAllocationCallbacks) -> void #foreign libvulkan;
+vkDestroyPipelineCache :: (device: VkDevice, pipelineCache: VkPipelineCache, pAllocator: *VkAllocationCallbacks) -> void #foreign vulkan_1;
 
-vkGetPipelineCacheData :: (device: VkDevice, pipelineCache: VkPipelineCache, pDataSize: *u64, pData: *void) -> VkResult #foreign libvulkan;
+vkGetPipelineCacheData :: (device: VkDevice, pipelineCache: VkPipelineCache, pDataSize: *u64, pData: *void) -> VkResult #foreign vulkan_1;
 
-vkMergePipelineCaches :: (device: VkDevice, dstCache: VkPipelineCache, srcCacheCount: u32, pSrcCaches: *VkPipelineCache) -> VkResult #foreign libvulkan;
+vkMergePipelineCaches :: (device: VkDevice, dstCache: VkPipelineCache, srcCacheCount: u32, pSrcCaches: *VkPipelineCache) -> VkResult #foreign vulkan_1;
 
-vkCreateGraphicsPipelines :: (device: VkDevice, pipelineCache: VkPipelineCache, createInfoCount: u32, pCreateInfos: *VkGraphicsPipelineCreateInfo, pAllocator: *VkAllocationCallbacks, pPipelines: *VkPipeline) -> VkResult #foreign libvulkan;
+vkCreateGraphicsPipelines :: (device: VkDevice, pipelineCache: VkPipelineCache, createInfoCount: u32, pCreateInfos: *VkGraphicsPipelineCreateInfo, pAllocator: *VkAllocationCallbacks, pPipelines: *VkPipeline) -> VkResult #foreign vulkan_1;
 
-vkCreateComputePipelines :: (device: VkDevice, pipelineCache: VkPipelineCache, createInfoCount: u32, pCreateInfos: *VkComputePipelineCreateInfo, pAllocator: *VkAllocationCallbacks, pPipelines: *VkPipeline) -> VkResult #foreign libvulkan;
+vkCreateComputePipelines :: (device: VkDevice, pipelineCache: VkPipelineCache, createInfoCount: u32, pCreateInfos: *VkComputePipelineCreateInfo, pAllocator: *VkAllocationCallbacks, pPipelines: *VkPipeline) -> VkResult #foreign vulkan_1;
 
-vkDestroyPipeline :: (device: VkDevice, pipeline: VkPipeline, pAllocator: *VkAllocationCallbacks) -> void #foreign libvulkan;
+vkDestroyPipeline :: (device: VkDevice, pipeline: VkPipeline, pAllocator: *VkAllocationCallbacks) -> void #foreign vulkan_1;
 
-vkCreatePipelineLayout :: (device: VkDevice, pCreateInfo: *VkPipelineLayoutCreateInfo, pAllocator: *VkAllocationCallbacks, pPipelineLayout: *VkPipelineLayout) -> VkResult #foreign libvulkan;
+vkCreatePipelineLayout :: (device: VkDevice, pCreateInfo: *VkPipelineLayoutCreateInfo, pAllocator: *VkAllocationCallbacks, pPipelineLayout: *VkPipelineLayout) -> VkResult #foreign vulkan_1;
 
-vkDestroyPipelineLayout :: (device: VkDevice, pipelineLayout: VkPipelineLayout, pAllocator: *VkAllocationCallbacks) -> void #foreign libvulkan;
+vkDestroyPipelineLayout :: (device: VkDevice, pipelineLayout: VkPipelineLayout, pAllocator: *VkAllocationCallbacks) -> void #foreign vulkan_1;
 
-vkCreateSampler :: (device: VkDevice, pCreateInfo: *VkSamplerCreateInfo, pAllocator: *VkAllocationCallbacks, pSampler: *VkSampler) -> VkResult #foreign libvulkan;
+vkCreateSampler :: (device: VkDevice, pCreateInfo: *VkSamplerCreateInfo, pAllocator: *VkAllocationCallbacks, pSampler: *VkSampler) -> VkResult #foreign vulkan_1;
 
-vkDestroySampler :: (device: VkDevice, sampler: VkSampler, pAllocator: *VkAllocationCallbacks) -> void #foreign libvulkan;
+vkDestroySampler :: (device: VkDevice, sampler: VkSampler, pAllocator: *VkAllocationCallbacks) -> void #foreign vulkan_1;
 
-vkCreateDescriptorSetLayout :: (device: VkDevice, pCreateInfo: *VkDescriptorSetLayoutCreateInfo, pAllocator: *VkAllocationCallbacks, pSetLayout: *VkDescriptorSetLayout) -> VkResult #foreign libvulkan;
+vkCreateDescriptorSetLayout :: (device: VkDevice, pCreateInfo: *VkDescriptorSetLayoutCreateInfo, pAllocator: *VkAllocationCallbacks, pSetLayout: *VkDescriptorSetLayout) -> VkResult #foreign vulkan_1;
 
-vkDestroyDescriptorSetLayout :: (device: VkDevice, descriptorSetLayout: VkDescriptorSetLayout, pAllocator: *VkAllocationCallbacks) -> void #foreign libvulkan;
+vkDestroyDescriptorSetLayout :: (device: VkDevice, descriptorSetLayout: VkDescriptorSetLayout, pAllocator: *VkAllocationCallbacks) -> void #foreign vulkan_1;
 
-vkCreateDescriptorPool :: (device: VkDevice, pCreateInfo: *VkDescriptorPoolCreateInfo, pAllocator: *VkAllocationCallbacks, pDescriptorPool: *VkDescriptorPool) -> VkResult #foreign libvulkan;
+vkCreateDescriptorPool :: (device: VkDevice, pCreateInfo: *VkDescriptorPoolCreateInfo, pAllocator: *VkAllocationCallbacks, pDescriptorPool: *VkDescriptorPool) -> VkResult #foreign vulkan_1;
 
-vkDestroyDescriptorPool :: (device: VkDevice, descriptorPool: VkDescriptorPool, pAllocator: *VkAllocationCallbacks) -> void #foreign libvulkan;
+vkDestroyDescriptorPool :: (device: VkDevice, descriptorPool: VkDescriptorPool, pAllocator: *VkAllocationCallbacks) -> void #foreign vulkan_1;
 
-vkResetDescriptorPool :: (device: VkDevice, descriptorPool: VkDescriptorPool, flags: VkDescriptorPoolResetFlags) -> VkResult #foreign libvulkan;
+vkResetDescriptorPool :: (device: VkDevice, descriptorPool: VkDescriptorPool, flags: VkDescriptorPoolResetFlags) -> VkResult #foreign vulkan_1;
 
-vkAllocateDescriptorSets :: (device: VkDevice, pAllocateInfo: *VkDescriptorSetAllocateInfo, pDescriptorSets: *VkDescriptorSet) -> VkResult #foreign libvulkan;
+vkAllocateDescriptorSets :: (device: VkDevice, pAllocateInfo: *VkDescriptorSetAllocateInfo, pDescriptorSets: *VkDescriptorSet) -> VkResult #foreign vulkan_1;
 
-vkFreeDescriptorSets :: (device: VkDevice, descriptorPool: VkDescriptorPool, descriptorSetCount: u32, pDescriptorSets: *VkDescriptorSet) -> VkResult #foreign libvulkan;
+vkFreeDescriptorSets :: (device: VkDevice, descriptorPool: VkDescriptorPool, descriptorSetCount: u32, pDescriptorSets: *VkDescriptorSet) -> VkResult #foreign vulkan_1;
 
-vkUpdateDescriptorSets :: (device: VkDevice, descriptorWriteCount: u32, pDescriptorWrites: *VkWriteDescriptorSet, descriptorCopyCount: u32, pDescriptorCopies: *VkCopyDescriptorSet) -> void #foreign libvulkan;
+vkUpdateDescriptorSets :: (device: VkDevice, descriptorWriteCount: u32, pDescriptorWrites: *VkWriteDescriptorSet, descriptorCopyCount: u32, pDescriptorCopies: *VkCopyDescriptorSet) -> void #foreign vulkan_1;
 
-vkCreateFramebuffer :: (device: VkDevice, pCreateInfo: *VkFramebufferCreateInfo, pAllocator: *VkAllocationCallbacks, pFramebuffer: *VkFramebuffer) -> VkResult #foreign libvulkan;
+vkCreateFramebuffer :: (device: VkDevice, pCreateInfo: *VkFramebufferCreateInfo, pAllocator: *VkAllocationCallbacks, pFramebuffer: *VkFramebuffer) -> VkResult #foreign vulkan_1;
 
-vkDestroyFramebuffer :: (device: VkDevice, framebuffer: VkFramebuffer, pAllocator: *VkAllocationCallbacks) -> void #foreign libvulkan;
+vkDestroyFramebuffer :: (device: VkDevice, framebuffer: VkFramebuffer, pAllocator: *VkAllocationCallbacks) -> void #foreign vulkan_1;
 
-vkCreateRenderPass :: (device: VkDevice, pCreateInfo: *VkRenderPassCreateInfo, pAllocator: *VkAllocationCallbacks, pRenderPass: *VkRenderPass) -> VkResult #foreign libvulkan;
+vkCreateRenderPass :: (device: VkDevice, pCreateInfo: *VkRenderPassCreateInfo, pAllocator: *VkAllocationCallbacks, pRenderPass: *VkRenderPass) -> VkResult #foreign vulkan_1;
 
-vkDestroyRenderPass :: (device: VkDevice, renderPass: VkRenderPass, pAllocator: *VkAllocationCallbacks) -> void #foreign libvulkan;
+vkDestroyRenderPass :: (device: VkDevice, renderPass: VkRenderPass, pAllocator: *VkAllocationCallbacks) -> void #foreign vulkan_1;
 
-vkGetRenderAreaGranularity :: (device: VkDevice, renderPass: VkRenderPass, pGranularity: *VkExtent2D) -> void #foreign libvulkan;
+vkGetRenderAreaGranularity :: (device: VkDevice, renderPass: VkRenderPass, pGranularity: *VkExtent2D) -> void #foreign vulkan_1;
 
-vkCreateCommandPool :: (device: VkDevice, pCreateInfo: *VkCommandPoolCreateInfo, pAllocator: *VkAllocationCallbacks, pCommandPool: *VkCommandPool) -> VkResult #foreign libvulkan;
+vkCreateCommandPool :: (device: VkDevice, pCreateInfo: *VkCommandPoolCreateInfo, pAllocator: *VkAllocationCallbacks, pCommandPool: *VkCommandPool) -> VkResult #foreign vulkan_1;
 
-vkDestroyCommandPool :: (device: VkDevice, commandPool: VkCommandPool, pAllocator: *VkAllocationCallbacks) -> void #foreign libvulkan;
+vkDestroyCommandPool :: (device: VkDevice, commandPool: VkCommandPool, pAllocator: *VkAllocationCallbacks) -> void #foreign vulkan_1;
 
-vkResetCommandPool :: (device: VkDevice, commandPool: VkCommandPool, flags: VkCommandPoolResetFlags) -> VkResult #foreign libvulkan;
+vkResetCommandPool :: (device: VkDevice, commandPool: VkCommandPool, flags: VkCommandPoolResetFlags) -> VkResult #foreign vulkan_1;
 
-vkAllocateCommandBuffers :: (device: VkDevice, pAllocateInfo: *VkCommandBufferAllocateInfo, pCommandBuffers: *VkCommandBuffer) -> VkResult #foreign libvulkan;
+vkAllocateCommandBuffers :: (device: VkDevice, pAllocateInfo: *VkCommandBufferAllocateInfo, pCommandBuffers: *VkCommandBuffer) -> VkResult #foreign vulkan_1;
 
-vkFreeCommandBuffers :: (device: VkDevice, commandPool: VkCommandPool, commandBufferCount: u32, pCommandBuffers: *VkCommandBuffer) -> void #foreign libvulkan;
+vkFreeCommandBuffers :: (device: VkDevice, commandPool: VkCommandPool, commandBufferCount: u32, pCommandBuffers: *VkCommandBuffer) -> void #foreign vulkan_1;
 
-vkBeginCommandBuffer :: (commandBuffer: VkCommandBuffer, pBeginInfo: *VkCommandBufferBeginInfo) -> VkResult #foreign libvulkan;
+vkBeginCommandBuffer :: (commandBuffer: VkCommandBuffer, pBeginInfo: *VkCommandBufferBeginInfo) -> VkResult #foreign vulkan_1;
 
-vkEndCommandBuffer :: (commandBuffer: VkCommandBuffer) -> VkResult #foreign libvulkan;
+vkEndCommandBuffer :: (commandBuffer: VkCommandBuffer) -> VkResult #foreign vulkan_1;
 
-vkResetCommandBuffer :: (commandBuffer: VkCommandBuffer, flags: VkCommandBufferResetFlags) -> VkResult #foreign libvulkan;
+vkResetCommandBuffer :: (commandBuffer: VkCommandBuffer, flags: VkCommandBufferResetFlags) -> VkResult #foreign vulkan_1;
 
-vkCmdBindPipeline :: (commandBuffer: VkCommandBuffer, pipelineBindPoint: VkPipelineBindPoint, pipeline: VkPipeline) -> void #foreign libvulkan;
+vkCmdBindPipeline :: (commandBuffer: VkCommandBuffer, pipelineBindPoint: VkPipelineBindPoint, pipeline: VkPipeline) -> void #foreign vulkan_1;
 
-vkCmdSetViewport :: (commandBuffer: VkCommandBuffer, firstViewport: u32, viewportCount: u32, pViewports: *VkViewport) -> void #foreign libvulkan;
+vkCmdSetViewport :: (commandBuffer: VkCommandBuffer, firstViewport: u32, viewportCount: u32, pViewports: *VkViewport) -> void #foreign vulkan_1;
 
-vkCmdSetScissor :: (commandBuffer: VkCommandBuffer, firstScissor: u32, scissorCount: u32, pScissors: *VkRect2D) -> void #foreign libvulkan;
+vkCmdSetScissor :: (commandBuffer: VkCommandBuffer, firstScissor: u32, scissorCount: u32, pScissors: *VkRect2D) -> void #foreign vulkan_1;
 
-vkCmdSetLineWidth :: (commandBuffer: VkCommandBuffer, lineWidth: float) -> void #foreign libvulkan;
+vkCmdSetLineWidth :: (commandBuffer: VkCommandBuffer, lineWidth: float) -> void #foreign vulkan_1;
 
-vkCmdSetDepthBias :: (commandBuffer: VkCommandBuffer, depthBiasConstantFactor: float, depthBiasClamp: float, depthBiasSlopeFactor: float) -> void #foreign libvulkan;
+vkCmdSetDepthBias :: (commandBuffer: VkCommandBuffer, depthBiasConstantFactor: float, depthBiasClamp: float, depthBiasSlopeFactor: float) -> void #foreign vulkan_1;
 
-vkCmdSetBlendConstants :: (commandBuffer: VkCommandBuffer, blendConstants: *[4] float) -> void #foreign libvulkan;
+vkCmdSetBlendConstants :: (commandBuffer: VkCommandBuffer, blendConstants: *[4] float) -> void #foreign vulkan_1;
 
-vkCmdSetDepthBounds :: (commandBuffer: VkCommandBuffer, minDepthBounds: float, maxDepthBounds: float) -> void #foreign libvulkan;
+vkCmdSetDepthBounds :: (commandBuffer: VkCommandBuffer, minDepthBounds: float, maxDepthBounds: float) -> void #foreign vulkan_1;
 
-vkCmdSetStencilCompareMask :: (commandBuffer: VkCommandBuffer, faceMask: VkStencilFaceFlags, compareMask: u32) -> void #foreign libvulkan;
+vkCmdSetStencilCompareMask :: (commandBuffer: VkCommandBuffer, faceMask: VkStencilFaceFlags, compareMask: u32) -> void #foreign vulkan_1;
 
-vkCmdSetStencilWriteMask :: (commandBuffer: VkCommandBuffer, faceMask: VkStencilFaceFlags, writeMask: u32) -> void #foreign libvulkan;
+vkCmdSetStencilWriteMask :: (commandBuffer: VkCommandBuffer, faceMask: VkStencilFaceFlags, writeMask: u32) -> void #foreign vulkan_1;
 
-vkCmdSetStencilReference :: (commandBuffer: VkCommandBuffer, faceMask: VkStencilFaceFlags, reference: u32) -> void #foreign libvulkan;
+vkCmdSetStencilReference :: (commandBuffer: VkCommandBuffer, faceMask: VkStencilFaceFlags, reference: u32) -> void #foreign vulkan_1;
 
-vkCmdBindDescriptorSets :: (commandBuffer: VkCommandBuffer, pipelineBindPoint: VkPipelineBindPoint, layout: VkPipelineLayout, firstSet: u32, descriptorSetCount: u32, pDescriptorSets: *VkDescriptorSet, dynamicOffsetCount: u32, pDynamicOffsets: *u32) -> void #foreign libvulkan;
+vkCmdBindDescriptorSets :: (commandBuffer: VkCommandBuffer, pipelineBindPoint: VkPipelineBindPoint, layout: VkPipelineLayout, firstSet: u32, descriptorSetCount: u32, pDescriptorSets: *VkDescriptorSet, dynamicOffsetCount: u32, pDynamicOffsets: *u32) -> void #foreign vulkan_1;
 
-vkCmdBindIndexBuffer :: (commandBuffer: VkCommandBuffer, buffer: VkBuffer, offset: VkDeviceSize, indexType: VkIndexType) -> void #foreign libvulkan;
+vkCmdBindIndexBuffer :: (commandBuffer: VkCommandBuffer, buffer: VkBuffer, offset: VkDeviceSize, indexType: VkIndexType) -> void #foreign vulkan_1;
 
-vkCmdBindVertexBuffers :: (commandBuffer: VkCommandBuffer, firstBinding: u32, bindingCount: u32, pBuffers: *VkBuffer, pOffsets: *VkDeviceSize) -> void #foreign libvulkan;
+vkCmdBindVertexBuffers :: (commandBuffer: VkCommandBuffer, firstBinding: u32, bindingCount: u32, pBuffers: *VkBuffer, pOffsets: *VkDeviceSize) -> void #foreign vulkan_1;
 
-vkCmdDraw :: (commandBuffer: VkCommandBuffer, vertexCount: u32, instanceCount: u32, firstVertex: u32, firstInstance: u32) -> void #foreign libvulkan;
+vkCmdDraw :: (commandBuffer: VkCommandBuffer, vertexCount: u32, instanceCount: u32, firstVertex: u32, firstInstance: u32) -> void #foreign vulkan_1;
 
-vkCmdDrawIndexed :: (commandBuffer: VkCommandBuffer, indexCount: u32, instanceCount: u32, firstIndex: u32, vertexOffset: s32, firstInstance: u32) -> void #foreign libvulkan;
+vkCmdDrawIndexed :: (commandBuffer: VkCommandBuffer, indexCount: u32, instanceCount: u32, firstIndex: u32, vertexOffset: s32, firstInstance: u32) -> void #foreign vulkan_1;
 
-vkCmdDrawIndirect :: (commandBuffer: VkCommandBuffer, buffer: VkBuffer, offset: VkDeviceSize, drawCount: u32, stride: u32) -> void #foreign libvulkan;
+vkCmdDrawIndirect :: (commandBuffer: VkCommandBuffer, buffer: VkBuffer, offset: VkDeviceSize, drawCount: u32, stride: u32) -> void #foreign vulkan_1;
 
-vkCmdDrawIndexedIndirect :: (commandBuffer: VkCommandBuffer, buffer: VkBuffer, offset: VkDeviceSize, drawCount: u32, stride: u32) -> void #foreign libvulkan;
+vkCmdDrawIndexedIndirect :: (commandBuffer: VkCommandBuffer, buffer: VkBuffer, offset: VkDeviceSize, drawCount: u32, stride: u32) -> void #foreign vulkan_1;
 
-vkCmdDispatch :: (commandBuffer: VkCommandBuffer, groupCountX: u32, groupCountY: u32, groupCountZ: u32) -> void #foreign libvulkan;
+vkCmdDispatch :: (commandBuffer: VkCommandBuffer, groupCountX: u32, groupCountY: u32, groupCountZ: u32) -> void #foreign vulkan_1;
 
-vkCmdDispatchIndirect :: (commandBuffer: VkCommandBuffer, buffer: VkBuffer, offset: VkDeviceSize) -> void #foreign libvulkan;
+vkCmdDispatchIndirect :: (commandBuffer: VkCommandBuffer, buffer: VkBuffer, offset: VkDeviceSize) -> void #foreign vulkan_1;
 
-vkCmdCopyBuffer :: (commandBuffer: VkCommandBuffer, srcBuffer: VkBuffer, dstBuffer: VkBuffer, regionCount: u32, pRegions: *VkBufferCopy) -> void #foreign libvulkan;
+vkCmdCopyBuffer :: (commandBuffer: VkCommandBuffer, srcBuffer: VkBuffer, dstBuffer: VkBuffer, regionCount: u32, pRegions: *VkBufferCopy) -> void #foreign vulkan_1;
 
-vkCmdCopyImage :: (commandBuffer: VkCommandBuffer, srcImage: VkImage, srcImageLayout: VkImageLayout, dstImage: VkImage, dstImageLayout: VkImageLayout, regionCount: u32, pRegions: *VkImageCopy) -> void #foreign libvulkan;
+vkCmdCopyImage :: (commandBuffer: VkCommandBuffer, srcImage: VkImage, srcImageLayout: VkImageLayout, dstImage: VkImage, dstImageLayout: VkImageLayout, regionCount: u32, pRegions: *VkImageCopy) -> void #foreign vulkan_1;
 
-vkCmdBlitImage :: (commandBuffer: VkCommandBuffer, srcImage: VkImage, srcImageLayout: VkImageLayout, dstImage: VkImage, dstImageLayout: VkImageLayout, regionCount: u32, pRegions: *VkImageBlit, filter: VkFilter) -> void #foreign libvulkan;
+vkCmdBlitImage :: (commandBuffer: VkCommandBuffer, srcImage: VkImage, srcImageLayout: VkImageLayout, dstImage: VkImage, dstImageLayout: VkImageLayout, regionCount: u32, pRegions: *VkImageBlit, filter: VkFilter) -> void #foreign vulkan_1;
 
-vkCmdCopyBufferToImage :: (commandBuffer: VkCommandBuffer, srcBuffer: VkBuffer, dstImage: VkImage, dstImageLayout: VkImageLayout, regionCount: u32, pRegions: *VkBufferImageCopy) -> void #foreign libvulkan;
+vkCmdCopyBufferToImage :: (commandBuffer: VkCommandBuffer, srcBuffer: VkBuffer, dstImage: VkImage, dstImageLayout: VkImageLayout, regionCount: u32, pRegions: *VkBufferImageCopy) -> void #foreign vulkan_1;
 
-vkCmdCopyImageToBuffer :: (commandBuffer: VkCommandBuffer, srcImage: VkImage, srcImageLayout: VkImageLayout, dstBuffer: VkBuffer, regionCount: u32, pRegions: *VkBufferImageCopy) -> void #foreign libvulkan;
+vkCmdCopyImageToBuffer :: (commandBuffer: VkCommandBuffer, srcImage: VkImage, srcImageLayout: VkImageLayout, dstBuffer: VkBuffer, regionCount: u32, pRegions: *VkBufferImageCopy) -> void #foreign vulkan_1;
 
-vkCmdUpdateBuffer :: (commandBuffer: VkCommandBuffer, dstBuffer: VkBuffer, dstOffset: VkDeviceSize, dataSize: VkDeviceSize, pData: *void) -> void #foreign libvulkan;
+vkCmdUpdateBuffer :: (commandBuffer: VkCommandBuffer, dstBuffer: VkBuffer, dstOffset: VkDeviceSize, dataSize: VkDeviceSize, pData: *void) -> void #foreign vulkan_1;
 
-vkCmdFillBuffer :: (commandBuffer: VkCommandBuffer, dstBuffer: VkBuffer, dstOffset: VkDeviceSize, size: VkDeviceSize, data: u32) -> void #foreign libvulkan;
+vkCmdFillBuffer :: (commandBuffer: VkCommandBuffer, dstBuffer: VkBuffer, dstOffset: VkDeviceSize, size: VkDeviceSize, data: u32) -> void #foreign vulkan_1;
 
-vkCmdClearColorImage :: (commandBuffer: VkCommandBuffer, image: VkImage, imageLayout: VkImageLayout, pColor: *VkClearColorValue, rangeCount: u32, pRanges: *VkImageSubresourceRange) -> void #foreign libvulkan;
+vkCmdClearColorImage :: (commandBuffer: VkCommandBuffer, image: VkImage, imageLayout: VkImageLayout, pColor: *VkClearColorValue, rangeCount: u32, pRanges: *VkImageSubresourceRange) -> void #foreign vulkan_1;
 
-vkCmdClearDepthStencilImage :: (commandBuffer: VkCommandBuffer, image: VkImage, imageLayout: VkImageLayout, pDepthStencil: *VkClearDepthStencilValue, rangeCount: u32, pRanges: *VkImageSubresourceRange) -> void #foreign libvulkan;
+vkCmdClearDepthStencilImage :: (commandBuffer: VkCommandBuffer, image: VkImage, imageLayout: VkImageLayout, pDepthStencil: *VkClearDepthStencilValue, rangeCount: u32, pRanges: *VkImageSubresourceRange) -> void #foreign vulkan_1;
 
-vkCmdClearAttachments :: (commandBuffer: VkCommandBuffer, attachmentCount: u32, pAttachments: *VkClearAttachment, rectCount: u32, pRects: *VkClearRect) -> void #foreign libvulkan;
+vkCmdClearAttachments :: (commandBuffer: VkCommandBuffer, attachmentCount: u32, pAttachments: *VkClearAttachment, rectCount: u32, pRects: *VkClearRect) -> void #foreign vulkan_1;
 
-vkCmdResolveImage :: (commandBuffer: VkCommandBuffer, srcImage: VkImage, srcImageLayout: VkImageLayout, dstImage: VkImage, dstImageLayout: VkImageLayout, regionCount: u32, pRegions: *VkImageResolve) -> void #foreign libvulkan;
+vkCmdResolveImage :: (commandBuffer: VkCommandBuffer, srcImage: VkImage, srcImageLayout: VkImageLayout, dstImage: VkImage, dstImageLayout: VkImageLayout, regionCount: u32, pRegions: *VkImageResolve) -> void #foreign vulkan_1;
 
-vkCmdSetEvent :: (commandBuffer: VkCommandBuffer, event: VkEvent, stageMask: VkPipelineStageFlags) -> void #foreign libvulkan;
+vkCmdSetEvent :: (commandBuffer: VkCommandBuffer, event: VkEvent, stageMask: VkPipelineStageFlags) -> void #foreign vulkan_1;
 
-vkCmdResetEvent :: (commandBuffer: VkCommandBuffer, event: VkEvent, stageMask: VkPipelineStageFlags) -> void #foreign libvulkan;
+vkCmdResetEvent :: (commandBuffer: VkCommandBuffer, event: VkEvent, stageMask: VkPipelineStageFlags) -> void #foreign vulkan_1;
 
-vkCmdWaitEvents :: (commandBuffer: VkCommandBuffer, eventCount: u32, pEvents: *VkEvent, srcStageMask: VkPipelineStageFlags, dstStageMask: VkPipelineStageFlags, memoryBarrierCount: u32, pMemoryBarriers: *VkMemoryBarrier, bufferMemoryBarrierCount: u32, pBufferMemoryBarriers: *VkBufferMemoryBarrier, imageMemoryBarrierCount: u32, pImageMemoryBarriers: *VkImageMemoryBarrier) -> void #foreign libvulkan;
+vkCmdWaitEvents :: (commandBuffer: VkCommandBuffer, eventCount: u32, pEvents: *VkEvent, srcStageMask: VkPipelineStageFlags, dstStageMask: VkPipelineStageFlags, memoryBarrierCount: u32, pMemoryBarriers: *VkMemoryBarrier, bufferMemoryBarrierCount: u32, pBufferMemoryBarriers: *VkBufferMemoryBarrier, imageMemoryBarrierCount: u32, pImageMemoryBarriers: *VkImageMemoryBarrier) -> void #foreign vulkan_1;
 
-vkCmdPipelineBarrier :: (commandBuffer: VkCommandBuffer, srcStageMask: VkPipelineStageFlags, dstStageMask: VkPipelineStageFlags, dependencyFlags: VkDependencyFlags, memoryBarrierCount: u32, pMemoryBarriers: *VkMemoryBarrier, bufferMemoryBarrierCount: u32, pBufferMemoryBarriers: *VkBufferMemoryBarrier, imageMemoryBarrierCount: u32, pImageMemoryBarriers: *VkImageMemoryBarrier) -> void #foreign libvulkan;
+vkCmdPipelineBarrier :: (commandBuffer: VkCommandBuffer, srcStageMask: VkPipelineStageFlags, dstStageMask: VkPipelineStageFlags, dependencyFlags: VkDependencyFlags, memoryBarrierCount: u32, pMemoryBarriers: *VkMemoryBarrier, bufferMemoryBarrierCount: u32, pBufferMemoryBarriers: *VkBufferMemoryBarrier, imageMemoryBarrierCount: u32, pImageMemoryBarriers: *VkImageMemoryBarrier) -> void #foreign vulkan_1;
 
-vkCmdBeginQuery :: (commandBuffer: VkCommandBuffer, queryPool: VkQueryPool, query: u32, flags: VkQueryControlFlags) -> void #foreign libvulkan;
+vkCmdBeginQuery :: (commandBuffer: VkCommandBuffer, queryPool: VkQueryPool, query: u32, flags: VkQueryControlFlags) -> void #foreign vulkan_1;
 
-vkCmdEndQuery :: (commandBuffer: VkCommandBuffer, queryPool: VkQueryPool, query: u32) -> void #foreign libvulkan;
+vkCmdEndQuery :: (commandBuffer: VkCommandBuffer, queryPool: VkQueryPool, query: u32) -> void #foreign vulkan_1;
 
-vkCmdResetQueryPool :: (commandBuffer: VkCommandBuffer, queryPool: VkQueryPool, firstQuery: u32, queryCount: u32) -> void #foreign libvulkan;
+vkCmdResetQueryPool :: (commandBuffer: VkCommandBuffer, queryPool: VkQueryPool, firstQuery: u32, queryCount: u32) -> void #foreign vulkan_1;
 
-vkCmdWriteTimestamp :: (commandBuffer: VkCommandBuffer, pipelineStage: VkPipelineStageFlagBits, queryPool: VkQueryPool, query: u32) -> void #foreign libvulkan;
+vkCmdWriteTimestamp :: (commandBuffer: VkCommandBuffer, pipelineStage: VkPipelineStageFlagBits, queryPool: VkQueryPool, query: u32) -> void #foreign vulkan_1;
 
-vkCmdCopyQueryPoolResults :: (commandBuffer: VkCommandBuffer, queryPool: VkQueryPool, firstQuery: u32, queryCount: u32, dstBuffer: VkBuffer, dstOffset: VkDeviceSize, stride: VkDeviceSize, flags: VkQueryResultFlags) -> void #foreign libvulkan;
+vkCmdCopyQueryPoolResults :: (commandBuffer: VkCommandBuffer, queryPool: VkQueryPool, firstQuery: u32, queryCount: u32, dstBuffer: VkBuffer, dstOffset: VkDeviceSize, stride: VkDeviceSize, flags: VkQueryResultFlags) -> void #foreign vulkan_1;
 
-vkCmdPushConstants :: (commandBuffer: VkCommandBuffer, layout: VkPipelineLayout, stageFlags: VkShaderStageFlags, offset: u32, size: u32, pValues: *void) -> void #foreign libvulkan;
+vkCmdPushConstants :: (commandBuffer: VkCommandBuffer, layout: VkPipelineLayout, stageFlags: VkShaderStageFlags, offset: u32, size: u32, pValues: *void) -> void #foreign vulkan_1;
 
-vkCmdBeginRenderPass :: (commandBuffer: VkCommandBuffer, pRenderPassBegin: *VkRenderPassBeginInfo, contents: VkSubpassContents) -> void #foreign libvulkan;
+vkCmdBeginRenderPass :: (commandBuffer: VkCommandBuffer, pRenderPassBegin: *VkRenderPassBeginInfo, contents: VkSubpassContents) -> void #foreign vulkan_1;
 
-vkCmdNextSubpass :: (commandBuffer: VkCommandBuffer, contents: VkSubpassContents) -> void #foreign libvulkan;
+vkCmdNextSubpass :: (commandBuffer: VkCommandBuffer, contents: VkSubpassContents) -> void #foreign vulkan_1;
 
-vkCmdEndRenderPass :: (commandBuffer: VkCommandBuffer) -> void #foreign libvulkan;
+vkCmdEndRenderPass :: (commandBuffer: VkCommandBuffer) -> void #foreign vulkan_1;
 
-vkCmdExecuteCommands :: (commandBuffer: VkCommandBuffer, commandBufferCount: u32, pCommandBuffers: *VkCommandBuffer) -> void #foreign libvulkan;
+vkCmdExecuteCommands :: (commandBuffer: VkCommandBuffer, commandBufferCount: u32, pCommandBuffers: *VkCommandBuffer) -> void #foreign vulkan_1;
 
 VkSamplerYcbcrConversion_T :: struct {}
 VkSamplerYcbcrConversion :: *VkSamplerYcbcrConversion_T;
@@ -9127,61 +9127,61 @@ PFN_vkGetPhysicalDeviceExternalFenceProperties :: #type (physicalDevice: VkPhysi
 PFN_vkGetPhysicalDeviceExternalSemaphoreProperties :: #type (physicalDevice: VkPhysicalDevice, pExternalSemaphoreInfo: *VkPhysicalDeviceExternalSemaphoreInfo, pExternalSemaphoreProperties: *VkExternalSemaphoreProperties) -> void #c_call;
 PFN_vkGetDescriptorSetLayoutSupport :: #type (device: VkDevice, pCreateInfo: *VkDescriptorSetLayoutCreateInfo, pSupport: *VkDescriptorSetLayoutSupport) -> void #c_call;
 
-vkEnumerateInstanceVersion :: (pApiVersion: *u32) -> VkResult #foreign libvulkan;
+vkEnumerateInstanceVersion :: (pApiVersion: *u32) -> VkResult #foreign vulkan_1;
 
-vkBindBufferMemory2 :: (device: VkDevice, bindInfoCount: u32, pBindInfos: *VkBindBufferMemoryInfo) -> VkResult #foreign libvulkan;
+vkBindBufferMemory2 :: (device: VkDevice, bindInfoCount: u32, pBindInfos: *VkBindBufferMemoryInfo) -> VkResult #foreign vulkan_1;
 
-vkBindImageMemory2 :: (device: VkDevice, bindInfoCount: u32, pBindInfos: *VkBindImageMemoryInfo) -> VkResult #foreign libvulkan;
+vkBindImageMemory2 :: (device: VkDevice, bindInfoCount: u32, pBindInfos: *VkBindImageMemoryInfo) -> VkResult #foreign vulkan_1;
 
-vkGetDeviceGroupPeerMemoryFeatures :: (device: VkDevice, heapIndex: u32, localDeviceIndex: u32, remoteDeviceIndex: u32, pPeerMemoryFeatures: *VkPeerMemoryFeatureFlags) -> void #foreign libvulkan;
+vkGetDeviceGroupPeerMemoryFeatures :: (device: VkDevice, heapIndex: u32, localDeviceIndex: u32, remoteDeviceIndex: u32, pPeerMemoryFeatures: *VkPeerMemoryFeatureFlags) -> void #foreign vulkan_1;
 
-vkCmdSetDeviceMask :: (commandBuffer: VkCommandBuffer, deviceMask: u32) -> void #foreign libvulkan;
+vkCmdSetDeviceMask :: (commandBuffer: VkCommandBuffer, deviceMask: u32) -> void #foreign vulkan_1;
 
-vkCmdDispatchBase :: (commandBuffer: VkCommandBuffer, baseGroupX: u32, baseGroupY: u32, baseGroupZ: u32, groupCountX: u32, groupCountY: u32, groupCountZ: u32) -> void #foreign libvulkan;
+vkCmdDispatchBase :: (commandBuffer: VkCommandBuffer, baseGroupX: u32, baseGroupY: u32, baseGroupZ: u32, groupCountX: u32, groupCountY: u32, groupCountZ: u32) -> void #foreign vulkan_1;
 
-vkEnumeratePhysicalDeviceGroups :: (instance: VkInstance, pPhysicalDeviceGroupCount: *u32, pPhysicalDeviceGroupProperties: *VkPhysicalDeviceGroupProperties) -> VkResult #foreign libvulkan;
+vkEnumeratePhysicalDeviceGroups :: (instance: VkInstance, pPhysicalDeviceGroupCount: *u32, pPhysicalDeviceGroupProperties: *VkPhysicalDeviceGroupProperties) -> VkResult #foreign vulkan_1;
 
-vkGetImageMemoryRequirements2 :: (device: VkDevice, pInfo: *VkImageMemoryRequirementsInfo2, pMemoryRequirements: *VkMemoryRequirements2) -> void #foreign libvulkan;
+vkGetImageMemoryRequirements2 :: (device: VkDevice, pInfo: *VkImageMemoryRequirementsInfo2, pMemoryRequirements: *VkMemoryRequirements2) -> void #foreign vulkan_1;
 
-vkGetBufferMemoryRequirements2 :: (device: VkDevice, pInfo: *VkBufferMemoryRequirementsInfo2, pMemoryRequirements: *VkMemoryRequirements2) -> void #foreign libvulkan;
+vkGetBufferMemoryRequirements2 :: (device: VkDevice, pInfo: *VkBufferMemoryRequirementsInfo2, pMemoryRequirements: *VkMemoryRequirements2) -> void #foreign vulkan_1;
 
-vkGetImageSparseMemoryRequirements2 :: (device: VkDevice, pInfo: *VkImageSparseMemoryRequirementsInfo2, pSparseMemoryRequirementCount: *u32, pSparseMemoryRequirements: *VkSparseImageMemoryRequirements2) -> void #foreign libvulkan;
+vkGetImageSparseMemoryRequirements2 :: (device: VkDevice, pInfo: *VkImageSparseMemoryRequirementsInfo2, pSparseMemoryRequirementCount: *u32, pSparseMemoryRequirements: *VkSparseImageMemoryRequirements2) -> void #foreign vulkan_1;
 
-vkGetPhysicalDeviceFeatures2 :: (physicalDevice: VkPhysicalDevice, pFeatures: *VkPhysicalDeviceFeatures2) -> void #foreign libvulkan;
+vkGetPhysicalDeviceFeatures2 :: (physicalDevice: VkPhysicalDevice, pFeatures: *VkPhysicalDeviceFeatures2) -> void #foreign vulkan_1;
 
-vkGetPhysicalDeviceProperties2 :: (physicalDevice: VkPhysicalDevice, pProperties: *VkPhysicalDeviceProperties2) -> void #foreign libvulkan;
+vkGetPhysicalDeviceProperties2 :: (physicalDevice: VkPhysicalDevice, pProperties: *VkPhysicalDeviceProperties2) -> void #foreign vulkan_1;
 
-vkGetPhysicalDeviceFormatProperties2 :: (physicalDevice: VkPhysicalDevice, format: VkFormat, pFormatProperties: *VkFormatProperties2) -> void #foreign libvulkan;
+vkGetPhysicalDeviceFormatProperties2 :: (physicalDevice: VkPhysicalDevice, format: VkFormat, pFormatProperties: *VkFormatProperties2) -> void #foreign vulkan_1;
 
-vkGetPhysicalDeviceImageFormatProperties2 :: (physicalDevice: VkPhysicalDevice, pImageFormatInfo: *VkPhysicalDeviceImageFormatInfo2, pImageFormatProperties: *VkImageFormatProperties2) -> VkResult #foreign libvulkan;
+vkGetPhysicalDeviceImageFormatProperties2 :: (physicalDevice: VkPhysicalDevice, pImageFormatInfo: *VkPhysicalDeviceImageFormatInfo2, pImageFormatProperties: *VkImageFormatProperties2) -> VkResult #foreign vulkan_1;
 
-vkGetPhysicalDeviceQueueFamilyProperties2 :: (physicalDevice: VkPhysicalDevice, pQueueFamilyPropertyCount: *u32, pQueueFamilyProperties: *VkQueueFamilyProperties2) -> void #foreign libvulkan;
+vkGetPhysicalDeviceQueueFamilyProperties2 :: (physicalDevice: VkPhysicalDevice, pQueueFamilyPropertyCount: *u32, pQueueFamilyProperties: *VkQueueFamilyProperties2) -> void #foreign vulkan_1;
 
-vkGetPhysicalDeviceMemoryProperties2 :: (physicalDevice: VkPhysicalDevice, pMemoryProperties: *VkPhysicalDeviceMemoryProperties2) -> void #foreign libvulkan;
+vkGetPhysicalDeviceMemoryProperties2 :: (physicalDevice: VkPhysicalDevice, pMemoryProperties: *VkPhysicalDeviceMemoryProperties2) -> void #foreign vulkan_1;
 
-vkGetPhysicalDeviceSparseImageFormatProperties2 :: (physicalDevice: VkPhysicalDevice, pFormatInfo: *VkPhysicalDeviceSparseImageFormatInfo2, pPropertyCount: *u32, pProperties: *VkSparseImageFormatProperties2) -> void #foreign libvulkan;
+vkGetPhysicalDeviceSparseImageFormatProperties2 :: (physicalDevice: VkPhysicalDevice, pFormatInfo: *VkPhysicalDeviceSparseImageFormatInfo2, pPropertyCount: *u32, pProperties: *VkSparseImageFormatProperties2) -> void #foreign vulkan_1;
 
-vkTrimCommandPool :: (device: VkDevice, commandPool: VkCommandPool, flags: VkCommandPoolTrimFlags) -> void #foreign libvulkan;
+vkTrimCommandPool :: (device: VkDevice, commandPool: VkCommandPool, flags: VkCommandPoolTrimFlags) -> void #foreign vulkan_1;
 
-vkGetDeviceQueue2 :: (device: VkDevice, pQueueInfo: *VkDeviceQueueInfo2, pQueue: *VkQueue) -> void #foreign libvulkan;
+vkGetDeviceQueue2 :: (device: VkDevice, pQueueInfo: *VkDeviceQueueInfo2, pQueue: *VkQueue) -> void #foreign vulkan_1;
 
-vkCreateSamplerYcbcrConversion :: (device: VkDevice, pCreateInfo: *VkSamplerYcbcrConversionCreateInfo, pAllocator: *VkAllocationCallbacks, pYcbcrConversion: *VkSamplerYcbcrConversion) -> VkResult #foreign libvulkan;
+vkCreateSamplerYcbcrConversion :: (device: VkDevice, pCreateInfo: *VkSamplerYcbcrConversionCreateInfo, pAllocator: *VkAllocationCallbacks, pYcbcrConversion: *VkSamplerYcbcrConversion) -> VkResult #foreign vulkan_1;
 
-vkDestroySamplerYcbcrConversion :: (device: VkDevice, ycbcrConversion: VkSamplerYcbcrConversion, pAllocator: *VkAllocationCallbacks) -> void #foreign libvulkan;
+vkDestroySamplerYcbcrConversion :: (device: VkDevice, ycbcrConversion: VkSamplerYcbcrConversion, pAllocator: *VkAllocationCallbacks) -> void #foreign vulkan_1;
 
-vkCreateDescriptorUpdateTemplate :: (device: VkDevice, pCreateInfo: *VkDescriptorUpdateTemplateCreateInfo, pAllocator: *VkAllocationCallbacks, pDescriptorUpdateTemplate: *VkDescriptorUpdateTemplate) -> VkResult #foreign libvulkan;
+vkCreateDescriptorUpdateTemplate :: (device: VkDevice, pCreateInfo: *VkDescriptorUpdateTemplateCreateInfo, pAllocator: *VkAllocationCallbacks, pDescriptorUpdateTemplate: *VkDescriptorUpdateTemplate) -> VkResult #foreign vulkan_1;
 
-vkDestroyDescriptorUpdateTemplate :: (device: VkDevice, descriptorUpdateTemplate: VkDescriptorUpdateTemplate, pAllocator: *VkAllocationCallbacks) -> void #foreign libvulkan;
+vkDestroyDescriptorUpdateTemplate :: (device: VkDevice, descriptorUpdateTemplate: VkDescriptorUpdateTemplate, pAllocator: *VkAllocationCallbacks) -> void #foreign vulkan_1;
 
-vkUpdateDescriptorSetWithTemplate :: (device: VkDevice, descriptorSet: VkDescriptorSet, descriptorUpdateTemplate: VkDescriptorUpdateTemplate, pData: *void) -> void #foreign libvulkan;
+vkUpdateDescriptorSetWithTemplate :: (device: VkDevice, descriptorSet: VkDescriptorSet, descriptorUpdateTemplate: VkDescriptorUpdateTemplate, pData: *void) -> void #foreign vulkan_1;
 
-vkGetPhysicalDeviceExternalBufferProperties :: (physicalDevice: VkPhysicalDevice, pExternalBufferInfo: *VkPhysicalDeviceExternalBufferInfo, pExternalBufferProperties: *VkExternalBufferProperties) -> void #foreign libvulkan;
+vkGetPhysicalDeviceExternalBufferProperties :: (physicalDevice: VkPhysicalDevice, pExternalBufferInfo: *VkPhysicalDeviceExternalBufferInfo, pExternalBufferProperties: *VkExternalBufferProperties) -> void #foreign vulkan_1;
 
-vkGetPhysicalDeviceExternalFenceProperties :: (physicalDevice: VkPhysicalDevice, pExternalFenceInfo: *VkPhysicalDeviceExternalFenceInfo, pExternalFenceProperties: *VkExternalFenceProperties) -> void #foreign libvulkan;
+vkGetPhysicalDeviceExternalFenceProperties :: (physicalDevice: VkPhysicalDevice, pExternalFenceInfo: *VkPhysicalDeviceExternalFenceInfo, pExternalFenceProperties: *VkExternalFenceProperties) -> void #foreign vulkan_1;
 
-vkGetPhysicalDeviceExternalSemaphoreProperties :: (physicalDevice: VkPhysicalDevice, pExternalSemaphoreInfo: *VkPhysicalDeviceExternalSemaphoreInfo, pExternalSemaphoreProperties: *VkExternalSemaphoreProperties) -> void #foreign libvulkan;
+vkGetPhysicalDeviceExternalSemaphoreProperties :: (physicalDevice: VkPhysicalDevice, pExternalSemaphoreInfo: *VkPhysicalDeviceExternalSemaphoreInfo, pExternalSemaphoreProperties: *VkExternalSemaphoreProperties) -> void #foreign vulkan_1;
 
-vkGetDescriptorSetLayoutSupport :: (device: VkDevice, pCreateInfo: *VkDescriptorSetLayoutCreateInfo, pSupport: *VkDescriptorSetLayoutSupport) -> void #foreign libvulkan;
+vkGetDescriptorSetLayoutSupport :: (device: VkDevice, pCreateInfo: *VkDescriptorSetLayoutCreateInfo, pSupport: *VkDescriptorSetLayoutSupport) -> void #foreign vulkan_1;
 
 VkDriverId :: enum u32 {
     AMD_PROPRIETARY               :: 1;
@@ -9955,31 +9955,31 @@ PFN_vkGetBufferDeviceAddress :: #type (device: VkDevice, pInfo: *VkBufferDeviceA
 PFN_vkGetBufferOpaqueCaptureAddress :: #type (device: VkDevice, pInfo: *VkBufferDeviceAddressInfo) -> u64 #c_call;
 PFN_vkGetDeviceMemoryOpaqueCaptureAddress :: #type (device: VkDevice, pInfo: *VkDeviceMemoryOpaqueCaptureAddressInfo) -> u64 #c_call;
 
-vkCmdDrawIndirectCount :: (commandBuffer: VkCommandBuffer, buffer: VkBuffer, offset: VkDeviceSize, countBuffer: VkBuffer, countBufferOffset: VkDeviceSize, maxDrawCount: u32, stride: u32) -> void #foreign libvulkan;
+vkCmdDrawIndirectCount :: (commandBuffer: VkCommandBuffer, buffer: VkBuffer, offset: VkDeviceSize, countBuffer: VkBuffer, countBufferOffset: VkDeviceSize, maxDrawCount: u32, stride: u32) -> void #foreign vulkan_1;
 
-vkCmdDrawIndexedIndirectCount :: (commandBuffer: VkCommandBuffer, buffer: VkBuffer, offset: VkDeviceSize, countBuffer: VkBuffer, countBufferOffset: VkDeviceSize, maxDrawCount: u32, stride: u32) -> void #foreign libvulkan;
+vkCmdDrawIndexedIndirectCount :: (commandBuffer: VkCommandBuffer, buffer: VkBuffer, offset: VkDeviceSize, countBuffer: VkBuffer, countBufferOffset: VkDeviceSize, maxDrawCount: u32, stride: u32) -> void #foreign vulkan_1;
 
-vkCreateRenderPass2 :: (device: VkDevice, pCreateInfo: *VkRenderPassCreateInfo2, pAllocator: *VkAllocationCallbacks, pRenderPass: *VkRenderPass) -> VkResult #foreign libvulkan;
+vkCreateRenderPass2 :: (device: VkDevice, pCreateInfo: *VkRenderPassCreateInfo2, pAllocator: *VkAllocationCallbacks, pRenderPass: *VkRenderPass) -> VkResult #foreign vulkan_1;
 
-vkCmdBeginRenderPass2 :: (commandBuffer: VkCommandBuffer, pRenderPassBegin: *VkRenderPassBeginInfo, pSubpassBeginInfo: *VkSubpassBeginInfo) -> void #foreign libvulkan;
+vkCmdBeginRenderPass2 :: (commandBuffer: VkCommandBuffer, pRenderPassBegin: *VkRenderPassBeginInfo, pSubpassBeginInfo: *VkSubpassBeginInfo) -> void #foreign vulkan_1;
 
-vkCmdNextSubpass2 :: (commandBuffer: VkCommandBuffer, pSubpassBeginInfo: *VkSubpassBeginInfo, pSubpassEndInfo: *VkSubpassEndInfo) -> void #foreign libvulkan;
+vkCmdNextSubpass2 :: (commandBuffer: VkCommandBuffer, pSubpassBeginInfo: *VkSubpassBeginInfo, pSubpassEndInfo: *VkSubpassEndInfo) -> void #foreign vulkan_1;
 
-vkCmdEndRenderPass2 :: (commandBuffer: VkCommandBuffer, pSubpassEndInfo: *VkSubpassEndInfo) -> void #foreign libvulkan;
+vkCmdEndRenderPass2 :: (commandBuffer: VkCommandBuffer, pSubpassEndInfo: *VkSubpassEndInfo) -> void #foreign vulkan_1;
 
-vkResetQueryPool :: (device: VkDevice, queryPool: VkQueryPool, firstQuery: u32, queryCount: u32) -> void #foreign libvulkan;
+vkResetQueryPool :: (device: VkDevice, queryPool: VkQueryPool, firstQuery: u32, queryCount: u32) -> void #foreign vulkan_1;
 
-vkGetSemaphoreCounterValue :: (device: VkDevice, semaphore: VkSemaphore, pValue: *u64) -> VkResult #foreign libvulkan;
+vkGetSemaphoreCounterValue :: (device: VkDevice, semaphore: VkSemaphore, pValue: *u64) -> VkResult #foreign vulkan_1;
 
-vkWaitSemaphores :: (device: VkDevice, pWaitInfo: *VkSemaphoreWaitInfo, timeout: u64) -> VkResult #foreign libvulkan;
+vkWaitSemaphores :: (device: VkDevice, pWaitInfo: *VkSemaphoreWaitInfo, timeout: u64) -> VkResult #foreign vulkan_1;
 
-vkSignalSemaphore :: (device: VkDevice, pSignalInfo: *VkSemaphoreSignalInfo) -> VkResult #foreign libvulkan;
+vkSignalSemaphore :: (device: VkDevice, pSignalInfo: *VkSemaphoreSignalInfo) -> VkResult #foreign vulkan_1;
 
-vkGetBufferDeviceAddress :: (device: VkDevice, pInfo: *VkBufferDeviceAddressInfo) -> VkDeviceAddress #foreign libvulkan;
+vkGetBufferDeviceAddress :: (device: VkDevice, pInfo: *VkBufferDeviceAddressInfo) -> VkDeviceAddress #foreign vulkan_1;
 
-vkGetBufferOpaqueCaptureAddress :: (device: VkDevice, pInfo: *VkBufferDeviceAddressInfo) -> u64 #foreign libvulkan;
+vkGetBufferOpaqueCaptureAddress :: (device: VkDevice, pInfo: *VkBufferDeviceAddressInfo) -> u64 #foreign vulkan_1;
 
-vkGetDeviceMemoryOpaqueCaptureAddress :: (device: VkDevice, pInfo: *VkDeviceMemoryOpaqueCaptureAddressInfo) -> u64 #foreign libvulkan;
+vkGetDeviceMemoryOpaqueCaptureAddress :: (device: VkDevice, pInfo: *VkDeviceMemoryOpaqueCaptureAddressInfo) -> u64 #foreign vulkan_1;
 
 VkFlags64 :: u64;
 VkPrivateDataSlot_T :: struct {}
@@ -10870,79 +10870,79 @@ PFN_vkGetDeviceBufferMemoryRequirements :: #type (device: VkDevice, pInfo: *VkDe
 PFN_vkGetDeviceImageMemoryRequirements :: #type (device: VkDevice, pInfo: *VkDeviceImageMemoryRequirements, pMemoryRequirements: *VkMemoryRequirements2) -> void #c_call;
 PFN_vkGetDeviceImageSparseMemoryRequirements :: #type (device: VkDevice, pInfo: *VkDeviceImageMemoryRequirements, pSparseMemoryRequirementCount: *u32, pSparseMemoryRequirements: *VkSparseImageMemoryRequirements2) -> void #c_call;
 
-vkGetPhysicalDeviceToolProperties :: (physicalDevice: VkPhysicalDevice, pToolCount: *u32, pToolProperties: *VkPhysicalDeviceToolProperties) -> VkResult #foreign libvulkan;
+vkGetPhysicalDeviceToolProperties :: (physicalDevice: VkPhysicalDevice, pToolCount: *u32, pToolProperties: *VkPhysicalDeviceToolProperties) -> VkResult #foreign vulkan_1;
 
-vkCreatePrivateDataSlot :: (device: VkDevice, pCreateInfo: *VkPrivateDataSlotCreateInfo, pAllocator: *VkAllocationCallbacks, pPrivateDataSlot: *VkPrivateDataSlot) -> VkResult #foreign libvulkan;
+vkCreatePrivateDataSlot :: (device: VkDevice, pCreateInfo: *VkPrivateDataSlotCreateInfo, pAllocator: *VkAllocationCallbacks, pPrivateDataSlot: *VkPrivateDataSlot) -> VkResult #foreign vulkan_1;
 
-vkDestroyPrivateDataSlot :: (device: VkDevice, privateDataSlot: VkPrivateDataSlot, pAllocator: *VkAllocationCallbacks) -> void #foreign libvulkan;
+vkDestroyPrivateDataSlot :: (device: VkDevice, privateDataSlot: VkPrivateDataSlot, pAllocator: *VkAllocationCallbacks) -> void #foreign vulkan_1;
 
-vkSetPrivateData :: (device: VkDevice, objectType: VkObjectType, objectHandle: u64, privateDataSlot: VkPrivateDataSlot, data: u64) -> VkResult #foreign libvulkan;
+vkSetPrivateData :: (device: VkDevice, objectType: VkObjectType, objectHandle: u64, privateDataSlot: VkPrivateDataSlot, data: u64) -> VkResult #foreign vulkan_1;
 
-vkGetPrivateData :: (device: VkDevice, objectType: VkObjectType, objectHandle: u64, privateDataSlot: VkPrivateDataSlot, pData: *u64) -> void #foreign libvulkan;
+vkGetPrivateData :: (device: VkDevice, objectType: VkObjectType, objectHandle: u64, privateDataSlot: VkPrivateDataSlot, pData: *u64) -> void #foreign vulkan_1;
 
-vkCmdSetEvent2 :: (commandBuffer: VkCommandBuffer, event: VkEvent, pDependencyInfo: *VkDependencyInfo) -> void #foreign libvulkan;
+vkCmdSetEvent2 :: (commandBuffer: VkCommandBuffer, event: VkEvent, pDependencyInfo: *VkDependencyInfo) -> void #foreign vulkan_1;
 
-vkCmdResetEvent2 :: (commandBuffer: VkCommandBuffer, event: VkEvent, stageMask: VkPipelineStageFlags2) -> void #foreign libvulkan;
+vkCmdResetEvent2 :: (commandBuffer: VkCommandBuffer, event: VkEvent, stageMask: VkPipelineStageFlags2) -> void #foreign vulkan_1;
 
-vkCmdWaitEvents2 :: (commandBuffer: VkCommandBuffer, eventCount: u32, pEvents: *VkEvent, pDependencyInfos: *VkDependencyInfo) -> void #foreign libvulkan;
+vkCmdWaitEvents2 :: (commandBuffer: VkCommandBuffer, eventCount: u32, pEvents: *VkEvent, pDependencyInfos: *VkDependencyInfo) -> void #foreign vulkan_1;
 
-vkCmdPipelineBarrier2 :: (commandBuffer: VkCommandBuffer, pDependencyInfo: *VkDependencyInfo) -> void #foreign libvulkan;
+vkCmdPipelineBarrier2 :: (commandBuffer: VkCommandBuffer, pDependencyInfo: *VkDependencyInfo) -> void #foreign vulkan_1;
 
-vkCmdWriteTimestamp2 :: (commandBuffer: VkCommandBuffer, stage: VkPipelineStageFlags2, queryPool: VkQueryPool, query: u32) -> void #foreign libvulkan;
+vkCmdWriteTimestamp2 :: (commandBuffer: VkCommandBuffer, stage: VkPipelineStageFlags2, queryPool: VkQueryPool, query: u32) -> void #foreign vulkan_1;
 
-vkQueueSubmit2 :: (queue: VkQueue, submitCount: u32, pSubmits: *VkSubmitInfo2, fence: VkFence) -> VkResult #foreign libvulkan;
+vkQueueSubmit2 :: (queue: VkQueue, submitCount: u32, pSubmits: *VkSubmitInfo2, fence: VkFence) -> VkResult #foreign vulkan_1;
 
-vkCmdCopyBuffer2 :: (commandBuffer: VkCommandBuffer, pCopyBufferInfo: *VkCopyBufferInfo2) -> void #foreign libvulkan;
+vkCmdCopyBuffer2 :: (commandBuffer: VkCommandBuffer, pCopyBufferInfo: *VkCopyBufferInfo2) -> void #foreign vulkan_1;
 
-vkCmdCopyImage2 :: (commandBuffer: VkCommandBuffer, pCopyImageInfo: *VkCopyImageInfo2) -> void #foreign libvulkan;
+vkCmdCopyImage2 :: (commandBuffer: VkCommandBuffer, pCopyImageInfo: *VkCopyImageInfo2) -> void #foreign vulkan_1;
 
-vkCmdCopyBufferToImage2 :: (commandBuffer: VkCommandBuffer, pCopyBufferToImageInfo: *VkCopyBufferToImageInfo2) -> void #foreign libvulkan;
+vkCmdCopyBufferToImage2 :: (commandBuffer: VkCommandBuffer, pCopyBufferToImageInfo: *VkCopyBufferToImageInfo2) -> void #foreign vulkan_1;
 
-vkCmdCopyImageToBuffer2 :: (commandBuffer: VkCommandBuffer, pCopyImageToBufferInfo: *VkCopyImageToBufferInfo2) -> void #foreign libvulkan;
+vkCmdCopyImageToBuffer2 :: (commandBuffer: VkCommandBuffer, pCopyImageToBufferInfo: *VkCopyImageToBufferInfo2) -> void #foreign vulkan_1;
 
-vkCmdBlitImage2 :: (commandBuffer: VkCommandBuffer, pBlitImageInfo: *VkBlitImageInfo2) -> void #foreign libvulkan;
+vkCmdBlitImage2 :: (commandBuffer: VkCommandBuffer, pBlitImageInfo: *VkBlitImageInfo2) -> void #foreign vulkan_1;
 
-vkCmdResolveImage2 :: (commandBuffer: VkCommandBuffer, pResolveImageInfo: *VkResolveImageInfo2) -> void #foreign libvulkan;
+vkCmdResolveImage2 :: (commandBuffer: VkCommandBuffer, pResolveImageInfo: *VkResolveImageInfo2) -> void #foreign vulkan_1;
 
-vkCmdBeginRendering :: (commandBuffer: VkCommandBuffer, pRenderingInfo: *VkRenderingInfo) -> void #foreign libvulkan;
+vkCmdBeginRendering :: (commandBuffer: VkCommandBuffer, pRenderingInfo: *VkRenderingInfo) -> void #foreign vulkan_1;
 
-vkCmdEndRendering :: (commandBuffer: VkCommandBuffer) -> void #foreign libvulkan;
+vkCmdEndRendering :: (commandBuffer: VkCommandBuffer) -> void #foreign vulkan_1;
 
-vkCmdSetCullMode :: (commandBuffer: VkCommandBuffer, cullMode: VkCullModeFlags) -> void #foreign libvulkan;
+vkCmdSetCullMode :: (commandBuffer: VkCommandBuffer, cullMode: VkCullModeFlags) -> void #foreign vulkan_1;
 
-vkCmdSetFrontFace :: (commandBuffer: VkCommandBuffer, frontFace: VkFrontFace) -> void #foreign libvulkan;
+vkCmdSetFrontFace :: (commandBuffer: VkCommandBuffer, frontFace: VkFrontFace) -> void #foreign vulkan_1;
 
-vkCmdSetPrimitiveTopology :: (commandBuffer: VkCommandBuffer, primitiveTopology: VkPrimitiveTopology) -> void #foreign libvulkan;
+vkCmdSetPrimitiveTopology :: (commandBuffer: VkCommandBuffer, primitiveTopology: VkPrimitiveTopology) -> void #foreign vulkan_1;
 
-vkCmdSetViewportWithCount :: (commandBuffer: VkCommandBuffer, viewportCount: u32, pViewports: *VkViewport) -> void #foreign libvulkan;
+vkCmdSetViewportWithCount :: (commandBuffer: VkCommandBuffer, viewportCount: u32, pViewports: *VkViewport) -> void #foreign vulkan_1;
 
-vkCmdSetScissorWithCount :: (commandBuffer: VkCommandBuffer, scissorCount: u32, pScissors: *VkRect2D) -> void #foreign libvulkan;
+vkCmdSetScissorWithCount :: (commandBuffer: VkCommandBuffer, scissorCount: u32, pScissors: *VkRect2D) -> void #foreign vulkan_1;
 
-vkCmdBindVertexBuffers2 :: (commandBuffer: VkCommandBuffer, firstBinding: u32, bindingCount: u32, pBuffers: *VkBuffer, pOffsets: *VkDeviceSize, pSizes: *VkDeviceSize, pStrides: *VkDeviceSize) -> void #foreign libvulkan;
+vkCmdBindVertexBuffers2 :: (commandBuffer: VkCommandBuffer, firstBinding: u32, bindingCount: u32, pBuffers: *VkBuffer, pOffsets: *VkDeviceSize, pSizes: *VkDeviceSize, pStrides: *VkDeviceSize) -> void #foreign vulkan_1;
 
-vkCmdSetDepthTestEnable :: (commandBuffer: VkCommandBuffer, depthTestEnable: VkBool32) -> void #foreign libvulkan;
+vkCmdSetDepthTestEnable :: (commandBuffer: VkCommandBuffer, depthTestEnable: VkBool32) -> void #foreign vulkan_1;
 
-vkCmdSetDepthWriteEnable :: (commandBuffer: VkCommandBuffer, depthWriteEnable: VkBool32) -> void #foreign libvulkan;
+vkCmdSetDepthWriteEnable :: (commandBuffer: VkCommandBuffer, depthWriteEnable: VkBool32) -> void #foreign vulkan_1;
 
-vkCmdSetDepthCompareOp :: (commandBuffer: VkCommandBuffer, depthCompareOp: VkCompareOp) -> void #foreign libvulkan;
+vkCmdSetDepthCompareOp :: (commandBuffer: VkCommandBuffer, depthCompareOp: VkCompareOp) -> void #foreign vulkan_1;
 
-vkCmdSetDepthBoundsTestEnable :: (commandBuffer: VkCommandBuffer, depthBoundsTestEnable: VkBool32) -> void #foreign libvulkan;
+vkCmdSetDepthBoundsTestEnable :: (commandBuffer: VkCommandBuffer, depthBoundsTestEnable: VkBool32) -> void #foreign vulkan_1;
 
-vkCmdSetStencilTestEnable :: (commandBuffer: VkCommandBuffer, stencilTestEnable: VkBool32) -> void #foreign libvulkan;
+vkCmdSetStencilTestEnable :: (commandBuffer: VkCommandBuffer, stencilTestEnable: VkBool32) -> void #foreign vulkan_1;
 
-vkCmdSetStencilOp :: (commandBuffer: VkCommandBuffer, faceMask: VkStencilFaceFlags, failOp: VkStencilOp, passOp: VkStencilOp, depthFailOp: VkStencilOp, compareOp: VkCompareOp) -> void #foreign libvulkan;
+vkCmdSetStencilOp :: (commandBuffer: VkCommandBuffer, faceMask: VkStencilFaceFlags, failOp: VkStencilOp, passOp: VkStencilOp, depthFailOp: VkStencilOp, compareOp: VkCompareOp) -> void #foreign vulkan_1;
 
-vkCmdSetRasterizerDiscardEnable :: (commandBuffer: VkCommandBuffer, rasterizerDiscardEnable: VkBool32) -> void #foreign libvulkan;
+vkCmdSetRasterizerDiscardEnable :: (commandBuffer: VkCommandBuffer, rasterizerDiscardEnable: VkBool32) -> void #foreign vulkan_1;
 
-vkCmdSetDepthBiasEnable :: (commandBuffer: VkCommandBuffer, depthBiasEnable: VkBool32) -> void #foreign libvulkan;
+vkCmdSetDepthBiasEnable :: (commandBuffer: VkCommandBuffer, depthBiasEnable: VkBool32) -> void #foreign vulkan_1;
 
-vkCmdSetPrimitiveRestartEnable :: (commandBuffer: VkCommandBuffer, primitiveRestartEnable: VkBool32) -> void #foreign libvulkan;
+vkCmdSetPrimitiveRestartEnable :: (commandBuffer: VkCommandBuffer, primitiveRestartEnable: VkBool32) -> void #foreign vulkan_1;
 
-vkGetDeviceBufferMemoryRequirements :: (device: VkDevice, pInfo: *VkDeviceBufferMemoryRequirements, pMemoryRequirements: *VkMemoryRequirements2) -> void #foreign libvulkan;
+vkGetDeviceBufferMemoryRequirements :: (device: VkDevice, pInfo: *VkDeviceBufferMemoryRequirements, pMemoryRequirements: *VkMemoryRequirements2) -> void #foreign vulkan_1;
 
-vkGetDeviceImageMemoryRequirements :: (device: VkDevice, pInfo: *VkDeviceImageMemoryRequirements, pMemoryRequirements: *VkMemoryRequirements2) -> void #foreign libvulkan;
+vkGetDeviceImageMemoryRequirements :: (device: VkDevice, pInfo: *VkDeviceImageMemoryRequirements, pMemoryRequirements: *VkMemoryRequirements2) -> void #foreign vulkan_1;
 
-vkGetDeviceImageSparseMemoryRequirements :: (device: VkDevice, pInfo: *VkDeviceImageMemoryRequirements, pSparseMemoryRequirementCount: *u32, pSparseMemoryRequirements: *VkSparseImageMemoryRequirements2) -> void #foreign libvulkan;
+vkGetDeviceImageSparseMemoryRequirements :: (device: VkDevice, pInfo: *VkDeviceImageMemoryRequirements, pSparseMemoryRequirementCount: *u32, pSparseMemoryRequirements: *VkSparseImageMemoryRequirements2) -> void #foreign vulkan_1;
 
 VkSurfaceKHR_T :: struct {}
 VkSurfaceKHR :: *VkSurfaceKHR_T;
@@ -11071,15 +11071,15 @@ PFN_vkGetPhysicalDeviceSurfaceCapabilitiesKHR :: #type (physicalDevice: VkPhysic
 PFN_vkGetPhysicalDeviceSurfaceFormatsKHR :: #type (physicalDevice: VkPhysicalDevice, surface: VkSurfaceKHR, pSurfaceFormatCount: *u32, pSurfaceFormats: *VkSurfaceFormatKHR) -> VkResult #c_call;
 PFN_vkGetPhysicalDeviceSurfacePresentModesKHR :: #type (physicalDevice: VkPhysicalDevice, surface: VkSurfaceKHR, pPresentModeCount: *u32, pPresentModes: *VkPresentModeKHR) -> VkResult #c_call;
 
-vkDestroySurfaceKHR :: (instance: VkInstance, surface: VkSurfaceKHR, pAllocator: *VkAllocationCallbacks) -> void #foreign libvulkan;
+vkDestroySurfaceKHR :: (instance: VkInstance, surface: VkSurfaceKHR, pAllocator: *VkAllocationCallbacks) -> void #foreign vulkan_1;
 
-vkGetPhysicalDeviceSurfaceSupportKHR :: (physicalDevice: VkPhysicalDevice, queueFamilyIndex: u32, surface: VkSurfaceKHR, pSupported: *VkBool32) -> VkResult #foreign libvulkan;
+vkGetPhysicalDeviceSurfaceSupportKHR :: (physicalDevice: VkPhysicalDevice, queueFamilyIndex: u32, surface: VkSurfaceKHR, pSupported: *VkBool32) -> VkResult #foreign vulkan_1;
 
-vkGetPhysicalDeviceSurfaceCapabilitiesKHR :: (physicalDevice: VkPhysicalDevice, surface: VkSurfaceKHR, pSurfaceCapabilities: *VkSurfaceCapabilitiesKHR) -> VkResult #foreign libvulkan;
+vkGetPhysicalDeviceSurfaceCapabilitiesKHR :: (physicalDevice: VkPhysicalDevice, surface: VkSurfaceKHR, pSurfaceCapabilities: *VkSurfaceCapabilitiesKHR) -> VkResult #foreign vulkan_1;
 
-vkGetPhysicalDeviceSurfaceFormatsKHR :: (physicalDevice: VkPhysicalDevice, surface: VkSurfaceKHR, pSurfaceFormatCount: *u32, pSurfaceFormats: *VkSurfaceFormatKHR) -> VkResult #foreign libvulkan;
+vkGetPhysicalDeviceSurfaceFormatsKHR :: (physicalDevice: VkPhysicalDevice, surface: VkSurfaceKHR, pSurfaceFormatCount: *u32, pSurfaceFormats: *VkSurfaceFormatKHR) -> VkResult #foreign vulkan_1;
 
-vkGetPhysicalDeviceSurfacePresentModesKHR :: (physicalDevice: VkPhysicalDevice, surface: VkSurfaceKHR, pPresentModeCount: *u32, pPresentModes: *VkPresentModeKHR) -> VkResult #foreign libvulkan;
+vkGetPhysicalDeviceSurfacePresentModesKHR :: (physicalDevice: VkPhysicalDevice, surface: VkSurfaceKHR, pPresentModeCount: *u32, pPresentModes: *VkPresentModeKHR) -> VkResult #foreign vulkan_1;
 
 VkSwapchainKHR_T :: struct {}
 VkSwapchainKHR :: *VkSwapchainKHR_T;
@@ -11201,23 +11201,23 @@ PFN_vkGetDeviceGroupSurfacePresentModesKHR :: #type (device: VkDevice, surface: 
 PFN_vkGetPhysicalDevicePresentRectanglesKHR :: #type (physicalDevice: VkPhysicalDevice, surface: VkSurfaceKHR, pRectCount: *u32, pRects: *VkRect2D) -> VkResult #c_call;
 PFN_vkAcquireNextImage2KHR :: #type (device: VkDevice, pAcquireInfo: *VkAcquireNextImageInfoKHR, pImageIndex: *u32) -> VkResult #c_call;
 
-vkCreateSwapchainKHR :: (device: VkDevice, pCreateInfo: *VkSwapchainCreateInfoKHR, pAllocator: *VkAllocationCallbacks, pSwapchain: *VkSwapchainKHR) -> VkResult #foreign libvulkan;
+vkCreateSwapchainKHR :: (device: VkDevice, pCreateInfo: *VkSwapchainCreateInfoKHR, pAllocator: *VkAllocationCallbacks, pSwapchain: *VkSwapchainKHR) -> VkResult #foreign vulkan_1;
 
-vkDestroySwapchainKHR :: (device: VkDevice, swapchain: VkSwapchainKHR, pAllocator: *VkAllocationCallbacks) -> void #foreign libvulkan;
+vkDestroySwapchainKHR :: (device: VkDevice, swapchain: VkSwapchainKHR, pAllocator: *VkAllocationCallbacks) -> void #foreign vulkan_1;
 
-vkGetSwapchainImagesKHR :: (device: VkDevice, swapchain: VkSwapchainKHR, pSwapchainImageCount: *u32, pSwapchainImages: *VkImage) -> VkResult #foreign libvulkan;
+vkGetSwapchainImagesKHR :: (device: VkDevice, swapchain: VkSwapchainKHR, pSwapchainImageCount: *u32, pSwapchainImages: *VkImage) -> VkResult #foreign vulkan_1;
 
-vkAcquireNextImageKHR :: (device: VkDevice, swapchain: VkSwapchainKHR, timeout: u64, semaphore: VkSemaphore, fence: VkFence, pImageIndex: *u32) -> VkResult #foreign libvulkan;
+vkAcquireNextImageKHR :: (device: VkDevice, swapchain: VkSwapchainKHR, timeout: u64, semaphore: VkSemaphore, fence: VkFence, pImageIndex: *u32) -> VkResult #foreign vulkan_1;
 
-vkQueuePresentKHR :: (queue: VkQueue, pPresentInfo: *VkPresentInfoKHR) -> VkResult #foreign libvulkan;
+vkQueuePresentKHR :: (queue: VkQueue, pPresentInfo: *VkPresentInfoKHR) -> VkResult #foreign vulkan_1;
 
-vkGetDeviceGroupPresentCapabilitiesKHR :: (device: VkDevice, pDeviceGroupPresentCapabilities: *VkDeviceGroupPresentCapabilitiesKHR) -> VkResult #foreign libvulkan;
+vkGetDeviceGroupPresentCapabilitiesKHR :: (device: VkDevice, pDeviceGroupPresentCapabilities: *VkDeviceGroupPresentCapabilitiesKHR) -> VkResult #foreign vulkan_1;
 
-vkGetDeviceGroupSurfacePresentModesKHR :: (device: VkDevice, surface: VkSurfaceKHR, pModes: *VkDeviceGroupPresentModeFlagsKHR) -> VkResult #foreign libvulkan;
+vkGetDeviceGroupSurfacePresentModesKHR :: (device: VkDevice, surface: VkSurfaceKHR, pModes: *VkDeviceGroupPresentModeFlagsKHR) -> VkResult #foreign vulkan_1;
 
-vkGetPhysicalDevicePresentRectanglesKHR :: (physicalDevice: VkPhysicalDevice, surface: VkSurfaceKHR, pRectCount: *u32, pRects: *VkRect2D) -> VkResult #foreign libvulkan;
+vkGetPhysicalDevicePresentRectanglesKHR :: (physicalDevice: VkPhysicalDevice, surface: VkSurfaceKHR, pRectCount: *u32, pRects: *VkRect2D) -> VkResult #foreign vulkan_1;
 
-vkAcquireNextImage2KHR :: (device: VkDevice, pAcquireInfo: *VkAcquireNextImageInfoKHR, pImageIndex: *u32) -> VkResult #foreign libvulkan;
+vkAcquireNextImage2KHR :: (device: VkDevice, pAcquireInfo: *VkAcquireNextImageInfoKHR, pImageIndex: *u32) -> VkResult #foreign vulkan_1;
 
 VkDisplayKHR_T :: struct {}
 VkDisplayKHR :: *VkDisplayKHR_T;
@@ -11307,19 +11307,19 @@ PFN_vkCreateDisplayModeKHR :: #type (physicalDevice: VkPhysicalDevice, display: 
 PFN_vkGetDisplayPlaneCapabilitiesKHR :: #type (physicalDevice: VkPhysicalDevice, mode: VkDisplayModeKHR, planeIndex: u32, pCapabilities: *VkDisplayPlaneCapabilitiesKHR) -> VkResult #c_call;
 PFN_vkCreateDisplayPlaneSurfaceKHR :: #type (instance: VkInstance, pCreateInfo: *VkDisplaySurfaceCreateInfoKHR, pAllocator: *VkAllocationCallbacks, pSurface: *VkSurfaceKHR) -> VkResult #c_call;
 
-vkGetPhysicalDeviceDisplayPropertiesKHR :: (physicalDevice: VkPhysicalDevice, pPropertyCount: *u32, pProperties: *VkDisplayPropertiesKHR) -> VkResult #foreign libvulkan;
+vkGetPhysicalDeviceDisplayPropertiesKHR :: (physicalDevice: VkPhysicalDevice, pPropertyCount: *u32, pProperties: *VkDisplayPropertiesKHR) -> VkResult #foreign vulkan_1;
 
-vkGetPhysicalDeviceDisplayPlanePropertiesKHR :: (physicalDevice: VkPhysicalDevice, pPropertyCount: *u32, pProperties: *VkDisplayPlanePropertiesKHR) -> VkResult #foreign libvulkan;
+vkGetPhysicalDeviceDisplayPlanePropertiesKHR :: (physicalDevice: VkPhysicalDevice, pPropertyCount: *u32, pProperties: *VkDisplayPlanePropertiesKHR) -> VkResult #foreign vulkan_1;
 
-vkGetDisplayPlaneSupportedDisplaysKHR :: (physicalDevice: VkPhysicalDevice, planeIndex: u32, pDisplayCount: *u32, pDisplays: *VkDisplayKHR) -> VkResult #foreign libvulkan;
+vkGetDisplayPlaneSupportedDisplaysKHR :: (physicalDevice: VkPhysicalDevice, planeIndex: u32, pDisplayCount: *u32, pDisplays: *VkDisplayKHR) -> VkResult #foreign vulkan_1;
 
-vkGetDisplayModePropertiesKHR :: (physicalDevice: VkPhysicalDevice, display: VkDisplayKHR, pPropertyCount: *u32, pProperties: *VkDisplayModePropertiesKHR) -> VkResult #foreign libvulkan;
+vkGetDisplayModePropertiesKHR :: (physicalDevice: VkPhysicalDevice, display: VkDisplayKHR, pPropertyCount: *u32, pProperties: *VkDisplayModePropertiesKHR) -> VkResult #foreign vulkan_1;
 
-vkCreateDisplayModeKHR :: (physicalDevice: VkPhysicalDevice, display: VkDisplayKHR, pCreateInfo: *VkDisplayModeCreateInfoKHR, pAllocator: *VkAllocationCallbacks, pMode: *VkDisplayModeKHR) -> VkResult #foreign libvulkan;
+vkCreateDisplayModeKHR :: (physicalDevice: VkPhysicalDevice, display: VkDisplayKHR, pCreateInfo: *VkDisplayModeCreateInfoKHR, pAllocator: *VkAllocationCallbacks, pMode: *VkDisplayModeKHR) -> VkResult #foreign vulkan_1;
 
-vkGetDisplayPlaneCapabilitiesKHR :: (physicalDevice: VkPhysicalDevice, mode: VkDisplayModeKHR, planeIndex: u32, pCapabilities: *VkDisplayPlaneCapabilitiesKHR) -> VkResult #foreign libvulkan;
+vkGetDisplayPlaneCapabilitiesKHR :: (physicalDevice: VkPhysicalDevice, mode: VkDisplayModeKHR, planeIndex: u32, pCapabilities: *VkDisplayPlaneCapabilitiesKHR) -> VkResult #foreign vulkan_1;
 
-vkCreateDisplayPlaneSurfaceKHR :: (instance: VkInstance, pCreateInfo: *VkDisplaySurfaceCreateInfoKHR, pAllocator: *VkAllocationCallbacks, pSurface: *VkSurfaceKHR) -> VkResult #foreign libvulkan;
+vkCreateDisplayPlaneSurfaceKHR :: (instance: VkInstance, pCreateInfo: *VkDisplaySurfaceCreateInfoKHR, pAllocator: *VkAllocationCallbacks, pSurface: *VkSurfaceKHR) -> VkResult #foreign vulkan_1;
 
 VkDisplayPresentInfoKHR :: struct {
     sType:      VkStructureType = .DISPLAY_PRESENT_INFO_KHR;
@@ -11331,7 +11331,7 @@ VkDisplayPresentInfoKHR :: struct {
 
 PFN_vkCreateSharedSwapchainsKHR :: #type (device: VkDevice, swapchainCount: u32, pCreateInfos: *VkSwapchainCreateInfoKHR, pAllocator: *VkAllocationCallbacks, pSwapchains: *VkSwapchainKHR) -> VkResult #c_call;
 
-vkCreateSharedSwapchainsKHR :: (device: VkDevice, swapchainCount: u32, pCreateInfos: *VkSwapchainCreateInfoKHR, pAllocator: *VkAllocationCallbacks, pSwapchains: *VkSwapchainKHR) -> VkResult #foreign libvulkan;
+vkCreateSharedSwapchainsKHR :: (device: VkDevice, swapchainCount: u32, pCreateInfos: *VkSwapchainCreateInfoKHR, pAllocator: *VkAllocationCallbacks, pSwapchains: *VkSwapchainKHR) -> VkResult #foreign vulkan_1;
 
 VkVideoSessionKHR_T :: struct {}
 VkVideoSessionKHR :: *VkVideoSessionKHR_T;
@@ -11926,18 +11926,21 @@ StdVideoH264NonVclNaluType :: enum u32 {
 }
 
 StdVideoH264SpsVuiFlags :: struct {
-    aspect_ratio_info_present_flag:  u32;
-    #place aspect_ratio_info_present_flag; /*bitfield 1*/ overscan_info_present_flag:      u32;
-    #place aspect_ratio_info_present_flag; /*bitfield 2*/ overscan_appropriate_flag:       u32;
-    #place aspect_ratio_info_present_flag; /*bitfield 3*/ video_signal_type_present_flag:  u32;
-    #place aspect_ratio_info_present_flag; /*bitfield 4*/ video_full_range_flag:           u32;
-    #place aspect_ratio_info_present_flag; /*bitfield 5*/ color_description_present_flag:  u32;
-    #place aspect_ratio_info_present_flag; /*bitfield 6*/ chroma_loc_info_present_flag:    u32;
-    #place aspect_ratio_info_present_flag; /*bitfield 7*/ timing_info_present_flag:        u32;
-    #place aspect_ratio_info_present_flag; /*bitfield 8*/ fixed_frame_rate_flag:           u32;
-    #place aspect_ratio_info_present_flag; /*bitfield 9*/ bitstream_restriction_flag:      u32;
-    #place aspect_ratio_info_present_flag; /*bitfield 10*/ nal_hrd_parameters_present_flag: u32;
-    #place aspect_ratio_info_present_flag; /*bitfield 11*/ vcl_hrd_parameters_present_flag: u32;
+    __bitfield: u32;
+    /* 
+        aspect_ratio_info_present_flag: u32; /* 1 bits */
+        overscan_info_present_flag: u32; /* 1 bits */
+        overscan_appropriate_flag: u32; /* 1 bits */
+        video_signal_type_present_flag: u32; /* 1 bits */
+        video_full_range_flag: u32; /* 1 bits */
+        color_description_present_flag: u32; /* 1 bits */
+        chroma_loc_info_present_flag: u32; /* 1 bits */
+        timing_info_present_flag: u32; /* 1 bits */
+        fixed_frame_rate_flag: u32; /* 1 bits */
+        bitstream_restriction_flag: u32; /* 1 bits */
+        nal_hrd_parameters_present_flag: u32; /* 1 bits */
+        vcl_hrd_parameters_present_flag: u32; /* 1 bits */;
+    */
 }
 
 StdVideoH264HrdParameters :: struct {
@@ -11974,22 +11977,25 @@ StdVideoH264SequenceParameterSetVui :: struct {
 }
 
 StdVideoH264SpsFlags :: struct {
-    constraint_set0_flag:                 u32;
-    #place constraint_set0_flag; /*bitfield 1*/ constraint_set1_flag:                 u32;
-    #place constraint_set0_flag; /*bitfield 2*/ constraint_set2_flag:                 u32;
-    #place constraint_set0_flag; /*bitfield 3*/ constraint_set3_flag:                 u32;
-    #place constraint_set0_flag; /*bitfield 4*/ constraint_set4_flag:                 u32;
-    #place constraint_set0_flag; /*bitfield 5*/ constraint_set5_flag:                 u32;
-    #place constraint_set0_flag; /*bitfield 6*/ direct_8x8_inference_flag:            u32;
-    #place constraint_set0_flag; /*bitfield 7*/ mb_adaptive_frame_field_flag:         u32;
-    #place constraint_set0_flag; /*bitfield 8*/ frame_mbs_only_flag:                  u32;
-    #place constraint_set0_flag; /*bitfield 9*/ delta_pic_order_always_zero_flag:     u32;
-    #place constraint_set0_flag; /*bitfield 10*/ separate_colour_plane_flag:           u32;
-    #place constraint_set0_flag; /*bitfield 11*/ gaps_in_frame_num_value_allowed_flag: u32;
-    #place constraint_set0_flag; /*bitfield 12*/ qpprime_y_zero_transform_bypass_flag: u32;
-    #place constraint_set0_flag; /*bitfield 13*/ frame_cropping_flag:                  u32;
-    #place constraint_set0_flag; /*bitfield 14*/ seq_scaling_matrix_present_flag:      u32;
-    #place constraint_set0_flag; /*bitfield 15*/ vui_parameters_present_flag:          u32;
+    __bitfield: u32;
+    /* 
+        constraint_set0_flag: u32; /* 1 bits */
+        constraint_set1_flag: u32; /* 1 bits */
+        constraint_set2_flag: u32; /* 1 bits */
+        constraint_set3_flag: u32; /* 1 bits */
+        constraint_set4_flag: u32; /* 1 bits */
+        constraint_set5_flag: u32; /* 1 bits */
+        direct_8x8_inference_flag: u32; /* 1 bits */
+        mb_adaptive_frame_field_flag: u32; /* 1 bits */
+        frame_mbs_only_flag: u32; /* 1 bits */
+        delta_pic_order_always_zero_flag: u32; /* 1 bits */
+        separate_colour_plane_flag: u32; /* 1 bits */
+        gaps_in_frame_num_value_allowed_flag: u32; /* 1 bits */
+        qpprime_y_zero_transform_bypass_flag: u32; /* 1 bits */
+        frame_cropping_flag: u32; /* 1 bits */
+        seq_scaling_matrix_present_flag: u32; /* 1 bits */
+        vui_parameters_present_flag: u32; /* 1 bits */;
+    */
 }
 
 StdVideoH264ScalingLists :: struct {
@@ -12028,14 +12034,17 @@ StdVideoH264SequenceParameterSet :: struct {
 }
 
 StdVideoH264PpsFlags :: struct {
-    transform_8x8_mode_flag:                      u32;
-    #place transform_8x8_mode_flag; /*bitfield 1*/ redundant_pic_cnt_present_flag:               u32;
-    #place transform_8x8_mode_flag; /*bitfield 2*/ constrained_intra_pred_flag:                  u32;
-    #place transform_8x8_mode_flag; /*bitfield 3*/ deblocking_filter_control_present_flag:       u32;
-    #place transform_8x8_mode_flag; /*bitfield 4*/ weighted_pred_flag:                           u32;
-    #place transform_8x8_mode_flag; /*bitfield 5*/ bottom_field_pic_order_in_frame_present_flag: u32;
-    #place transform_8x8_mode_flag; /*bitfield 6*/ entropy_coding_mode_flag:                     u32;
-    #place transform_8x8_mode_flag; /*bitfield 7*/ pic_scaling_matrix_present_flag:              u32;
+    __bitfield: u32;
+    /* 
+        transform_8x8_mode_flag: u32; /* 1 bits */
+        redundant_pic_cnt_present_flag: u32; /* 1 bits */
+        constrained_intra_pred_flag: u32; /* 1 bits */
+        deblocking_filter_control_present_flag: u32; /* 1 bits */
+        weighted_pred_flag: u32; /* 1 bits */
+        bottom_field_pic_order_in_frame_present_flag: u32; /* 1 bits */
+        entropy_coding_mode_flag: u32; /* 1 bits */
+        pic_scaling_matrix_present_flag: u32; /* 1 bits */;
+    */
 }
 
 StdVideoH264PictureParameterSet :: struct {
@@ -12074,29 +12083,41 @@ StdVideoEncodeH264WeightTable :: struct {
 }
 
 StdVideoEncodeH264SliceHeaderFlags :: struct {
-    direct_spatial_mv_pred_flag:      u32;
-    #place direct_spatial_mv_pred_flag; /*bitfield 1*/ num_ref_idx_active_override_flag: u32;
-    #place direct_spatial_mv_pred_flag; /*bitfield 2*/ reserved:                         u32;
+    __bitfield: u32;
+    /* 
+        direct_spatial_mv_pred_flag: u32; /* 1 bits */
+        num_ref_idx_active_override_flag: u32; /* 1 bits */
+        reserved: u32; /* 30 bits */;
+    */
 }
 
 StdVideoEncodeH264PictureInfoFlags :: struct {
-    IdrPicFlag:                         u32;
-    #place IdrPicFlag; /*bitfield 1*/ is_reference:                       u32;
-    #place IdrPicFlag; /*bitfield 2*/ no_output_of_prior_pics_flag:       u32;
-    #place IdrPicFlag; /*bitfield 3*/ long_term_reference_flag:           u32;
-    #place IdrPicFlag; /*bitfield 4*/ adaptive_ref_pic_marking_mode_flag: u32;
-    #place IdrPicFlag; /*bitfield 5*/ reserved:                           u32;
+    __bitfield: u32;
+    /* 
+        IdrPicFlag: u32; /* 1 bits */
+        is_reference: u32; /* 1 bits */
+        no_output_of_prior_pics_flag: u32; /* 1 bits */
+        long_term_reference_flag: u32; /* 1 bits */
+        adaptive_ref_pic_marking_mode_flag: u32; /* 1 bits */
+        reserved: u32; /* 27 bits */;
+    */
 }
 
 StdVideoEncodeH264ReferenceInfoFlags :: struct {
-    used_for_long_term_reference: u32;
-    #place used_for_long_term_reference; /*bitfield 1*/ reserved:                     u32;
+    __bitfield: u32;
+    /* 
+        used_for_long_term_reference: u32; /* 1 bits */
+        reserved: u32; /* 31 bits */;
+    */
 }
 
 StdVideoEncodeH264ReferenceListsInfoFlags :: struct {
-    ref_pic_list_modification_flag_l0: u32;
-    #place ref_pic_list_modification_flag_l0; /*bitfield 1*/ ref_pic_list_modification_flag_l1: u32;
-    #place ref_pic_list_modification_flag_l0; /*bitfield 2*/ reserved:                          u32;
+    __bitfield: u32;
+    /* 
+        ref_pic_list_modification_flag_l0: u32; /* 1 bits */
+        ref_pic_list_modification_flag_l1: u32; /* 1 bits */
+        reserved: u32; /* 30 bits */;
+    */
 }
 
 StdVideoEncodeH264RefListModEntry :: struct {
@@ -12554,13 +12575,16 @@ StdVideoH265SubLayerHrdParameters :: struct {
 }
 
 StdVideoH265HrdFlags :: struct {
-    nal_hrd_parameters_present_flag:           u32;
-    #place nal_hrd_parameters_present_flag; /*bitfield 1*/ vcl_hrd_parameters_present_flag:           u32;
-    #place nal_hrd_parameters_present_flag; /*bitfield 2*/ sub_pic_hrd_params_present_flag:           u32;
-    #place nal_hrd_parameters_present_flag; /*bitfield 3*/ sub_pic_cpb_params_in_pic_timing_sei_flag: u32;
-    #place nal_hrd_parameters_present_flag; /*bitfield 4*/ fixed_pic_rate_general_flag:               u32;
-    #place nal_hrd_parameters_present_flag; /*bitfield 12*/ fixed_pic_rate_within_cvs_flag:            u32;
-    #place nal_hrd_parameters_present_flag; /*bitfield 20*/ low_delay_hrd_flag:                        u32;
+    __bitfield: u32;
+    /* 
+        nal_hrd_parameters_present_flag: u32; /* 1 bits */
+        vcl_hrd_parameters_present_flag: u32; /* 1 bits */
+        sub_pic_hrd_params_present_flag: u32; /* 1 bits */
+        sub_pic_cpb_params_in_pic_timing_sei_flag: u32; /* 1 bits */
+        fixed_pic_rate_general_flag: u32; /* 8 bits */
+        fixed_pic_rate_within_cvs_flag: u32; /* 8 bits */
+        low_delay_hrd_flag: u32; /* 8 bits */;
+    */
 }
 
 StdVideoH265HrdParameters :: struct {
@@ -12582,18 +12606,24 @@ StdVideoH265HrdParameters :: struct {
 }
 
 StdVideoH265VpsFlags :: struct {
-    vps_temporal_id_nesting_flag:             u32;
-    #place vps_temporal_id_nesting_flag; /*bitfield 1*/ vps_sub_layer_ordering_info_present_flag: u32;
-    #place vps_temporal_id_nesting_flag; /*bitfield 2*/ vps_timing_info_present_flag:             u32;
-    #place vps_temporal_id_nesting_flag; /*bitfield 3*/ vps_poc_proportional_to_timing_flag:      u32;
+    __bitfield: u32;
+    /* 
+        vps_temporal_id_nesting_flag: u32; /* 1 bits */
+        vps_sub_layer_ordering_info_present_flag: u32; /* 1 bits */
+        vps_timing_info_present_flag: u32; /* 1 bits */
+        vps_poc_proportional_to_timing_flag: u32; /* 1 bits */;
+    */
 }
 
 StdVideoH265ProfileTierLevelFlags :: struct {
-    general_tier_flag:                  u32;
-    #place general_tier_flag; /*bitfield 1*/ general_progressive_source_flag:    u32;
-    #place general_tier_flag; /*bitfield 2*/ general_interlaced_source_flag:     u32;
-    #place general_tier_flag; /*bitfield 3*/ general_non_packed_constraint_flag: u32;
-    #place general_tier_flag; /*bitfield 4*/ general_frame_only_constraint_flag: u32;
+    __bitfield: u32;
+    /* 
+        general_tier_flag: u32; /* 1 bits */
+        general_progressive_source_flag: u32; /* 1 bits */
+        general_interlaced_source_flag: u32; /* 1 bits */
+        general_non_packed_constraint_flag: u32; /* 1 bits */
+        general_frame_only_constraint_flag: u32; /* 1 bits */;
+    */
 }
 
 StdVideoH265ProfileTierLevel :: struct {
@@ -12627,24 +12657,27 @@ StdVideoH265ScalingLists :: struct {
 }
 
 StdVideoH265SpsVuiFlags :: struct {
-    aspect_ratio_info_present_flag:          u32;
-    #place aspect_ratio_info_present_flag; /*bitfield 1*/ overscan_info_present_flag:              u32;
-    #place aspect_ratio_info_present_flag; /*bitfield 2*/ overscan_appropriate_flag:               u32;
-    #place aspect_ratio_info_present_flag; /*bitfield 3*/ video_signal_type_present_flag:          u32;
-    #place aspect_ratio_info_present_flag; /*bitfield 4*/ video_full_range_flag:                   u32;
-    #place aspect_ratio_info_present_flag; /*bitfield 5*/ colour_description_present_flag:         u32;
-    #place aspect_ratio_info_present_flag; /*bitfield 6*/ chroma_loc_info_present_flag:            u32;
-    #place aspect_ratio_info_present_flag; /*bitfield 7*/ neutral_chroma_indication_flag:          u32;
-    #place aspect_ratio_info_present_flag; /*bitfield 8*/ field_seq_flag:                          u32;
-    #place aspect_ratio_info_present_flag; /*bitfield 9*/ frame_field_info_present_flag:           u32;
-    #place aspect_ratio_info_present_flag; /*bitfield 10*/ default_display_window_flag:             u32;
-    #place aspect_ratio_info_present_flag; /*bitfield 11*/ vui_timing_info_present_flag:            u32;
-    #place aspect_ratio_info_present_flag; /*bitfield 12*/ vui_poc_proportional_to_timing_flag:     u32;
-    #place aspect_ratio_info_present_flag; /*bitfield 13*/ vui_hrd_parameters_present_flag:         u32;
-    #place aspect_ratio_info_present_flag; /*bitfield 14*/ bitstream_restriction_flag:              u32;
-    #place aspect_ratio_info_present_flag; /*bitfield 15*/ tiles_fixed_structure_flag:              u32;
-    #place aspect_ratio_info_present_flag; /*bitfield 16*/ motion_vectors_over_pic_boundaries_flag: u32;
-    #place aspect_ratio_info_present_flag; /*bitfield 17*/ restricted_ref_pic_lists_flag:           u32;
+    __bitfield: u32;
+    /* 
+        aspect_ratio_info_present_flag: u32; /* 1 bits */
+        overscan_info_present_flag: u32; /* 1 bits */
+        overscan_appropriate_flag: u32; /* 1 bits */
+        video_signal_type_present_flag: u32; /* 1 bits */
+        video_full_range_flag: u32; /* 1 bits */
+        colour_description_present_flag: u32; /* 1 bits */
+        chroma_loc_info_present_flag: u32; /* 1 bits */
+        neutral_chroma_indication_flag: u32; /* 1 bits */
+        field_seq_flag: u32; /* 1 bits */
+        frame_field_info_present_flag: u32; /* 1 bits */
+        default_display_window_flag: u32; /* 1 bits */
+        vui_timing_info_present_flag: u32; /* 1 bits */
+        vui_poc_proportional_to_timing_flag: u32; /* 1 bits */
+        vui_hrd_parameters_present_flag: u32; /* 1 bits */
+        bitstream_restriction_flag: u32; /* 1 bits */
+        tiles_fixed_structure_flag: u32; /* 1 bits */
+        motion_vectors_over_pic_boundaries_flag: u32; /* 1 bits */
+        restricted_ref_pic_lists_flag: u32; /* 1 bits */;
+    */
 }
 
 StdVideoH265SequenceParameterSetVui :: struct {
@@ -12681,41 +12714,47 @@ StdVideoH265PredictorPaletteEntries :: struct {
 }
 
 StdVideoH265SpsFlags :: struct {
-    sps_temporal_id_nesting_flag:                    u32;
-    #place sps_temporal_id_nesting_flag; /*bitfield 1*/ separate_colour_plane_flag:                      u32;
-    #place sps_temporal_id_nesting_flag; /*bitfield 2*/ conformance_window_flag:                         u32;
-    #place sps_temporal_id_nesting_flag; /*bitfield 3*/ sps_sub_layer_ordering_info_present_flag:        u32;
-    #place sps_temporal_id_nesting_flag; /*bitfield 4*/ scaling_list_enabled_flag:                       u32;
-    #place sps_temporal_id_nesting_flag; /*bitfield 5*/ sps_scaling_list_data_present_flag:              u32;
-    #place sps_temporal_id_nesting_flag; /*bitfield 6*/ amp_enabled_flag:                                u32;
-    #place sps_temporal_id_nesting_flag; /*bitfield 7*/ sample_adaptive_offset_enabled_flag:             u32;
-    #place sps_temporal_id_nesting_flag; /*bitfield 8*/ pcm_enabled_flag:                                u32;
-    #place sps_temporal_id_nesting_flag; /*bitfield 9*/ pcm_loop_filter_disabled_flag:                   u32;
-    #place sps_temporal_id_nesting_flag; /*bitfield 10*/ long_term_ref_pics_present_flag:                 u32;
-    #place sps_temporal_id_nesting_flag; /*bitfield 11*/ sps_temporal_mvp_enabled_flag:                   u32;
-    #place sps_temporal_id_nesting_flag; /*bitfield 12*/ strong_intra_smoothing_enabled_flag:             u32;
-    #place sps_temporal_id_nesting_flag; /*bitfield 13*/ vui_parameters_present_flag:                     u32;
-    #place sps_temporal_id_nesting_flag; /*bitfield 14*/ sps_extension_present_flag:                      u32;
-    #place sps_temporal_id_nesting_flag; /*bitfield 15*/ sps_range_extension_flag:                        u32;
-    #place sps_temporal_id_nesting_flag; /*bitfield 16*/ transform_skip_rotation_enabled_flag:            u32;
-    #place sps_temporal_id_nesting_flag; /*bitfield 17*/ transform_skip_context_enabled_flag:             u32;
-    #place sps_temporal_id_nesting_flag; /*bitfield 18*/ implicit_rdpcm_enabled_flag:                     u32;
-    #place sps_temporal_id_nesting_flag; /*bitfield 19*/ explicit_rdpcm_enabled_flag:                     u32;
-    #place sps_temporal_id_nesting_flag; /*bitfield 20*/ extended_precision_processing_flag:              u32;
-    #place sps_temporal_id_nesting_flag; /*bitfield 21*/ intra_smoothing_disabled_flag:                   u32;
-    #place sps_temporal_id_nesting_flag; /*bitfield 22*/ high_precision_offsets_enabled_flag:             u32;
-    #place sps_temporal_id_nesting_flag; /*bitfield 23*/ persistent_rice_adaptation_enabled_flag:         u32;
-    #place sps_temporal_id_nesting_flag; /*bitfield 24*/ cabac_bypass_alignment_enabled_flag:             u32;
-    #place sps_temporal_id_nesting_flag; /*bitfield 25*/ sps_scc_extension_flag:                          u32;
-    #place sps_temporal_id_nesting_flag; /*bitfield 26*/ sps_curr_pic_ref_enabled_flag:                   u32;
-    #place sps_temporal_id_nesting_flag; /*bitfield 27*/ palette_mode_enabled_flag:                       u32;
-    #place sps_temporal_id_nesting_flag; /*bitfield 28*/ sps_palette_predictor_initializers_present_flag: u32;
-    #place sps_temporal_id_nesting_flag; /*bitfield 29*/ intra_boundary_filtering_disabled_flag:          u32;
+    __bitfield: u32;
+    /* 
+        sps_temporal_id_nesting_flag: u32; /* 1 bits */
+        separate_colour_plane_flag: u32; /* 1 bits */
+        conformance_window_flag: u32; /* 1 bits */
+        sps_sub_layer_ordering_info_present_flag: u32; /* 1 bits */
+        scaling_list_enabled_flag: u32; /* 1 bits */
+        sps_scaling_list_data_present_flag: u32; /* 1 bits */
+        amp_enabled_flag: u32; /* 1 bits */
+        sample_adaptive_offset_enabled_flag: u32; /* 1 bits */
+        pcm_enabled_flag: u32; /* 1 bits */
+        pcm_loop_filter_disabled_flag: u32; /* 1 bits */
+        long_term_ref_pics_present_flag: u32; /* 1 bits */
+        sps_temporal_mvp_enabled_flag: u32; /* 1 bits */
+        strong_intra_smoothing_enabled_flag: u32; /* 1 bits */
+        vui_parameters_present_flag: u32; /* 1 bits */
+        sps_extension_present_flag: u32; /* 1 bits */
+        sps_range_extension_flag: u32; /* 1 bits */
+        transform_skip_rotation_enabled_flag: u32; /* 1 bits */
+        transform_skip_context_enabled_flag: u32; /* 1 bits */
+        implicit_rdpcm_enabled_flag: u32; /* 1 bits */
+        explicit_rdpcm_enabled_flag: u32; /* 1 bits */
+        extended_precision_processing_flag: u32; /* 1 bits */
+        intra_smoothing_disabled_flag: u32; /* 1 bits */
+        high_precision_offsets_enabled_flag: u32; /* 1 bits */
+        persistent_rice_adaptation_enabled_flag: u32; /* 1 bits */
+        cabac_bypass_alignment_enabled_flag: u32; /* 1 bits */
+        sps_scc_extension_flag: u32; /* 1 bits */
+        sps_curr_pic_ref_enabled_flag: u32; /* 1 bits */
+        palette_mode_enabled_flag: u32; /* 1 bits */
+        sps_palette_predictor_initializers_present_flag: u32; /* 1 bits */
+        intra_boundary_filtering_disabled_flag: u32; /* 1 bits */;
+    */
 }
 
 StdVideoH265ShortTermRefPicSetFlags :: struct {
-    inter_ref_pic_set_prediction_flag: u32;
-    #place inter_ref_pic_set_prediction_flag; /*bitfield 1*/ delta_rps_sign:                    u32;
+    __bitfield: u32;
+    /* 
+        inter_ref_pic_set_prediction_flag: u32; /* 1 bits */
+        delta_rps_sign: u32; /* 1 bits */;
+    */
 }
 
 StdVideoH265ShortTermRefPicSet :: struct {
@@ -12783,37 +12822,40 @@ StdVideoH265SequenceParameterSet :: struct {
 }
 
 StdVideoH265PpsFlags :: struct {
-    dependent_slice_segments_enabled_flag:           u32;
-    #place dependent_slice_segments_enabled_flag; /*bitfield 1*/ output_flag_present_flag:                        u32;
-    #place dependent_slice_segments_enabled_flag; /*bitfield 2*/ sign_data_hiding_enabled_flag:                   u32;
-    #place dependent_slice_segments_enabled_flag; /*bitfield 3*/ cabac_init_present_flag:                         u32;
-    #place dependent_slice_segments_enabled_flag; /*bitfield 4*/ constrained_intra_pred_flag:                     u32;
-    #place dependent_slice_segments_enabled_flag; /*bitfield 5*/ transform_skip_enabled_flag:                     u32;
-    #place dependent_slice_segments_enabled_flag; /*bitfield 6*/ cu_qp_delta_enabled_flag:                        u32;
-    #place dependent_slice_segments_enabled_flag; /*bitfield 7*/ pps_slice_chroma_qp_offsets_present_flag:        u32;
-    #place dependent_slice_segments_enabled_flag; /*bitfield 8*/ weighted_pred_flag:                              u32;
-    #place dependent_slice_segments_enabled_flag; /*bitfield 9*/ weighted_bipred_flag:                            u32;
-    #place dependent_slice_segments_enabled_flag; /*bitfield 10*/ transquant_bypass_enabled_flag:                  u32;
-    #place dependent_slice_segments_enabled_flag; /*bitfield 11*/ tiles_enabled_flag:                              u32;
-    #place dependent_slice_segments_enabled_flag; /*bitfield 12*/ entropy_coding_sync_enabled_flag:                u32;
-    #place dependent_slice_segments_enabled_flag; /*bitfield 13*/ uniform_spacing_flag:                            u32;
-    #place dependent_slice_segments_enabled_flag; /*bitfield 14*/ loop_filter_across_tiles_enabled_flag:           u32;
-    #place dependent_slice_segments_enabled_flag; /*bitfield 15*/ pps_loop_filter_across_slices_enabled_flag:      u32;
-    #place dependent_slice_segments_enabled_flag; /*bitfield 16*/ deblocking_filter_control_present_flag:          u32;
-    #place dependent_slice_segments_enabled_flag; /*bitfield 17*/ deblocking_filter_override_enabled_flag:         u32;
-    #place dependent_slice_segments_enabled_flag; /*bitfield 18*/ pps_deblocking_filter_disabled_flag:             u32;
-    #place dependent_slice_segments_enabled_flag; /*bitfield 19*/ pps_scaling_list_data_present_flag:              u32;
-    #place dependent_slice_segments_enabled_flag; /*bitfield 20*/ lists_modification_present_flag:                 u32;
-    #place dependent_slice_segments_enabled_flag; /*bitfield 21*/ slice_segment_header_extension_present_flag:     u32;
-    #place dependent_slice_segments_enabled_flag; /*bitfield 22*/ pps_extension_present_flag:                      u32;
-    #place dependent_slice_segments_enabled_flag; /*bitfield 23*/ cross_component_prediction_enabled_flag:         u32;
-    #place dependent_slice_segments_enabled_flag; /*bitfield 24*/ chroma_qp_offset_list_enabled_flag:              u32;
-    #place dependent_slice_segments_enabled_flag; /*bitfield 25*/ pps_curr_pic_ref_enabled_flag:                   u32;
-    #place dependent_slice_segments_enabled_flag; /*bitfield 26*/ residual_adaptive_colour_transform_enabled_flag: u32;
-    #place dependent_slice_segments_enabled_flag; /*bitfield 27*/ pps_slice_act_qp_offsets_present_flag:           u32;
-    #place dependent_slice_segments_enabled_flag; /*bitfield 28*/ pps_palette_predictor_initializers_present_flag: u32;
-    #place dependent_slice_segments_enabled_flag; /*bitfield 29*/ monochrome_palette_flag:                         u32;
-    #place dependent_slice_segments_enabled_flag; /*bitfield 30*/ pps_range_extension_flag:                        u32;
+    __bitfield: u32;
+    /* 
+        dependent_slice_segments_enabled_flag: u32; /* 1 bits */
+        output_flag_present_flag: u32; /* 1 bits */
+        sign_data_hiding_enabled_flag: u32; /* 1 bits */
+        cabac_init_present_flag: u32; /* 1 bits */
+        constrained_intra_pred_flag: u32; /* 1 bits */
+        transform_skip_enabled_flag: u32; /* 1 bits */
+        cu_qp_delta_enabled_flag: u32; /* 1 bits */
+        pps_slice_chroma_qp_offsets_present_flag: u32; /* 1 bits */
+        weighted_pred_flag: u32; /* 1 bits */
+        weighted_bipred_flag: u32; /* 1 bits */
+        transquant_bypass_enabled_flag: u32; /* 1 bits */
+        tiles_enabled_flag: u32; /* 1 bits */
+        entropy_coding_sync_enabled_flag: u32; /* 1 bits */
+        uniform_spacing_flag: u32; /* 1 bits */
+        loop_filter_across_tiles_enabled_flag: u32; /* 1 bits */
+        pps_loop_filter_across_slices_enabled_flag: u32; /* 1 bits */
+        deblocking_filter_control_present_flag: u32; /* 1 bits */
+        deblocking_filter_override_enabled_flag: u32; /* 1 bits */
+        pps_deblocking_filter_disabled_flag: u32; /* 1 bits */
+        pps_scaling_list_data_present_flag: u32; /* 1 bits */
+        lists_modification_present_flag: u32; /* 1 bits */
+        slice_segment_header_extension_present_flag: u32; /* 1 bits */
+        pps_extension_present_flag: u32; /* 1 bits */
+        cross_component_prediction_enabled_flag: u32; /* 1 bits */
+        chroma_qp_offset_list_enabled_flag: u32; /* 1 bits */
+        pps_curr_pic_ref_enabled_flag: u32; /* 1 bits */
+        residual_adaptive_colour_transform_enabled_flag: u32; /* 1 bits */
+        pps_slice_act_qp_offsets_present_flag: u32; /* 1 bits */
+        pps_palette_predictor_initializers_present_flag: u32; /* 1 bits */
+        monochrome_palette_flag: u32; /* 1 bits */
+        pps_range_extension_flag: u32; /* 1 bits */;
+    */
 }
 
 StdVideoH265PictureParameterSet :: struct {
@@ -12877,19 +12919,22 @@ StdVideoEncodeH265WeightTable :: struct {
 }
 
 StdVideoEncodeH265SliceSegmentHeaderFlags :: struct {
-    first_slice_segment_in_pic_flag:              u32;
-    #place first_slice_segment_in_pic_flag; /*bitfield 1*/ dependent_slice_segment_flag:                 u32;
-    #place first_slice_segment_in_pic_flag; /*bitfield 2*/ slice_sao_luma_flag:                          u32;
-    #place first_slice_segment_in_pic_flag; /*bitfield 3*/ slice_sao_chroma_flag:                        u32;
-    #place first_slice_segment_in_pic_flag; /*bitfield 4*/ num_ref_idx_active_override_flag:             u32;
-    #place first_slice_segment_in_pic_flag; /*bitfield 5*/ mvd_l1_zero_flag:                             u32;
-    #place first_slice_segment_in_pic_flag; /*bitfield 6*/ cabac_init_flag:                              u32;
-    #place first_slice_segment_in_pic_flag; /*bitfield 7*/ cu_chroma_qp_offset_enabled_flag:             u32;
-    #place first_slice_segment_in_pic_flag; /*bitfield 8*/ deblocking_filter_override_flag:              u32;
-    #place first_slice_segment_in_pic_flag; /*bitfield 9*/ slice_deblocking_filter_disabled_flag:        u32;
-    #place first_slice_segment_in_pic_flag; /*bitfield 10*/ collocated_from_l0_flag:                      u32;
-    #place first_slice_segment_in_pic_flag; /*bitfield 11*/ slice_loop_filter_across_slices_enabled_flag: u32;
-    #place first_slice_segment_in_pic_flag; /*bitfield 12*/ reserved:                                     u32;
+    __bitfield: u32;
+    /* 
+        first_slice_segment_in_pic_flag: u32; /* 1 bits */
+        dependent_slice_segment_flag: u32; /* 1 bits */
+        slice_sao_luma_flag: u32; /* 1 bits */
+        slice_sao_chroma_flag: u32; /* 1 bits */
+        num_ref_idx_active_override_flag: u32; /* 1 bits */
+        mvd_l1_zero_flag: u32; /* 1 bits */
+        cabac_init_flag: u32; /* 1 bits */
+        cu_chroma_qp_offset_enabled_flag: u32; /* 1 bits */
+        deblocking_filter_override_flag: u32; /* 1 bits */
+        slice_deblocking_filter_disabled_flag: u32; /* 1 bits */
+        collocated_from_l0_flag: u32; /* 1 bits */
+        slice_loop_filter_across_slices_enabled_flag: u32; /* 1 bits */
+        reserved: u32; /* 20 bits */;
+    */
 }
 
 StdVideoEncodeH265SliceSegmentHeader :: struct {
@@ -12911,9 +12956,12 @@ StdVideoEncodeH265SliceSegmentHeader :: struct {
 }
 
 StdVideoEncodeH265ReferenceListsInfoFlags :: struct {
-    ref_pic_list_modification_flag_l0: u32;
-    #place ref_pic_list_modification_flag_l0; /*bitfield 1*/ ref_pic_list_modification_flag_l1: u32;
-    #place ref_pic_list_modification_flag_l0; /*bitfield 2*/ reserved:                          u32;
+    __bitfield: u32;
+    /* 
+        ref_pic_list_modification_flag_l0: u32; /* 1 bits */
+        ref_pic_list_modification_flag_l1: u32; /* 1 bits */
+        reserved: u32; /* 30 bits */;
+    */
 }
 
 StdVideoEncodeH265ReferenceListsInfo :: struct {
@@ -12927,16 +12975,19 @@ StdVideoEncodeH265ReferenceListsInfo :: struct {
 }
 
 StdVideoEncodeH265PictureInfoFlags :: struct {
-    is_reference:                    u32;
-    #place is_reference; /*bitfield 1*/ IrapPicFlag:                     u32;
-    #place is_reference; /*bitfield 2*/ used_for_long_term_reference:    u32;
-    #place is_reference; /*bitfield 3*/ discardable_flag:                u32;
-    #place is_reference; /*bitfield 4*/ cross_layer_bla_flag:            u32;
-    #place is_reference; /*bitfield 5*/ pic_output_flag:                 u32;
-    #place is_reference; /*bitfield 6*/ no_output_of_prior_pics_flag:    u32;
-    #place is_reference; /*bitfield 7*/ short_term_ref_pic_set_sps_flag: u32;
-    #place is_reference; /*bitfield 8*/ slice_temporal_mvp_enabled_flag: u32;
-    #place is_reference; /*bitfield 9*/ reserved:                        u32;
+    __bitfield: u32;
+    /* 
+        is_reference: u32; /* 1 bits */
+        IrapPicFlag: u32; /* 1 bits */
+        used_for_long_term_reference: u32; /* 1 bits */
+        discardable_flag: u32; /* 1 bits */
+        cross_layer_bla_flag: u32; /* 1 bits */
+        pic_output_flag: u32; /* 1 bits */
+        no_output_of_prior_pics_flag: u32; /* 1 bits */
+        short_term_ref_pic_set_sps_flag: u32; /* 1 bits */
+        slice_temporal_mvp_enabled_flag: u32; /* 1 bits */
+        reserved: u32; /* 23 bits */;
+    */
 }
 
 StdVideoEncodeH265LongTermRefPics :: struct {
@@ -12965,9 +13016,12 @@ StdVideoEncodeH265PictureInfo :: struct {
 }
 
 StdVideoEncodeH265ReferenceInfoFlags :: struct {
-    used_for_long_term_reference: u32;
-    #place used_for_long_term_reference; /*bitfield 1*/ unused_for_reference:         u32;
-    #place used_for_long_term_reference; /*bitfield 2*/ reserved:                     u32;
+    __bitfield: u32;
+    /* 
+        used_for_long_term_reference: u32; /* 1 bits */
+        unused_for_reference: u32; /* 1 bits */
+        reserved: u32; /* 30 bits */;
+    */
 }
 
 StdVideoEncodeH265ReferenceInfo :: struct {
@@ -13264,12 +13318,15 @@ StdVideoDecodeH264FieldOrderCount :: enum u32 {
 }
 
 StdVideoDecodeH264PictureInfoFlags :: struct {
-    field_pic_flag:           u32;
-    #place field_pic_flag; /*bitfield 1*/ is_intra:                 u32;
-    #place field_pic_flag; /*bitfield 2*/ IdrPicFlag:               u32;
-    #place field_pic_flag; /*bitfield 3*/ bottom_field_flag:        u32;
-    #place field_pic_flag; /*bitfield 4*/ is_reference:             u32;
-    #place field_pic_flag; /*bitfield 5*/ complementary_field_pair: u32;
+    __bitfield: u32;
+    /* 
+        field_pic_flag: u32; /* 1 bits */
+        is_intra: u32; /* 1 bits */
+        IdrPicFlag: u32; /* 1 bits */
+        bottom_field_flag: u32; /* 1 bits */
+        is_reference: u32; /* 1 bits */
+        complementary_field_pair: u32; /* 1 bits */;
+    */
 }
 
 StdVideoDecodeH264PictureInfo :: struct {
@@ -13284,10 +13341,13 @@ StdVideoDecodeH264PictureInfo :: struct {
 }
 
 StdVideoDecodeH264ReferenceInfoFlags :: struct {
-    top_field_flag:               u32;
-    #place top_field_flag; /*bitfield 1*/ bottom_field_flag:            u32;
-    #place top_field_flag; /*bitfield 2*/ used_for_long_term_reference: u32;
-    #place top_field_flag; /*bitfield 3*/ is_non_existing:              u32;
+    __bitfield: u32;
+    /* 
+        top_field_flag: u32; /* 1 bits */
+        bottom_field_flag: u32; /* 1 bits */
+        used_for_long_term_reference: u32; /* 1 bits */
+        is_non_existing: u32; /* 1 bits */;
+    */
 }
 
 StdVideoDecodeH264ReferenceInfo :: struct {
@@ -13909,13 +13969,13 @@ PFN_vkGetPhysicalDeviceDisplayPlaneProperties2KHR :: #type (physicalDevice: VkPh
 PFN_vkGetDisplayModeProperties2KHR :: #type (physicalDevice: VkPhysicalDevice, display: VkDisplayKHR, pPropertyCount: *u32, pProperties: *VkDisplayModeProperties2KHR) -> VkResult #c_call;
 PFN_vkGetDisplayPlaneCapabilities2KHR :: #type (physicalDevice: VkPhysicalDevice, pDisplayPlaneInfo: *VkDisplayPlaneInfo2KHR, pCapabilities: *VkDisplayPlaneCapabilities2KHR) -> VkResult #c_call;
 
-vkGetPhysicalDeviceDisplayProperties2KHR :: (physicalDevice: VkPhysicalDevice, pPropertyCount: *u32, pProperties: *VkDisplayProperties2KHR) -> VkResult #foreign libvulkan;
+vkGetPhysicalDeviceDisplayProperties2KHR :: (physicalDevice: VkPhysicalDevice, pPropertyCount: *u32, pProperties: *VkDisplayProperties2KHR) -> VkResult #foreign vulkan_1;
 
-vkGetPhysicalDeviceDisplayPlaneProperties2KHR :: (physicalDevice: VkPhysicalDevice, pPropertyCount: *u32, pProperties: *VkDisplayPlaneProperties2KHR) -> VkResult #foreign libvulkan;
+vkGetPhysicalDeviceDisplayPlaneProperties2KHR :: (physicalDevice: VkPhysicalDevice, pPropertyCount: *u32, pProperties: *VkDisplayPlaneProperties2KHR) -> VkResult #foreign vulkan_1;
 
-vkGetDisplayModeProperties2KHR :: (physicalDevice: VkPhysicalDevice, display: VkDisplayKHR, pPropertyCount: *u32, pProperties: *VkDisplayModeProperties2KHR) -> VkResult #foreign libvulkan;
+vkGetDisplayModeProperties2KHR :: (physicalDevice: VkPhysicalDevice, display: VkDisplayKHR, pPropertyCount: *u32, pProperties: *VkDisplayModeProperties2KHR) -> VkResult #foreign vulkan_1;
 
-vkGetDisplayPlaneCapabilities2KHR :: (physicalDevice: VkPhysicalDevice, pDisplayPlaneInfo: *VkDisplayPlaneInfo2KHR, pCapabilities: *VkDisplayPlaneCapabilities2KHR) -> VkResult #foreign libvulkan;
+vkGetDisplayPlaneCapabilities2KHR :: (physicalDevice: VkPhysicalDevice, pDisplayPlaneInfo: *VkDisplayPlaneInfo2KHR, pCapabilities: *VkDisplayPlaneCapabilities2KHR) -> VkResult #foreign vulkan_1;
 
 VkMemoryDedicatedRequirementsKHR :: VkMemoryDedicatedRequirements;
 
@@ -13990,10 +14050,13 @@ VkPhysicalDeviceShaderClockFeaturesKHR :: struct {
 }
 
 StdVideoDecodeH265PictureInfoFlags :: struct {
-    IrapPicFlag:                     u32;
-    #place IrapPicFlag; /*bitfield 1*/ IdrPicFlag:                      u32;
-    #place IrapPicFlag; /*bitfield 2*/ IsReference:                     u32;
-    #place IrapPicFlag; /*bitfield 3*/ short_term_ref_pic_set_sps_flag: u32;
+    __bitfield: u32;
+    /* 
+        IrapPicFlag: u32; /* 1 bits */
+        IdrPicFlag: u32; /* 1 bits */
+        IsReference: u32; /* 1 bits */
+        short_term_ref_pic_set_sps_flag: u32; /* 1 bits */;
+    */
 }
 
 StdVideoDecodeH265PictureInfo :: struct {
@@ -14011,8 +14074,11 @@ StdVideoDecodeH265PictureInfo :: struct {
 }
 
 StdVideoDecodeH265ReferenceInfoFlags :: struct {
-    used_for_long_term_reference: u32;
-    #place used_for_long_term_reference; /*bitfield 1*/ unused_for_reference:         u32;
+    __bitfield: u32;
+    /* 
+        used_for_long_term_reference: u32; /* 1 bits */
+        unused_for_reference: u32; /* 1 bits */;
+    */
 }
 
 StdVideoDecodeH265ReferenceInfo :: struct {
@@ -15310,11 +15376,14 @@ StdVideoAV1ChromaSamplePosition :: enum u32 {
 }
 
 StdVideoAV1ColorConfigFlags :: struct {
-    mono_chrome:                    u32;
-    #place mono_chrome; /*bitfield 1*/ color_range:                    u32;
-    #place mono_chrome; /*bitfield 2*/ separate_uv_delta_q:            u32;
-    #place mono_chrome; /*bitfield 3*/ color_description_present_flag: u32;
-    #place mono_chrome; /*bitfield 4*/ reserved:                       u32;
+    __bitfield: u32;
+    /* 
+        mono_chrome: u32; /* 1 bits */
+        color_range: u32; /* 1 bits */
+        separate_uv_delta_q: u32; /* 1 bits */
+        color_description_present_flag: u32; /* 1 bits */
+        reserved: u32; /* 28 bits */;
+    */
 }
 
 StdVideoAV1ColorConfig :: struct {
@@ -15330,8 +15399,11 @@ StdVideoAV1ColorConfig :: struct {
 }
 
 StdVideoAV1TimingInfoFlags :: struct {
-    equal_picture_interval: u32;
-    #place equal_picture_interval; /*bitfield 1*/ reserved:               u32;
+    __bitfield: u32;
+    /* 
+        equal_picture_interval: u32; /* 1 bits */
+        reserved: u32; /* 31 bits */;
+    */
 }
 
 StdVideoAV1TimingInfo :: struct {
@@ -15342,9 +15414,12 @@ StdVideoAV1TimingInfo :: struct {
 }
 
 StdVideoAV1LoopFilterFlags :: struct {
-    loop_filter_delta_enabled: u32;
-    #place loop_filter_delta_enabled; /*bitfield 1*/ loop_filter_delta_update:  u32;
-    #place loop_filter_delta_enabled; /*bitfield 2*/ reserved:                  u32;
+    __bitfield: u32;
+    /* 
+        loop_filter_delta_enabled: u32; /* 1 bits */
+        loop_filter_delta_update: u32; /* 1 bits */
+        reserved: u32; /* 30 bits */;
+    */
 }
 
 StdVideoAV1LoopFilter :: struct {
@@ -15358,9 +15433,12 @@ StdVideoAV1LoopFilter :: struct {
 }
 
 StdVideoAV1QuantizationFlags :: struct {
-    using_qmatrix: u32;
-    #place using_qmatrix; /*bitfield 1*/ diff_uv_delta: u32;
-    #place using_qmatrix; /*bitfield 2*/ reserved:      u32;
+    __bitfield: u32;
+    /* 
+        using_qmatrix: u32; /* 1 bits */
+        diff_uv_delta: u32; /* 1 bits */
+        reserved: u32; /* 30 bits */;
+    */
 }
 
 StdVideoAV1Quantization :: struct {
@@ -15382,8 +15460,11 @@ StdVideoAV1Segmentation :: struct {
 }
 
 StdVideoAV1TileInfoFlags :: struct {
-    uniform_tile_spacing_flag: u32;
-    #place uniform_tile_spacing_flag; /*bitfield 1*/ reserved:                  u32;
+    __bitfield: u32;
+    /* 
+        uniform_tile_spacing_flag: u32; /* 1 bits */
+        reserved: u32; /* 31 bits */;
+    */
 }
 
 StdVideoAV1TileInfo :: struct {
@@ -15419,11 +15500,14 @@ StdVideoAV1GlobalMotion :: struct {
 }
 
 StdVideoAV1FilmGrainFlags :: struct {
-    chroma_scaling_from_luma: u32;
-    #place chroma_scaling_from_luma; /*bitfield 1*/ overlap_flag:             u32;
-    #place chroma_scaling_from_luma; /*bitfield 2*/ clip_to_restricted_range: u32;
-    #place chroma_scaling_from_luma; /*bitfield 3*/ update_grain:             u32;
-    #place chroma_scaling_from_luma; /*bitfield 4*/ reserved:                 u32;
+    __bitfield: u32;
+    /* 
+        chroma_scaling_from_luma: u32; /* 1 bits */
+        overlap_flag: u32; /* 1 bits */
+        clip_to_restricted_range: u32; /* 1 bits */
+        update_grain: u32; /* 1 bits */
+        reserved: u32; /* 28 bits */;
+    */
 }
 
 StdVideoAV1FilmGrain :: struct {
@@ -15455,26 +15539,29 @@ StdVideoAV1FilmGrain :: struct {
 }
 
 StdVideoAV1SequenceHeaderFlags :: struct {
-    still_picture:                      u32;
-    #place still_picture; /*bitfield 1*/ reduced_still_picture_header:       u32;
-    #place still_picture; /*bitfield 2*/ use_128x128_superblock:             u32;
-    #place still_picture; /*bitfield 3*/ enable_filter_intra:                u32;
-    #place still_picture; /*bitfield 4*/ enable_intra_edge_filter:           u32;
-    #place still_picture; /*bitfield 5*/ enable_interintra_compound:         u32;
-    #place still_picture; /*bitfield 6*/ enable_masked_compound:             u32;
-    #place still_picture; /*bitfield 7*/ enable_warped_motion:               u32;
-    #place still_picture; /*bitfield 8*/ enable_dual_filter:                 u32;
-    #place still_picture; /*bitfield 9*/ enable_order_hint:                  u32;
-    #place still_picture; /*bitfield 10*/ enable_jnt_comp:                    u32;
-    #place still_picture; /*bitfield 11*/ enable_ref_frame_mvs:               u32;
-    #place still_picture; /*bitfield 12*/ frame_id_numbers_present_flag:      u32;
-    #place still_picture; /*bitfield 13*/ enable_superres:                    u32;
-    #place still_picture; /*bitfield 14*/ enable_cdef:                        u32;
-    #place still_picture; /*bitfield 15*/ enable_restoration:                 u32;
-    #place still_picture; /*bitfield 16*/ film_grain_params_present:          u32;
-    #place still_picture; /*bitfield 17*/ timing_info_present_flag:           u32;
-    #place still_picture; /*bitfield 18*/ initial_display_delay_present_flag: u32;
-    #place still_picture; /*bitfield 19*/ reserved:                           u32;
+    __bitfield: u32;
+    /* 
+        still_picture: u32; /* 1 bits */
+        reduced_still_picture_header: u32; /* 1 bits */
+        use_128x128_superblock: u32; /* 1 bits */
+        enable_filter_intra: u32; /* 1 bits */
+        enable_intra_edge_filter: u32; /* 1 bits */
+        enable_interintra_compound: u32; /* 1 bits */
+        enable_masked_compound: u32; /* 1 bits */
+        enable_warped_motion: u32; /* 1 bits */
+        enable_dual_filter: u32; /* 1 bits */
+        enable_order_hint: u32; /* 1 bits */
+        enable_jnt_comp: u32; /* 1 bits */
+        enable_ref_frame_mvs: u32; /* 1 bits */
+        frame_id_numbers_present_flag: u32; /* 1 bits */
+        enable_superres: u32; /* 1 bits */
+        enable_cdef: u32; /* 1 bits */
+        enable_restoration: u32; /* 1 bits */
+        film_grain_params_present: u32; /* 1 bits */
+        timing_info_present_flag: u32; /* 1 bits */
+        initial_display_delay_present_flag: u32; /* 1 bits */
+        reserved: u32; /* 13 bits */;
+    */
 }
 
 StdVideoAV1SequenceHeader :: struct {
@@ -15495,36 +15582,39 @@ StdVideoAV1SequenceHeader :: struct {
 }
 
 StdVideoDecodeAV1PictureInfoFlags :: struct {
-    error_resilient_mode:             u32;
-    #place error_resilient_mode; /*bitfield 1*/ disable_cdf_update:               u32;
-    #place error_resilient_mode; /*bitfield 2*/ use_superres:                     u32;
-    #place error_resilient_mode; /*bitfield 3*/ render_and_frame_size_different:  u32;
-    #place error_resilient_mode; /*bitfield 4*/ allow_screen_content_tools:       u32;
-    #place error_resilient_mode; /*bitfield 5*/ is_filter_switchable:             u32;
-    #place error_resilient_mode; /*bitfield 6*/ force_integer_mv:                 u32;
-    #place error_resilient_mode; /*bitfield 7*/ frame_size_override_flag:         u32;
-    #place error_resilient_mode; /*bitfield 8*/ buffer_removal_time_present_flag: u32;
-    #place error_resilient_mode; /*bitfield 9*/ allow_intrabc:                    u32;
-    #place error_resilient_mode; /*bitfield 10*/ frame_refs_short_signaling:       u32;
-    #place error_resilient_mode; /*bitfield 11*/ allow_high_precision_mv:          u32;
-    #place error_resilient_mode; /*bitfield 12*/ is_motion_mode_switchable:        u32;
-    #place error_resilient_mode; /*bitfield 13*/ use_ref_frame_mvs:                u32;
-    #place error_resilient_mode; /*bitfield 14*/ disable_frame_end_update_cdf:     u32;
-    #place error_resilient_mode; /*bitfield 15*/ allow_warped_motion:              u32;
-    #place error_resilient_mode; /*bitfield 16*/ reduced_tx_set:                   u32;
-    #place error_resilient_mode; /*bitfield 17*/ reference_select:                 u32;
-    #place error_resilient_mode; /*bitfield 18*/ skip_mode_present:                u32;
-    #place error_resilient_mode; /*bitfield 19*/ delta_q_present:                  u32;
-    #place error_resilient_mode; /*bitfield 20*/ delta_lf_present:                 u32;
-    #place error_resilient_mode; /*bitfield 21*/ delta_lf_multi:                   u32;
-    #place error_resilient_mode; /*bitfield 22*/ segmentation_enabled:             u32;
-    #place error_resilient_mode; /*bitfield 23*/ segmentation_update_map:          u32;
-    #place error_resilient_mode; /*bitfield 24*/ segmentation_temporal_update:     u32;
-    #place error_resilient_mode; /*bitfield 25*/ segmentation_update_data:         u32;
-    #place error_resilient_mode; /*bitfield 26*/ UsesLr:                           u32;
-    #place error_resilient_mode; /*bitfield 27*/ usesChromaLr:                     u32;
-    #place error_resilient_mode; /*bitfield 28*/ apply_grain:                      u32;
-    #place error_resilient_mode; /*bitfield 29*/ reserved:                         u32;
+    __bitfield: u32;
+    /* 
+        error_resilient_mode: u32; /* 1 bits */
+        disable_cdf_update: u32; /* 1 bits */
+        use_superres: u32; /* 1 bits */
+        render_and_frame_size_different: u32; /* 1 bits */
+        allow_screen_content_tools: u32; /* 1 bits */
+        is_filter_switchable: u32; /* 1 bits */
+        force_integer_mv: u32; /* 1 bits */
+        frame_size_override_flag: u32; /* 1 bits */
+        buffer_removal_time_present_flag: u32; /* 1 bits */
+        allow_intrabc: u32; /* 1 bits */
+        frame_refs_short_signaling: u32; /* 1 bits */
+        allow_high_precision_mv: u32; /* 1 bits */
+        is_motion_mode_switchable: u32; /* 1 bits */
+        use_ref_frame_mvs: u32; /* 1 bits */
+        disable_frame_end_update_cdf: u32; /* 1 bits */
+        allow_warped_motion: u32; /* 1 bits */
+        reduced_tx_set: u32; /* 1 bits */
+        reference_select: u32; /* 1 bits */
+        skip_mode_present: u32; /* 1 bits */
+        delta_q_present: u32; /* 1 bits */
+        delta_lf_present: u32; /* 1 bits */
+        delta_lf_multi: u32; /* 1 bits */
+        segmentation_enabled: u32; /* 1 bits */
+        segmentation_update_map: u32; /* 1 bits */
+        segmentation_temporal_update: u32; /* 1 bits */
+        segmentation_update_data: u32; /* 1 bits */
+        UsesLr: u32; /* 1 bits */
+        usesChromaLr: u32; /* 1 bits */
+        apply_grain: u32; /* 1 bits */
+        reserved: u32; /* 3 bits */;
+    */
 }
 
 StdVideoDecodeAV1PictureInfo :: struct {
@@ -15555,9 +15645,12 @@ StdVideoDecodeAV1PictureInfo :: struct {
 }
 
 StdVideoDecodeAV1ReferenceInfoFlags :: struct {
-    disable_frame_end_update_cdf: u32;
-    #place disable_frame_end_update_cdf; /*bitfield 1*/ segmentation_enabled:         u32;
-    #place disable_frame_end_update_cdf; /*bitfield 2*/ reserved:                     u32;
+    __bitfield: u32;
+    /* 
+        disable_frame_end_update_cdf: u32; /* 1 bits */
+        segmentation_enabled: u32; /* 1 bits */
+        reserved: u32; /* 30 bits */;
+    */
 }
 
 StdVideoDecodeAV1ReferenceInfo :: struct {
@@ -17455,12 +17548,16 @@ VkAabbPositionsKHR :: struct {
 VkAabbPositionsNV :: VkAabbPositionsKHR;
 
 VkAccelerationStructureInstanceKHR :: struct {
-    transform:                              VkTransformMatrixKHR;
-    instanceCustomIndex:                    u32;
-    #place instanceCustomIndex; /*bitfield 24*/ mask:                                   u32;
-    instanceShaderBindingTableRecordOffset: u32;
-    #place instanceShaderBindingTableRecordOffset; /*bitfield 24*/ flags:                                  VkGeometryInstanceFlagsKHR;
-    accelerationStructureReference:         u64;
+    transform:                      VkTransformMatrixKHR;
+    __bitfield:                     [8] u8;
+    /* 
+        instanceCustomIndex: u32; /* 24 bits */
+        mask: u32; /* 8 bits */
+        instanceShaderBindingTableRecordOffset: u32; /* 24 bits */
+        flags: VkGeometryInstanceFlagsKHR; /* 8 bits */;
+    */
+
+    accelerationStructureReference: u64;
 }
 
 VkAccelerationStructureInstanceNV :: VkAccelerationStructureInstanceKHR;
@@ -18111,7 +18208,7 @@ VkHeadlessSurfaceCreateInfoEXT :: struct {
 
 PFN_vkCreateHeadlessSurfaceEXT :: #type (instance: VkInstance, pCreateInfo: *VkHeadlessSurfaceCreateInfoEXT, pAllocator: *VkAllocationCallbacks, pSurface: *VkSurfaceKHR) -> VkResult #c_call;
 
-vkCreateHeadlessSurfaceEXT :: (instance: VkInstance, pCreateInfo: *VkHeadlessSurfaceCreateInfoEXT, pAllocator: *VkAllocationCallbacks, pSurface: *VkSurfaceKHR) -> VkResult #foreign libvulkan;
+vkCreateHeadlessSurfaceEXT :: (instance: VkInstance, pCreateInfo: *VkHeadlessSurfaceCreateInfoEXT, pAllocator: *VkAllocationCallbacks, pSurface: *VkSurfaceKHR) -> VkResult #foreign vulkan_1;
 
 VkLineRasterizationModeEXT :: VkLineRasterizationModeKHR;
 
@@ -19154,13 +19251,17 @@ VkAccelerationStructureMotionInfoNV :: struct {
 }
 
 VkAccelerationStructureMatrixMotionInstanceNV :: struct {
-    transformT0:                            VkTransformMatrixKHR;
-    transformT1:                            VkTransformMatrixKHR;
-    instanceCustomIndex:                    u32;
-    #place instanceCustomIndex; /*bitfield 24*/ mask:                                   u32;
-    instanceShaderBindingTableRecordOffset: u32;
-    #place instanceShaderBindingTableRecordOffset; /*bitfield 24*/ flags:                                  VkGeometryInstanceFlagsKHR;
-    accelerationStructureReference:         u64;
+    transformT0:                    VkTransformMatrixKHR;
+    transformT1:                    VkTransformMatrixKHR;
+    __bitfield:                     [8] u8;
+    /* 
+        instanceCustomIndex: u32; /* 24 bits */
+        mask: u32; /* 8 bits */
+        instanceShaderBindingTableRecordOffset: u32; /* 24 bits */
+        flags: VkGeometryInstanceFlagsKHR; /* 8 bits */;
+    */
+
+    accelerationStructureReference: u64;
 }
 
 VkSRTDataNV :: struct {
@@ -19183,13 +19284,17 @@ VkSRTDataNV :: struct {
 }
 
 VkAccelerationStructureSRTMotionInstanceNV :: struct {
-    transformT0:                            VkSRTDataNV;
-    transformT1:                            VkSRTDataNV;
-    instanceCustomIndex:                    u32;
-    #place instanceCustomIndex; /*bitfield 24*/ mask:                                   u32;
-    instanceShaderBindingTableRecordOffset: u32;
-    #place instanceShaderBindingTableRecordOffset; /*bitfield 24*/ flags:                                  VkGeometryInstanceFlagsKHR;
-    accelerationStructureReference:         u64;
+    transformT0:                    VkSRTDataNV;
+    transformT1:                    VkSRTDataNV;
+    __bitfield:                     [8] u8;
+    /* 
+        instanceCustomIndex: u32; /* 24 bits */
+        mask: u32; /* 8 bits */
+        instanceShaderBindingTableRecordOffset: u32; /* 24 bits */
+        flags: VkGeometryInstanceFlagsKHR; /* 8 bits */;
+    */
+
+    accelerationStructureReference: u64;
 }
 
 VkAccelerationStructureMotionInstanceDataNV :: union {
@@ -21576,7 +21681,7 @@ PFN_vkCmdDrawMeshTasksIndirectCountEXT :: #type (commandBuffer: VkCommandBuffer,
 
 #scope_file
 
-libvulkan :: #library "win/vulkan-1";
+vulkan_1 :: #library "win/vulkan-1";
 
 #import "Basic";
 
@@ -21584,7 +21689,7 @@ libvulkan :: #library "win/vulkan-1";
 
 // Enumeration helpers
 
-vkEnumeratePhysicalDevices :: (instance: VkInstance) -> [] VkPhysicalDevice, VkResult #must {
+vkEnumeratePhysicalDevices :: (instance: VkInstance) -> [] VkPhysicalDevice, VkResult {
     count: u32;
     data: [] VkPhysicalDevice;
     result: VkResult;
@@ -21606,7 +21711,7 @@ vkGetPhysicalDeviceQueueFamilyProperties :: (physicalDevice: VkPhysicalDevice) -
     return data;
 }
 
-vkEnumerateInstanceExtensionProperties :: (pLayerName: *u8) -> [] VkExtensionProperties, VkResult #must {
+vkEnumerateInstanceExtensionProperties :: (pLayerName: *u8) -> [] VkExtensionProperties, VkResult {
     count: u32;
     data: [] VkExtensionProperties;
     result: VkResult;
@@ -21618,7 +21723,7 @@ vkEnumerateInstanceExtensionProperties :: (pLayerName: *u8) -> [] VkExtensionPro
     return data, result;
 }
 
-vkEnumerateDeviceExtensionProperties :: (physicalDevice: VkPhysicalDevice, pLayerName: *u8) -> [] VkExtensionProperties, VkResult #must {
+vkEnumerateDeviceExtensionProperties :: (physicalDevice: VkPhysicalDevice, pLayerName: *u8) -> [] VkExtensionProperties, VkResult {
     count: u32;
     data: [] VkExtensionProperties;
     result: VkResult;
@@ -21630,7 +21735,7 @@ vkEnumerateDeviceExtensionProperties :: (physicalDevice: VkPhysicalDevice, pLaye
     return data, result;
 }
 
-vkEnumerateInstanceLayerProperties :: () -> [] VkLayerProperties, VkResult #must {
+vkEnumerateInstanceLayerProperties :: () -> [] VkLayerProperties, VkResult {
     count: u32;
     data: [] VkLayerProperties;
     result: VkResult;
@@ -21642,7 +21747,7 @@ vkEnumerateInstanceLayerProperties :: () -> [] VkLayerProperties, VkResult #must
     return data, result;
 }
 
-vkEnumerateDeviceLayerProperties :: (physicalDevice: VkPhysicalDevice) -> [] VkLayerProperties, VkResult #must {
+vkEnumerateDeviceLayerProperties :: (physicalDevice: VkPhysicalDevice) -> [] VkLayerProperties, VkResult {
     count: u32;
     data: [] VkLayerProperties;
     result: VkResult;
@@ -21674,7 +21779,7 @@ vkGetPhysicalDeviceSparseImageFormatProperties :: (physicalDevice: VkPhysicalDev
     return data;
 }
 
-vkEnumeratePhysicalDeviceGroups :: (instance: VkInstance) -> [] VkPhysicalDeviceGroupProperties, VkResult #must {
+vkEnumeratePhysicalDeviceGroups :: (instance: VkInstance) -> [] VkPhysicalDeviceGroupProperties, VkResult {
     count: u32;
     data: [] VkPhysicalDeviceGroupProperties;
     result: VkResult;
@@ -21716,7 +21821,7 @@ vkGetPhysicalDeviceSparseImageFormatProperties2 :: (physicalDevice: VkPhysicalDe
     return data;
 }
 
-vkGetPhysicalDeviceToolProperties :: (physicalDevice: VkPhysicalDevice) -> [] VkPhysicalDeviceToolProperties, VkResult #must {
+vkGetPhysicalDeviceToolProperties :: (physicalDevice: VkPhysicalDevice) -> [] VkPhysicalDeviceToolProperties, VkResult {
     count: u32;
     data: [] VkPhysicalDeviceToolProperties;
     result: VkResult;
@@ -21738,7 +21843,7 @@ vkGetDeviceImageSparseMemoryRequirements :: (device: VkDevice, pInfo: *VkDeviceI
     return data;
 }
 
-vkGetPhysicalDeviceSurfaceFormatsKHR :: (physicalDevice: VkPhysicalDevice, surface: VkSurfaceKHR) -> [] VkSurfaceFormatKHR, VkResult #must {
+vkGetPhysicalDeviceSurfaceFormatsKHR :: (physicalDevice: VkPhysicalDevice, surface: VkSurfaceKHR) -> [] VkSurfaceFormatKHR, VkResult {
     count: u32;
     data: [] VkSurfaceFormatKHR;
     result: VkResult;
@@ -21750,7 +21855,7 @@ vkGetPhysicalDeviceSurfaceFormatsKHR :: (physicalDevice: VkPhysicalDevice, surfa
     return data, result;
 }
 
-vkGetPhysicalDeviceSurfacePresentModesKHR :: (physicalDevice: VkPhysicalDevice, surface: VkSurfaceKHR) -> [] VkPresentModeKHR, VkResult #must {
+vkGetPhysicalDeviceSurfacePresentModesKHR :: (physicalDevice: VkPhysicalDevice, surface: VkSurfaceKHR) -> [] VkPresentModeKHR, VkResult {
     count: u32;
     data: [] VkPresentModeKHR;
     result: VkResult;
@@ -21762,7 +21867,7 @@ vkGetPhysicalDeviceSurfacePresentModesKHR :: (physicalDevice: VkPhysicalDevice, 
     return data, result;
 }
 
-vkGetSwapchainImagesKHR :: (device: VkDevice, swapchain: VkSwapchainKHR) -> [] VkImage, VkResult #must {
+vkGetSwapchainImagesKHR :: (device: VkDevice, swapchain: VkSwapchainKHR) -> [] VkImage, VkResult {
     count: u32;
     data: [] VkImage;
     result: VkResult;
@@ -21774,7 +21879,7 @@ vkGetSwapchainImagesKHR :: (device: VkDevice, swapchain: VkSwapchainKHR) -> [] V
     return data, result;
 }
 
-vkGetPhysicalDevicePresentRectanglesKHR :: (physicalDevice: VkPhysicalDevice, surface: VkSurfaceKHR) -> [] VkRect2D, VkResult #must {
+vkGetPhysicalDevicePresentRectanglesKHR :: (physicalDevice: VkPhysicalDevice, surface: VkSurfaceKHR) -> [] VkRect2D, VkResult {
     count: u32;
     data: [] VkRect2D;
     result: VkResult;
@@ -21786,7 +21891,7 @@ vkGetPhysicalDevicePresentRectanglesKHR :: (physicalDevice: VkPhysicalDevice, su
     return data, result;
 }
 
-vkGetPhysicalDeviceDisplayPropertiesKHR :: (physicalDevice: VkPhysicalDevice) -> [] VkDisplayPropertiesKHR, VkResult #must {
+vkGetPhysicalDeviceDisplayPropertiesKHR :: (physicalDevice: VkPhysicalDevice) -> [] VkDisplayPropertiesKHR, VkResult {
     count: u32;
     data: [] VkDisplayPropertiesKHR;
     result: VkResult;
@@ -21798,7 +21903,7 @@ vkGetPhysicalDeviceDisplayPropertiesKHR :: (physicalDevice: VkPhysicalDevice) ->
     return data, result;
 }
 
-vkGetPhysicalDeviceDisplayPlanePropertiesKHR :: (physicalDevice: VkPhysicalDevice) -> [] VkDisplayPlanePropertiesKHR, VkResult #must {
+vkGetPhysicalDeviceDisplayPlanePropertiesKHR :: (physicalDevice: VkPhysicalDevice) -> [] VkDisplayPlanePropertiesKHR, VkResult {
     count: u32;
     data: [] VkDisplayPlanePropertiesKHR;
     result: VkResult;
@@ -21810,7 +21915,7 @@ vkGetPhysicalDeviceDisplayPlanePropertiesKHR :: (physicalDevice: VkPhysicalDevic
     return data, result;
 }
 
-vkGetDisplayPlaneSupportedDisplaysKHR :: (physicalDevice: VkPhysicalDevice, planeIndex: u32) -> [] VkDisplayKHR, VkResult #must {
+vkGetDisplayPlaneSupportedDisplaysKHR :: (physicalDevice: VkPhysicalDevice, planeIndex: u32) -> [] VkDisplayKHR, VkResult {
     count: u32;
     data: [] VkDisplayKHR;
     result: VkResult;
@@ -21822,7 +21927,7 @@ vkGetDisplayPlaneSupportedDisplaysKHR :: (physicalDevice: VkPhysicalDevice, plan
     return data, result;
 }
 
-vkGetDisplayModePropertiesKHR :: (physicalDevice: VkPhysicalDevice, display: VkDisplayKHR) -> [] VkDisplayModePropertiesKHR, VkResult #must {
+vkGetDisplayModePropertiesKHR :: (physicalDevice: VkPhysicalDevice, display: VkDisplayKHR) -> [] VkDisplayModePropertiesKHR, VkResult {
     count: u32;
     data: [] VkDisplayModePropertiesKHR;
     result: VkResult;
@@ -21834,7 +21939,7 @@ vkGetDisplayModePropertiesKHR :: (physicalDevice: VkPhysicalDevice, display: VkD
     return data, result;
 }
 
-vkGetPhysicalDeviceDisplayProperties2KHR :: (physicalDevice: VkPhysicalDevice) -> [] VkDisplayProperties2KHR, VkResult #must {
+vkGetPhysicalDeviceDisplayProperties2KHR :: (physicalDevice: VkPhysicalDevice) -> [] VkDisplayProperties2KHR, VkResult {
     count: u32;
     data: [] VkDisplayProperties2KHR;
     result: VkResult;
@@ -21846,7 +21951,7 @@ vkGetPhysicalDeviceDisplayProperties2KHR :: (physicalDevice: VkPhysicalDevice) -
     return data, result;
 }
 
-vkGetPhysicalDeviceDisplayPlaneProperties2KHR :: (physicalDevice: VkPhysicalDevice) -> [] VkDisplayPlaneProperties2KHR, VkResult #must {
+vkGetPhysicalDeviceDisplayPlaneProperties2KHR :: (physicalDevice: VkPhysicalDevice) -> [] VkDisplayPlaneProperties2KHR, VkResult {
     count: u32;
     data: [] VkDisplayPlaneProperties2KHR;
     result: VkResult;
@@ -21858,7 +21963,7 @@ vkGetPhysicalDeviceDisplayPlaneProperties2KHR :: (physicalDevice: VkPhysicalDevi
     return data, result;
 }
 
-vkGetDisplayModeProperties2KHR :: (physicalDevice: VkPhysicalDevice, display: VkDisplayKHR) -> [] VkDisplayModeProperties2KHR, VkResult #must {
+vkGetDisplayModeProperties2KHR :: (physicalDevice: VkPhysicalDevice, display: VkDisplayKHR) -> [] VkDisplayModeProperties2KHR, VkResult {
     count: u32;
     data: [] VkDisplayModeProperties2KHR;
     result: VkResult;

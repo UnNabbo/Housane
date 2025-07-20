@@ -69,7 +69,7 @@ main :: () {
 				case .QUIT;
 					window.running = false;
 				case .RESIZE;
-					render_resize(window.width, window.height);
+					render_resize(xx window.width, xx window.height);
 			}
 		}
 		if window.width != 0 && window.height != 0 then render_next_frame();
