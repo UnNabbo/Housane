@@ -34,10 +34,8 @@ get_gltf_attribute_data :: (data: *cgltf_primitive, name: string)-> *void, u64, 
 
 load_gltf_file :: (arena: *Arena, path: string) -> [] *Mesh {
 	meshes: [..]*Mesh;
-
 	ATTRIBUTES_COUNT :: 3;
 	attributes : [ATTRIBUTES_COUNT]string = .["POSITION", "NORMAL", "TEXCOORD_0"];
-	
 	options: cgltf_options;
 	file_data: *cgltf_data;
 	result := cgltf_parse_file(*options, path.data, *file_data);

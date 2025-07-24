@@ -39,7 +39,7 @@ allocate_mesh_on_gpu :: (vertices: *Vertex, vertices_count: s64, indices: *u32, 
 	mesh.index  = allocate_gpu_buffer(*allocator, raw_indices_size, .INDEX | .TRANSFER_DST,.GPU_ONLY);
 	mesh.address = get_buffer_device_address(mesh.vertex);
 
-	staging := allocate_gpu_buffer(*allocator, raw_indices_size + raw_vertices_size, .TRANSFER_SRC, .CPU_ONLY);
+	staging := allocate_gpu_buffer(*allocator, raw_indices_size + raw_vertices_size, .TRANSFER_SRC, .CPU_TO_GPU);
 	data := staging.info.pMappedData;
 	memcpy(data, vertices, raw_vertices_size);
 	memcpy(data + raw_vertices_size, indices, raw_indices_size);
@@ -116,8 +116,8 @@ render_resize ::(width: s32, height: s32){
 	using render_data;
 	
 	if swapchain.handle != NULL_HANDLE{
-		destroy_swapchain(*swapchain);
-		swapchain = create_swapchain(*device, *instance.surface, .MAILBOX, width, height);
+		//destroy_swapchain(*swapchain);
+		swapchain = create_swapchain(*device, *instance.surface, .MAILBOX, width, height, swapchain);
 	}
 	
 	render_next_frame();
@@ -220,7 +220,7 @@ render_next_frame :: (){
 	draw_width, draw_height : u32 = xx window.width, xx  window.height;
 		
 	transition_image_layout_command(frame.buffer, *backbuffer, .GENERAL);
-	clear_image_command(frame.buffer, backbuffer, .{0, 0, 255, 255});
+	clear_image_command(frame.buffer, backbuffer, .{6, 6, 6, 255});
 
 	transition_image_layout_command(frame.buffer, *backbuffer, .COLOR_ATTACHMENT_OPTIMAL);
 	transition_image_layout_command(frame.buffer, *depth_buffer, .DEPTH_ATTACHMENT_OPTIMAL);

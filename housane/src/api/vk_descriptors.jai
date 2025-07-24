@@ -56,7 +56,9 @@ Descriptor_Set :: struct{
 	layout: Descriptor_Set_Layout;
 }
 
-create_descriptor_write_queue :: (device: *Device, size: u64 = 32768) -> Descriptor_Write_Queue{
+create_descriptor_write_queue :: (
+
+	device: *Device, size: u64 = 32768) -> Descriptor_Write_Queue{
 	queue: Descriptor_Write_Queue;
 	queue.memory = arena_alloc();
 	queue.device = device;

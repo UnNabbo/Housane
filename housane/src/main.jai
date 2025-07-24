@@ -32,7 +32,7 @@
 nlogger :: (message: string, data: *void, info: Log_Info)
 {
 	#if BUILD_TYPE == .RELEASE then return;
-	if info.common_flags == .VERBOSE_ONLY && context.log_level != .VERBOSE then return;
+	if info.common_flags == .VERBOSE_ONLY && context.log_level != .VERBOSE then return; 
 	if info.common_flags == .VERY_VERBOSE_ONLY && context.log_level != .VERY_VERBOSE then return;
 
 		
@@ -60,8 +60,6 @@ main :: () {
 	//NOTE: LET IT LEAK!!
 	//defer destroy_window(window);
 	//defer render_deinit();
-
-
 	
 	while window.running{
 		for event : fetch_window_events(window){
@@ -74,6 +72,6 @@ main :: () {
 		}
 		if window.width != 0 && window.height != 0 then render_next_frame();
 	};
-
+	
 	
 }

@@ -144,7 +144,6 @@ create_instance :: (window_handle: * void) -> Instance	 {
 	for physical_device : devices{
 		device_properties: VkPhysicalDeviceProperties;
 		vkGetPhysicalDeviceProperties(physical_device, *device_properties);
-
 		if device_properties.apiVersion < VK_API_VERSION_1_3 then continue;
 		
 		device_features: VkPhysicalDeviceFeatures;
@@ -329,15 +328,9 @@ destroy_device :: (device: *Device){
 	vkDestroyDevice(device, null);
 }
 
-resize_swapcahin :: (swapchain: *Swapchain, width: s32, height: s32) {
-	for * swapchain.images{
-		it.extent = .{xx width, xx height, 1};
-	}
-}
 
 create_swapchain :: (device: * Device, surface: * Surface, present_mode: Swap_Chain_Present_Mode, width: s32, height: s32, old_handle: VkSwapchainKHR = VK_NULL_HANDLE) -> Swapchain {
 	
-
 	swapchain: Swapchain;
 	swapchain.device = device;
 	swapchain.surface =surface;
@@ -366,9 +359,14 @@ create_swapchain :: (device: * Device, surface: * Surface, present_mode: Swap_Ch
 	swapchain_create_info.clipped = VK_TRUE;
 	swapchain_create_info.oldSwapchain = old_handle;
 
-	// MIN_BIT_EXT            :: 0x1;
-    // MAX_BIT_EXT            :: 0x2;
-    // CENTERED_BIT_EXT       :: 0x4;
+	// // MIN_BIT_EXT            :: 0x1;
+    // // MAX_BIT_EXT            :: 0x2;
+    // // CENTERED_BIT_EXT       :: 0x4;
+	//     ONE_TO_ONE_BIT_EXT           :: 0x1;
+    // ASPECT_RATIO_STRETCH_BIT_EXT :: 0x2;
+    // STRETCH_BIT_EXT              :: 0x4;
+    // FLAG_BITS_MAX_ENUM_EXT       :: 0x7fffffff;
+
 	scaling :VkSwapchainPresentScalingCreateInfoEXT;
 	scaling.scalingBehavior = .STRETCH_BIT_EXT;
 	scaling.presentGravityX = .MIN_BIT_EXT;
