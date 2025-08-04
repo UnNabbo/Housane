@@ -1,3 +1,6 @@
 [submodule "modules/tracy"]
 	path = modules/tracy
 	url = https://github.com/rluba/jai-tracy
+[submodule "modules/jai-sdl3"]
+	path = modules/jai-sdl3
+	url = https://github.com/overlord-systems/jai-sdl3.git

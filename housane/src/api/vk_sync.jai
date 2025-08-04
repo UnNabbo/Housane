@@ -3,12 +3,12 @@ Fence :: struct{
 	device: *Device;
 };
 
-Semaphore :: struct{
+GPU_Semaphore :: struct{
 	#as handle: VkSemaphore;
 	device: *Device;
 };
 
-create_fence :: (device: *Device, signaled: bool, deletion_queue: *Deletion_Queue = null) -> Fence{
+create_fence :: (device: *Device, signaled: bool) -> Fence{
 	fence: Fence;
 	fence.device = device;
 	
@@ -16,7 +16,6 @@ create_fence :: (device: *Device, signaled: bool, deletion_queue: *Deletion_Queu
     info.flags = ifx signaled then VkFenceCreateFlagBits.SIGNALED_BIT;
 	
 	vk_assert(vkCreateFence(device, *info, null, *fence.handle));
-	Deletion_Queue.push(deletion_queue, fence);
 	
 	return fence;
 }
@@ -25,18 +24,17 @@ destroy_fence :: (fence: *Fence){
 	vkDestroyFence(fence.device, fence, null);
 }
 
-create_semaphore :: (device: *Device, deletion_queue: *Deletion_Queue = null/*, flags: <type>*/) -> Semaphore{
-	semaphore: Semaphore;
+create_semaphore :: (device: *Device/*, flags: <type>*/) -> GPU_Semaphore{
+	semaphore: GPU_Semaphore;
 	semaphore.device = device;
 	
 	info: VkSemaphoreCreateInfo;
     //info.flags = flags;
 	vk_assert(vkCreateSemaphore(device, *info, null, *semaphore.handle));
-	Deletion_Queue.push(deletion_queue, semaphore);
     return semaphore;
 }
 
-destroy_semaphore :: (semaphore: *Semaphore){
+destroy_semaphore :: (semaphore: *GPU_Semaphore){
 	vkDestroySemaphore(semaphore.device, semaphore, null);
 }
 

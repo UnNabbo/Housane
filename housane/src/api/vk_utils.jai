@@ -4,17 +4,6 @@ Image_Subresource_Range :: VkImageSubresourceRange;
 
 vk_assert :: val => assert(val == .SUCCESS);
 
-Deletion_Queue :: struct {#insert #run __generate_deletion_queue_body(
-		Fence,
-		Pipeline,
-		Semaphore,
-		Command_Buffer,
-		Descriptor_Allocator,
-		Vulkan_Memory_Allocator
-);}
-
-
-
 get_instance_proc_add :: (inst: VkInstance, entry: string) #expand {
 	#insert #run tprint("`% : PFN_% = xx vkGetInstanceProcAddr(inst, \"%\");", entry, entry, entry);
 }
@@ -45,3 +34,13 @@ image_attachment_info :: (image: Image, clear: bool = false) -> VkRenderingAttac
 
 	return attachment;
 }
+
+SDL_Vulkan_CreateSurface :: (window: *SDL_Window, instance: VkInstance, allocator: *VkAllocationCallbacks, surface: *VkSurfaceKHR) -> bool #foreign libsdl3;
+
+SDL_Vulkan_DestroySurface :: (instance: VkInstance, surface: VkSurfaceKHR, allocator: *VkAllocationCallbacks) -> void #foreign libsdl3;
+ 
+SDL_Vulkan_GetPresentationSupport :: (instance: VkInstance, physicalDevice: VkPhysicalDevice, queueFamilyIndex: Uint32) -> bool #foreign libsdl3;
+
+#scope_file
+
+libsdl3 :: #library "../../../modules/jai-sdl3/libSDL3";

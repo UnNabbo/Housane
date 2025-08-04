@@ -497,7 +497,7 @@ deallocate_image :: (image: *Image){
 	vmaDestroyImage(image.allocation.allocator, image, image.allocation);
 }
 
-create_vulkan_memory_allocator :: (instance: Instance, device: *Device, deletion_queue: *Deletion_Queue = null) -> Vulkan_Memory_Allocator{
+create_vulkan_memory_allocator :: (instance: Instance, device: *Device) -> Vulkan_Memory_Allocator{
 	allocator: Vulkan_Memory_Allocator;
 
 	allocator.device = device;
@@ -508,7 +508,6 @@ create_vulkan_memory_allocator :: (instance: Instance, device: *Device, deletion
     allocator_info.instance = instance;
     allocator_info.flags = .BUFFER_DEVICE_ADDRESS_BIT;
     vmaCreateAllocator(*allocator_info, *allocator.handle);
-	Deletion_Queue.push(deletion_queue, allocator);
 	return allocator;
 }
 

@@ -72,7 +72,7 @@ Pipeline :: struct {
 	usage: Pipeline_Usage = .GRAPHICS;
 }
 
-create_pipeline :: (device: *Device, info: Pipeline_Info, shader: *Shader, deletion_queue: *Deletion_Queue = null) -> Pipeline{
+create_pipeline :: (device: *Device, info: Pipeline_Info, shader: *Shader) -> Pipeline{
 	pipeline: Pipeline;
 	
 	input_assembly: VkPipelineInputAssemblyStateCreateInfo;
@@ -184,8 +184,6 @@ create_pipeline :: (device: *Device, info: Pipeline_Info, shader: *Shader, delet
 
 	vkCreateGraphicsPipelines(device, VK_NULL_HANDLE, 1, *pipeline_info, null, *pipeline.handle);
 
-	Deletion_Queue.push(deletion_queue, pipeline);
-	
 	return pipeline;
 }
 

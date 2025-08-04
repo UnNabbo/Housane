@@ -5,7 +5,7 @@ Command_Buffer :: struct{
 	device: *Device;
 }
 
-create_command_buffer :: (device: Device, queue_family: Device_Queue, deletion_queue: *Deletion_Queue = null) -> Command_Buffer{
+create_command_buffer :: (device: Device, queue_family: Device_Queue) -> Command_Buffer{
 	command_buffer: Command_Buffer;
 
 	command_buffer.device = *device;
@@ -23,7 +23,6 @@ create_command_buffer :: (device: Device, queue_family: Device_Queue, deletion_q
 
 	vk_assert(vkAllocateCommandBuffers(device, *command_buffer_info, *command_buffer.handle));
 	
-	Deletion_Queue.push(deletion_queue, command_buffer);
 	return command_buffer;
 }
 
@@ -78,7 +77,7 @@ end_command_recording :: (command_buffer: Command_Buffer){
 	vk_assert(vkEndCommandBuffer(command_buffer));
 }
 
-submit_command_buffer :: (command_buffer: Command_Buffer, queue: VkQueue, fence: *Fence, wait_semaphore: *Semaphore = null,  signal_semaphore: *Semaphore = null){
+submit_command_buffer :: (command_buffer: Command_Buffer, queue: VkQueue, fence: *Fence, wait_semaphore: *GPU_Semaphore = null,  signal_semaphore: *GPU_Semaphore = null){
 	buffer_info: VkCommandBufferSubmitInfo;
 	buffer_info.commandBuffer = command_buffer;
 

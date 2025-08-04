@@ -150,3 +150,49 @@ arena_pop :: (arena: *Arena, amt: u64) {
 arena_clear :: (arena: *Arena){
 	arena_pop_to(arena, 0);
 }
+
+
+arena_allocator_proc :: (mode: Allocator_Mode, requested_size: s64, old_size: s64, old_memory: *void, allocator_data: *void) -> *void {
+    if #complete mode == {
+		case .FREE;
+			return null;
+		case .RESIZE; #through;
+		case .ALLOCATE;
+			arena := cast(*Arena, allocator_data);
+			assert(arena != null);
+			result := arena_push(arena, xx requested_size);
+			return result;
+        
+		case .STARTUP;      #through;
+		case .SHUTDOWN; 
+			return null;
+
+		case .THREAD_START; #through;
+		case .THREAD_STOP;
+			assert(false, "Multithreaded access is not supported by arena_allocator_proc.\n");
+			return null;
+
+		case .CREATE_HEAP; #through;
+		case .DESTROY_HEAP;
+			assert(false, "Create/Destroy heap are not supported by arena_allocator_proc\n");
+			return null;
+
+		case .IS_THIS_YOURS;
+			current := cast(*Arena, allocator_data);
+			prev: *Arena;
+			while current{
+				prev = current.previous;
+				if (old_memory >= current) && (old_memory <= cast(*u8, current) + current.commit) then return cast(*void, 1);
+				current = prev;
+			}
+        
+			return null;
+
+		case .CAPS;
+			if old_memory { <<cast(*string)old_memory = CAPS_VERSION_STRING; }
+			return cast(*void)(Allocator_Caps.HINT_I_AM_A_FAST_BUMP_ALLOCATOR | .IS_THIS_YOURS);
+    }
+}
+
+
+CAPS_VERSION_STRING :: "housane/Arena";

@@ -1,3 +1,4 @@
+
 Buffer_Push_Constants :: struct {
 	world:   Mat4 = Matrix4_Identity;
 	address: Buffer_Device_Address;
@@ -30,7 +31,6 @@ Scene_Data :: struct {
 
 allocate_mesh_on_gpu :: (vertices: *Vertex, vertices_count: s64, indices: *u32, indices_count: s64) -> Mesh_Buffer{
 	using,except(mesh) render_data;
-	
 	raw_vertices_size := vertices_count * size_of(Vertex);
 	raw_indices_size  := indices_count * size_of(u32);
 
@@ -114,7 +114,8 @@ immediate_command_recording_end :: () {
 
 render_resize ::(width: s32, height: s32){
 	using render_data;
-	
+	window_width = width;
+	window_height = height;
 	if swapchain.handle != NULL_HANDLE{
 		//destroy_swapchain(*swapchain);
 		swapchain = create_swapchain(*device, *instance.surface, .MAILBOX, width, height, swapchain);
@@ -123,19 +124,19 @@ render_resize ::(width: s32, height: s32){
 	render_next_frame();
 }
 
-render_init :: (window: *Window){
-	using,except(window) render_data;
-	render_data.window = window;
+render_init :: (window_handle: *void){
+	using render_data;
+	SDL_GetWindowSize(xx window_handle, *window_width, *window_height);
 	
-	instance = create_instance(window.handle); 
+	instance = create_instance(window_handle, window_width, window_height); 
 	device = create_device(*instance.physical_device);
-    swapchain = create_swapchain(*device, *instance.surface, .MAILBOX, window.width, window.height);
+    swapchain = create_swapchain(*device, *instance.surface, .MAILBOX, window_width, window_height);
 	
 	for * frames {
-		it.buffer = create_command_buffer(*device, .GRAPHIC_PRESENT, *deletion_queue);
-		it.fence = create_fence(*device, true, *deletion_queue);
-		it.swapchain_semaphore = create_semaphore(*device, *deletion_queue);
-		it.render_semaphore = create_semaphore(*device, *deletion_queue);
+		it.buffer = create_command_buffer(*device, .GRAPHIC_PRESENT);
+		it.fence = create_fence(*device, true);
+		it.swapchain_semaphore = create_semaphore(*device);
+		it.render_semaphore = create_semaphore(*device);
 		it.descriptor_allocator = create_descriptor_allocator(*device,
 															  .{ .STORAGE_IMAGE, 3 },
 															  .{ .STORAGE_BUFFER, 3 },
@@ -147,8 +148,8 @@ render_init :: (window: *Window){
 	allocator = create_vulkan_memory_allocator(instance, *device);
 	descriptor_allocator = create_descriptor_allocator(*device, .{.STORAGE_IMAGE, 1});
 	
-	immediate_buffer = create_command_buffer(*device, .GRAPHIC_PRESENT, *deletion_queue);
-	immediate_fence = create_fence(*device, true, *deletion_queue);
+	immediate_buffer = create_command_buffer(*device, .GRAPHIC_PRESENT);
+	immediate_fence = create_fence(*device, true);
 
 	backbuffer = allocate_image(*allocator, IMAGE_DEFAULT_WIDTH, IMAGE_DEFAULT_HEIGHT, .TRANSFER_SRC | .TRANSFER_DST | .STORAGE | .COLOR_ATTACHMENT);
 	depth_buffer = allocate_image(*allocator, IMAGE_DEFAULT_WIDTH, IMAGE_DEFAULT_HEIGHT, .DEPTH_STENCIL_ATTACHMENT, .D32_SFLOAT);
@@ -156,9 +157,9 @@ render_init :: (window: *Window){
 	pipeline_info:  Pipeline_Info;
 	pipeline_info.color_attachment_format = backbuffer.format;
 	pipeline_info.depth_attachment_format = depth_buffer.format;
-	vertex_shader_module := create_shader_module(device, .VERTEX, "housane/res/shader_vertex.sprv", Buffer_Push_Constants);
+	vertex_shader_module := create_shader_module(device, .VERTEX, "../../housane/res/shader_vertex.sprv", Buffer_Push_Constants);
 	defer destroy_shader_module(device, vertex_shader_module);
-	fragment_shader_module := create_shader_module(device, .FRAGMENT, "housane/res/shader_frag.sprv");
+	fragment_shader_module := create_shader_module(device, .FRAGMENT, "../../housane/res/shader_frag.sprv");
 	defer destroy_shader_module(device, fragment_shader_module);
 
 
@@ -177,7 +178,7 @@ render_init :: (window: *Window){
 	arena := arena_alloc();
 	//monkey := load_gltf_file(arena, "housane/res/models/monkey.glb")[0].buffer;
 	
-	mesh = load_gltf_file(arena, "housane/res/models/monkey.glb")[0];//TODO: destroy
+	mesh = load_gltf_file(arena, "../../housane/res/models/monkey.glb")[0];//TODO: destroy
 	//mesh.buffer = allocate_mesh_on_gpu(vertices, indices);
 	//mesh.indices_count = 6;
 	texture_data : [16][16][4]u8;
@@ -197,11 +198,13 @@ render_init :: (window: *Window){
 render_deinit :: (){
 	using render_data;
 	
-	for 0..Frame_Data.OVERLAP - 1 {
-		Deletion_Queue.flush(*frames[it].deletion_queue);
+	for * frames {
+		it.buffer;
+		it.fence;
+		it.swapchain_semaphore;
+		it.render_semaphore;
+		it.descriptor_allocator;
 	}
-
-	Deletion_Queue.flush(*deletion_queue);
 
 	deallocate_gpu_buffer(*scene.buffer);
 }
@@ -212,12 +215,11 @@ render_next_frame :: (){
 	defer frame_count += 1;
 
 	wait_and_reset_fence(frame.fence);
-	Deletion_Queue.flush(*frame.deletion_queue);
 	clear_descriptor_allocator(*frame.descriptor_allocator);
 	image, index, should_resize := acquire_image_from_swapchain(swapchain, frame.swapchain_semaphore);
 	begin_command_recording(frame.buffer);
 
-	draw_width, draw_height : u32 = xx window.width, xx  window.height;
+	draw_width, draw_height : u32 = xx window_width, xx  window_height;
 		
 	transition_image_layout_command(frame.buffer, *backbuffer, .GENERAL);
 	clear_image_command(frame.buffer, backbuffer, .{6, 6, 6, 255});
@@ -264,8 +266,8 @@ render_data: Render_Data;
 
 Render_Data :: struct{
 	IMAGE_DEFAULT_WIDTH, IMAGE_DEFAULT_HEIGHT :: 2560, 1440;
-	
-	window: *Window;
+
+	window_width, window_height: s32;
 	
 	instance: Instance;
 	device: Device;
@@ -294,17 +296,14 @@ Render_Data :: struct{
 	write_queue: Descriptor_Write_Queue;
 	
 	frames : [Frame_Data.OVERLAP]Frame_Data;
-	deletion_queue: Deletion_Queue;
 }
 
 Frame_Data :: struct {
 	OVERLAP :: 2;
 	
-	swapchain_semaphore, render_semaphore: Semaphore;
+	swapchain_semaphore, render_semaphore: GPU_Semaphore;
 	fence: Fence;
 	buffer: Command_Buffer; 
-
 	
-	deletion_queue: Deletion_Queue;
 	descriptor_allocator: Descriptor_Allocator;
 }

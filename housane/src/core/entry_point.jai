@@ -1,9 +1,6 @@
 #load "win32.jai";
 
 
-f32 :: float32;
-new :: New;
-
 service_window: *void;
 main_thread_id: s32;
 

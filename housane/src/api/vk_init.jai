@@ -52,8 +52,28 @@ Instance :: struct{
 	}
 }
 
+create_surface :: (instance: *Instance, window: *void) {
+	assert(SDL_Vulkan_CreateSurface(window, instance.handle, null, *instance.surface.handle));
+}
+	
+get_extensions :: () -> []*u8 {
+	sdl_count: u32;
+	sdl_extension := SDL_Vulkan_GetInstanceExtensions(*sdl_count);
+	extensions : [..]*u8;
+	extensions.allocator = temp;
+	
+	for 0..sdl_count - 1 {
+		array_add(*extensions, sdl_extension[it]);
+	}
+	array_add(*extensions, VK_EXT_SURFACE_MAINTENANCE_1_EXTENSION_NAME, VK_KHR_GET_SURFACE_CAPABILITIES_2_EXTENSION_NAME);
+	#if BUILD_TYPE != .RELEASE{
+		array_add(*extensions, VK_EXT_DEBUG_UTILS_EXTENSION_NAME);
+	}
+	return extensions;
+}
 
-create_instance :: (window_handle: * void) -> Instance	 {
+
+create_instance :: (window_handle: * void, width: s32, height: s32) -> Instance	 {
 	instance: Instance;
 	
 	app_info: VkApplicationInfo;
@@ -66,15 +86,7 @@ create_instance :: (window_handle: * void) -> Instance	 {
 	instance_info: VkInstanceCreateInfo;
 	instance_info.pApplicationInfo = *app_info;
 
-	//TODO MAYBE CHECK FOR SUPPORT
-	#if BUILD_TYPE != .RELEASE{
-		extensions: []* u8 = .[
-		VK_KHR_SURFACE_EXTENSION_NAME, VK_KHR_WIN32_SURFACE_EXTENSION_NAME, VK_EXT_SURFACE_MAINTENANCE_1_EXTENSION_NAME, VK_KHR_GET_SURFACE_CAPABILITIES_2_EXTENSION_NAME, VK_EXT_DEBUG_UTILS_EXTENSION_NAME];
-	}else{
-		EXTENSIONS: []* u8 = .[
-		VK_KHR_SURFACE_EXTENSION_NAME, VK_EXT_SURFACE_MAINTENANCE_1_EXTENSION_NAME, VK_KHR_GET_SURFACE_CAPABILITIES_2_EXTENSION_NAME, VK_KHR_WIN32_SURFACE_EXTENSION_NAME];
-	}
-	
+	extensions := get_extensions();
 	instance_info.enabledExtensionCount = xx extensions.count;
 	instance_info.ppEnabledExtensionNames = extensions.data;
 	
@@ -123,11 +135,7 @@ create_instance :: (window_handle: * void) -> Instance	 {
 		vk_assert(vkCreateDebugUtilsMessengerEXT(instance.handle, *messenger_info, null, *instance.debug_messenger));
 	}
 
-	surface_info: VkWin32SurfaceCreateInfoKHR;
-	surface_info.hwnd = cast(HWND, window_handle);
-	surface_info.hinstance = GetModuleHandleA(null);
-	
-	vk_assert(vkCreateWin32SurfaceKHR(instance.handle, *surface_info, null, *instance.surface.handle));
+	create_surface(*instance, window_handle);
 	
 	device_extensions: []*u8 = .[
 		VK_KHR_SWAPCHAIN_EXTENSION_NAME
@@ -220,7 +228,7 @@ create_instance :: (window_handle: * void) -> Instance	 {
 			is_complete &= (it != U32_MAX);
 		}
 		
-		if (device_properties.deviceType == .DISCRETE_GPU && device_features.geometryShader && is_complete) {
+		if ( device_features.geometryShader && is_complete) {
 			instance.physical_device.handle = physical_device;
 			memcpy(instance.physical_device.queue_families.data, families.data, size_of(type_of(families)));
 			break;
@@ -398,14 +406,14 @@ destroy_swapchain :: (swapchain: *Swapchain){
 	array_free(swapchain.images);
 }
 
-acquire_image_from_swapchain :: (swapchain: Swapchain, semaphore: Semaphore, fence: Fence = .{}, timeout: u64 = U64_MAX) -> *Image, u32, bool{
+acquire_image_from_swapchain :: (swapchain: Swapchain, semaphore: GPU_Semaphore, fence: Fence = .{}, timeout: u64 = U64_MAX) -> *Image, u32, bool{
 	index: u32;
 	e := vkAcquireNextImageKHR(swapchain.device, swapchain, timeout, semaphore, fence, *index);
 	if e == VkResult.ERROR_OUT_OF_DATE_KHR return null, U32_MAX, true;
 	return *swapchain.images[index], index, false;
 }
 
-present_queue_to_swapchain :: (swapchain: Swapchain, index: u32 /*temp*/, semaphore: *Semaphore = null){	
+present_queue_to_swapchain :: (swapchain: Swapchain, index: u32 /*temp*/, semaphore: *GPU_Semaphore = null){	
 	present_info: VkPresentInfoKHR;
 	present_info.pSwapchains = *swapchain.handle;
 	present_info.swapchainCount = 1;

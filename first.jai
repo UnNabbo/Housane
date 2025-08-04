@@ -11,14 +11,15 @@ plugins: [..] *Metaprogram_Plugin;
 
 build :: () {
 	set_working_directory(#filepath);
+	
     defer set_build_options_dc(.{do_output=false});
 	options := get_build_options();
-	options.output_executable_name = "Vulkan";
+	options.output_executable_name = "housane";
 	options.text_output_flags = 0;
 	
 	build_path := "out/debug";
 	src_path := "housane/src";
-	options.entry_point_name = "entry_point";
+	options.entry_point_name = "main";
 	debug := true;
 	run_debugger := false;
 
@@ -89,8 +90,6 @@ build :: () {
 	compiler_begin_intercept(workspace, intercept_flags);
 
 	for plugins if it.add_source then it.add_source(it);
-
-	//add_build_string("#load \"vulkan/src/core/entry_point.jai\";", workspace);
 	
 	add_build_string("Build_Type :: enum u8{DEBUG; OPTIMIZED; RELEASE; }", workspace);
 	
@@ -123,18 +122,10 @@ build :: () {
     for plugins if it.shutdown it.shutdown(it);
 	
 	if !failed {
-		copy_file("modules/Vulkan_Memory_Allocator/windows/Vulkan_Memory_Allocator.dll", tprint("%/Vulkan_Memory_Allocator.dll", options.output_path));
-		
-		exe_full_name := tprint("%/%.exe", options.output_path, options.output_executable_name);
-		process: Process;
-		if run_debugger{
-			success := create_process(*process, "raddbg.exe", exe_full_name, kill_process_if_parent_exits = false);
-		}else{
-			for exe_full_name if it == #char "/" then exe_full_name[it_index] = #char "\\";
-			success := create_process(*process, "wt", "-d", #filepath, "cmd", "/k", exe_full_name, "&", "exit", kill_process_if_parent_exits = false);
-		}
+		copy_file("modules/Vulkan_Memory_Allocator/linux/VMA.so", tprint("%/Vulkan_Memory_Allocator.so", options.output_path));
+		copy_file("modules/jai-sdl3/linux/libSDL3.so.0", tprint("%/libSDL3.so.0", options.output_path));
 	}
 }
  
-#run build();
+#run,stallable build();
 

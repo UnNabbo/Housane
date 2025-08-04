@@ -1828,7 +1828,7 @@ vmaFreeStatsString :: (allocator: VmaAllocator, pStatsString: *u8) -> void #fore
 
 #scope_file
 
-#import "jai-vulkan";
+#import "Vulkan";
 
 #if OS == .WINDOWS {
 	libvma :: #library "windows/VMA";
